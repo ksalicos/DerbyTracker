@@ -21,6 +21,14 @@ namespace DerbyTracker.Master
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder.AllowAnyMethod().AllowAnyHeader()
+                        .WithOrigins("http://localhost:44347")
+                        .AllowCredentials();
+                }));
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -47,6 +55,10 @@ namespace DerbyTracker.Master
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseCors("CorsPolicy");
+
+            app.UseSignalR(s => s.MapHub<WheelHub>("/wheelhub"));
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -64,7 +76,7 @@ namespace DerbyTracker.Master
                 }
             });
 
-            app.UseSignalR(s => s.MapHub<WheelHub>("/wheelhub"));
+
         }
     }
 }
