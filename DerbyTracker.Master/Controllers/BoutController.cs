@@ -1,5 +1,6 @@
 ﻿using DerbyTracker.Common.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace DerbyTracker.Master.Controllers
 {
@@ -15,9 +16,9 @@ namespace DerbyTracker.Master.Controllers
         }
 
         [Route("List")]
-        public object List()
+        public IEnumerable<BoutListItem> List()
         {
-            return Ok(_boutService.List());
+            return _boutService.List();
         }
     }
 }

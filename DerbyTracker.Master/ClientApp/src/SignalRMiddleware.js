@@ -1,7 +1,9 @@
 ﻿import * as signalR from '@aspnet/signalr'
+//TODO: Set log level programmatically
+const signalrLogLevel = signalR.LogLevel.Information
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/wheelhub")
-    .configureLogging(signalR.LogLevel.Information)
+    .configureLogging(signalrLogLevel)
     .build();
 
 export function signalRInvokeMiddleware(store: any) {
@@ -20,7 +22,7 @@ export function signalRInvokeMiddleware(store: any) {
 
 export function signalRRegisterCommands(store: any, callback: Function) {
     connection.on('TestAck', data => {
-        console.log("Success", data)
+        console.log("SignalR Test: Success")
     })
 
     connection.start().catch(err => console.log(err.toString())).then(callback);
