@@ -1,3 +1,4 @@
+using DerbyTracker.Common.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,8 @@ namespace DerbyTracker.Master
             });
 
             services.AddSignalR();
+
+            services.AddSingleton<IBoutService, BoutService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
