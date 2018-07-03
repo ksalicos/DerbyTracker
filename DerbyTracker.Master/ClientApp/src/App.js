@@ -1,12 +1,27 @@
-﻿import React from 'react';
-import { Route } from 'react-router';
-import Layout from './components/Layout';
-import Home from './components/Home';
+﻿import React from 'react'
+import Bout from './components/Bout'
 import LoadingScreen from './components/LoadingScreen'
+import { connect } from 'react-redux'
 
-export default () => (
-    <Layout>
-        <Route exact path='/' component={LoadingScreen} />
-        <Route exact path='/home' component={Home} />
-    </Layout>
-);
+const App = props => {
+    return (
+        <div>
+            {({
+                'loading': (<LoadingScreen />),
+                'bout': (<Bout />)
+            })[props.system.screen]}
+        </div>
+    )
+}
+
+const mapStateToProps = state => {
+    return {
+        system: state.system
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

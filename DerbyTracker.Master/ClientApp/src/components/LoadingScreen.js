@@ -1,6 +1,6 @@
 ﻿import React from 'react'
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
+import { actionCreators as system } from '../store/System'
 
 const Loading = props => (
     <div>
@@ -27,7 +27,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         go: () =>
-            dispatch(push('/home'))
+            dispatch(system.changeScreen('bout'))
     }
 }
 

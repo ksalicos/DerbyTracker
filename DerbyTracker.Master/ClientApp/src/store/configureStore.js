@@ -1,13 +1,12 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import { routerReducer, routerMiddleware } from 'react-router-redux'
 import { signalRInvokeMiddleware } from '../SignalRMiddleware'
 import * as Counter from './Counter'
 import * as WeatherForecasts from './WeatherForecasts'
 import * as System from './System'
 import * as Bout from './Bout'
 
-export default function configureStore(history, initialState) {
+export default function configureStore(initialState) {
     const reducers = {
         counter: Counter.reducer,
         weatherForecasts: WeatherForecasts.reducer,
@@ -17,7 +16,6 @@ export default function configureStore(history, initialState) {
 
     const middleware = [
         thunk,
-        routerMiddleware(history),
         signalRInvokeMiddleware
     ];
 
@@ -29,8 +27,7 @@ export default function configureStore(history, initialState) {
     }
 
     const rootReducer = combineReducers({
-        ...reducers,
-        routing: routerReducer
+        ...reducers
     });
 
     return createStore(

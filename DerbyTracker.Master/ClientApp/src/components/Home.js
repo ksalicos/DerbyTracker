@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from 'react'
+import { connect } from 'react-redux'
 
 const Home = props => (
     <div>
@@ -7,4 +7,4 @@ const Home = props => (
     </div>
 );
 
-export default connect()(Home);
+export default connect()(Home)

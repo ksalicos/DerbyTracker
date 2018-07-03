@@ -1,11 +1,14 @@
 ﻿const signalrConnectedType = 'SIGNALR_CONNECTED'
 const boutListLoaded = 'BOUT_LIST_LOADED'
+const changeScreen = 'CHANGE_SCREEN'
 
 const initialState = {
+    screen: 'loading',
     initialization: { complete: false, signalr: false, boutListLoaded: false }
 };
 
 export const actionCreators = {
+    changeScreen: (screen) => ({ type: changeScreen, screen: screen })
     //initialize: (data) => ({ type: initializeType, data: data })
 };
 
@@ -23,6 +26,8 @@ export const reducer = (state, action) => {
                 ...state, initialization: { ...state.initialization, boutListLoaded: true }
             }
             break
+        case changeScreen:
+            return { ...state, screen: action.screen }
         default:
             break
     }
