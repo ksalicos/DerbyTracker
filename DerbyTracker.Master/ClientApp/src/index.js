@@ -9,6 +9,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { signalRRegisterCommands } from './SignalRMiddleware'
 import superagent from 'superagent'
+import noCache from 'superagent-no-cache'
 import { actionCreators } from './store/Bout'
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
@@ -24,6 +25,7 @@ signalRRegisterCommands(store, () => {
 //Load Bout List
 superagent
     .get('/api/bout/list')
+    .use(noCache)
     .set('Accept', 'application/json')
     .end((e, r) => { store.dispatch(actionCreators.listLoaded(r.body)) })
 //TODO: Handle ajax error

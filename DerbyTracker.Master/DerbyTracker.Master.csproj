@@ -17,18 +17,19 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="BoutData\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="BoutData\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DerbyTracker.Common\DerbyTracker.Common.csproj" />
+    <EmbeddedResource Remove="BoutData\**" />
+    <None Remove="BoutData\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="BoutData\boutdata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\DerbyTracker.Common\DerbyTracker.Common.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

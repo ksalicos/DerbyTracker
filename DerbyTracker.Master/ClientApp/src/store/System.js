@@ -41,6 +41,5 @@ export const reducer = (state, action) => {
 };
 
 const complete = state => {
-    console.log(state)
     return state.initialization.signalr && state.initialization.boutListLoaded
 }

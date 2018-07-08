@@ -13,9 +13,9 @@ namespace DerbyTracker.Common.Entities
 
         //public RuleSet RuleSet { get; set; }
 
-        //public Venue Venue { get; set; }
+        public string Venue { get; set; }
 
-        //public DateTime AdvertisedStart { get; set; }
+        public DateTime AdvertisedStart { get; set; }
         //public DateTime ActualStart { get; set; }
         //public DateTime End { get; set; }
 

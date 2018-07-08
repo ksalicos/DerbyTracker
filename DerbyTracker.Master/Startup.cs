@@ -39,7 +39,7 @@ namespace DerbyTracker.Master
 
             services.AddSignalR();
 
-            services.AddSingleton<IBoutService, BoutService>();
+            services.AddSingleton<IBoutFileService, BoutFileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

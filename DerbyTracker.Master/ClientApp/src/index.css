@@ -4,3 +4,7 @@
         padding-top: 50px;
     }
 }
+
+.bout:hover {
+    color: red;
+}

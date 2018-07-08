@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace DerbyTracker.Master.Tests
+namespace DerbyTracker.Common.Tests
 {
     public class UnitTest1
     {

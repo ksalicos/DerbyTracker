@@ -1,59 +1,94 @@
 ﻿using DerbyTracker.Common.Entities;
+using DerbyTracker.Common.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DerbyTracker.Common.Services
 {
-    public interface IBoutService
+    public interface IBoutFileService
     {
-        Bout Load(string id);
-        IEnumerable<BoutListItem> List();
+        Bout Load(Guid id);
+        List<BoutListItem> List();
         void Save(Bout bout);
-        Bout Create();
     }
 
-    public class BoutService : IBoutService
+    public class BoutFileService : IBoutFileService
     {
-        //private readonly IHostingEnvironment _hostingEnvironment;
         private static IConfiguration Configuration { get; set; }
 
-        private static string BoutDataPath;
+        private static string _boutDataPath;
 
-        public BoutService(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public BoutFileService(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
-            BoutDataPath = $"{hostingEnvironment.ContentRootPath}/{Configuration["BoutDataPath"]}";
+            _boutDataPath = $"{hostingEnvironment.ContentRootPath}/{Configuration["BoutDataPath"]}";
 
         }
 
-        public IEnumerable<BoutListItem> List()
+        public List<BoutListItem> List()
         {
-            var path = $"{BoutDataPath}/boutdata.json";
+            var path = $"{_boutDataPath}/boutdata.json";
 
-            //TODO: If file doesn't exist, create it.  Path too.
+            if (!Directory.Exists(path))
+            { Directory.CreateDirectory(_boutDataPath); }
+
+            if (File.Exists(path))
+            {
+                var json = File.ReadAllText(path);
+                var boutData = JsonConvert.DeserializeObject<List<BoutListItem>>(json);
+                return boutData;
+            }
+
+            File.WriteAllLines(path, new[] { "[]" });
+            return new List<BoutListItem>();
+        }
+
+        public Bout Load(Guid id)
+        {
+            var path = $"{_boutDataPath}/{id}.json";
+            if (!File.Exists(path))
+            { throw new BoutNotFoundException(id); }
 
             var json = File.ReadAllText(path);
-            var boutData = JsonConvert.DeserializeObject<List<BoutListItem>>(json);
+            var boutData = JsonConvert.DeserializeObject<Bout>(json);
             return boutData;
-        }
-
-        public Bout Load(string id)
-        {
-            throw new NotImplementedException();
         }
 
         public void Save(Bout bout)
         {
-            throw new NotImplementedException();
-        }
+            if (bout.BoutId == Guid.Empty)
+            { bout.BoutId = Guid.NewGuid(); }
 
-        public Bout Create()
-        {
-            throw new NotImplementedException();
+            var filePath = $"{_boutDataPath}/{bout.BoutId}.json";
+            var boutJson = JsonConvert.SerializeObject(bout);
+            File.WriteAllText(filePath, boutJson);
+
+            var list = List();
+            var entry = list.FirstOrDefault(x => x.Id == bout.BoutId);
+
+            if (entry == null)
+            {
+                list.Add(new BoutListItem
+                {
+                    Id = bout.BoutId,
+                    Name = bout.Name,
+                    TimeStamp = DateTime.Now
+                });
+            }
+            else
+            {
+                entry.TimeStamp = DateTime.Now;
+                entry.Name = bout.Name;
+            }
+
+            var path = $"{_boutDataPath}/boutdata.json";
+            var listJson = JsonConvert.SerializeObject(list);
+            File.WriteAllText(path, listJson);
         }
     }
 
@@ -61,5 +96,6 @@ namespace DerbyTracker.Common.Services
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public DateTime TimeStamp { get; set; }
     }
 }
