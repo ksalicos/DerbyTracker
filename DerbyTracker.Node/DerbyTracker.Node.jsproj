@@ -85,6 +85,12 @@
     <Content Include="**\**" Exclude="**\platforms\**;**\bin\**;**\bld\**;**\node_modules\**;**\simulation\**;**\plugins\**;.gitignore;DerbyTracker.Node.*" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="bt-client\src\SignalRMiddleware.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bt-client\src\SignalRMiddleware.js" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="config.xml">
       <SubType>Designer</SubType>
     </Content>

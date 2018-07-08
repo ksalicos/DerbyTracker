@@ -26,7 +26,8 @@ namespace DerbyTracker.Master
                 builder =>
                 {
                     builder.AllowAnyMethod().AllowAnyHeader()
-                        .WithOrigins("http://localhost:44347")
+                        //.WithOrigins("http://localhost:44347")
+                        .AllowAnyOrigin()
                         .AllowCredentials();
                 }));
 

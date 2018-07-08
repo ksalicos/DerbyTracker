@@ -2,7 +2,7 @@
 //TODO: Set log level programmatically
 const signalrLogLevel = signalR.LogLevel.Information
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/wheelhub")
+    .withUrl("https://localhost:44347/wheelhub")
     .configureLogging(signalrLogLevel)
     .build();
 
