@@ -7,7 +7,7 @@ const boutUpdated = 'BOUT_UPDATED'
 const createBout = 'CREATE_BOUT'
 const exit = 'EXIT_BOUT'
 const toggleEdit = 'TOGGLE_EDIT'
-const selectVenue = 'SELECT_VENUE'
+const venueSelected = 'VENUE_SELECTED'
 
 const initialState = {
     list: null,
@@ -22,7 +22,7 @@ export const actionCreators = {
     create: () => ({ type: createBout }),
     exit: () => ({ type: exit }),
     toggleEdit: () => ({ type: toggleEdit }),
-    selectVenue: (data) => ({ type: selectVenue, data: data }),
+    venueSelected: (data) => ({ type: venueSelected, data: data }),
     saveBout: () => (dispatch, getState) => {
         let state = getState().bout
         let bout = {
@@ -66,7 +66,7 @@ export const reducer = (state, action) => {
             return { ...state, current: null }
         case toggleEdit:
             return { ...state, edit: !state.edit }
-        case selectVenue:
+        case venueSelected:
             return { ...state, current: { ...state.current, venue: action.data } }
         default:
             break;

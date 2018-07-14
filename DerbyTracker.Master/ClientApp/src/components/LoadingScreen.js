@@ -1,10 +1,11 @@
 ﻿import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as system } from '../store/System'
+import '../index.css'
 
 const Loading = props => (
-    <div>
-        <h1>BeTtie</h1>
+    <div id={'loadingBox'}>
+        <h1>Bettie</h1>
         <h2>Bout Tracking</h2>
         <p>Loading.  Please Wait.</p>
         {props.system.initialization.signalr ? <p>SignalR GO</p> : null}

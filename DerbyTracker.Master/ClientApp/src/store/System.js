@@ -3,6 +3,8 @@ const boutListLoaded = 'BOUT_LIST_LOADED'
 const venueListLoaded = 'VENUE_LIST_LOADED'
 const changeScreen = 'CHANGE_SCREEN'
 
+const venueSelected = 'VENUE_SELECTED'
+
 const initialState = {
     screen: 'loading',
     initialization: { complete: false, signalr: false, boutListLoaded: false, venueListLoaded: false }
@@ -34,6 +36,8 @@ export const reducer = (state, action) => {
             break
         case changeScreen:
             return { ...state, screen: action.screen }
+        case venueSelected:
+            return { ...state, screen: 'bout' }
         default:
             break
     }

@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as venue } from '../../store/Venue'
-import LabelledInput from '../common/LabelledTextInput'
 import agent from 'superagent'
+import { Row, Col } from 'react-bootstrap'
 
 class VenueEdit extends React.Component {
     constructor(props) {
@@ -24,21 +24,32 @@ class VenueEdit extends React.Component {
         return (
             <div>
                 <h1>Venue Edit</h1>
-                <LabelledInput config={{
-                    name: 'name', label: 'Name', value: this.state.name,
-                    onChange: this.handleChange, disabled: this.state.busy
-                }} />
-                <LabelledInput config={{
-                    name: 'city', label: 'City', value: this.state.city,
-                    onChange: this.handleChange, disabled: this.state.busy
-                }} />
-                <LabelledInput config={{
-                    name: 'state', label: 'State', value: this.state.state,
-                    onChange: this.handleChange, disabled: this.state.busy
-                }} />
-
-                <button disabled={this.state.saved} onClick={this.save}>Save</button>
-                <button onClick={this.props.exit}>Exit</button>
+                <Row>
+                    <Col sm={6}>
+                        <Row>
+                            <Col sm={1}><label>Name</label></Col>
+                            <Col sm={5}>
+                                <input name='name' value={this.state.name} onChange={this.handleChange} disabled={this.state.busy} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={1}><label>Sity</label></Col>
+                            <Col sm={5}>
+                                <input name='city' value={this.state.city} onChange={this.handleChange} disabled={this.state.busy} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={1}><label>State</label></Col>
+                            <Col sm={5}>
+                                <input name='state' value={this.state.state} onChange={this.handleChange} disabled={this.state.busy} />
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <div>
+                    <button disabled={this.state.busy} onClick={this.save}>Save</button>
+                    <button disabled={this.state.busy} onClick={this.props.exit}>Cancel</button>
+                </div>
             </div>
         )
     }
@@ -56,7 +67,7 @@ class VenueEdit extends React.Component {
 
     save() {
         let venue = {
-            Id: this.state.id,
+            id: this.state.id,
             name: this.state.name,
             city: this.state.city,
             state: this.state.state
@@ -65,7 +76,7 @@ class VenueEdit extends React.Component {
             .send(venue)
             .set('Accept', 'application/json')
             .then((r) => {
-                this.setState({ busy: false, saved: true })
+                this.props.save(venue)
             })
     }
 }
@@ -79,7 +90,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         exit: () => dispatch(venue.editVenue(null)),
+        save: (v) => dispatch(venue.venueUpdated(v))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(VenueEdit);
+export default connect(mapStateToProps, mapDispatchToProps)(VenueEdit)

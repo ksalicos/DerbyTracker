@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as bout } from '../../store/Bout'
 import { actionCreators as system } from '../../store/System'
-import LabelledInput from '../common/LabelledTextInput'
-import VenueShortDetails from '../venue/VenueShortDetails';
+import DateTime from 'react-datetime'
+import 'react-datetime/css/react-datetime.css'
+import { Col, Row } from 'react-bootstrap'
 
 class BoutEdit extends React.Component {
     constructor(props) {
@@ -17,29 +18,55 @@ class BoutEdit extends React.Component {
             advertisedStart: props.bout.current.advertisedStart
         }
 
-        this.handleChange = this.handleChange.bind(this);
-        this.exit = this.exit.bind(this);
+        this.handleChange = this.handleChange.bind(this)
+        this.timeChange = this.timeChange.bind(this)
+        this.updateBout = this.updateBout.bind(this)
+        this.exit = this.exit.bind(this)
     }
 
     render() {
+        let venue = this.props.bout.current.venue
+
         return (
             <div>
-                <h1>Bout Edit</h1>
-                <LabelledInput config={{
-                    name: 'name', label: 'Name', value: this.state.name,
-                    onChange: this.handleChange, disabled: this.state.busy
-                }} />
-                <VenueShortDetails venue={this.props.bout.current.venue} />
-                <button onClick={this.props.toVenueDetails}>Edit Venue</button>
-                <LabelledInput config={{
-                    name: 'advertisedStart', label: 'Date/Time', value: this.state.advertisedStart,
-                    onChange: this.handleChange, disabled: this.state.busy
-                }} />
+                <h1>Edit Bout</h1>
+                <Row>
+                    <Col sm={4}>
+                        <Row>
+                            <Col sm={2}><label>Name</label></Col>
+                            <Col sm={10}>
+                                <input name='name' value={this.state.name} onChange={this.handleChange} />
+                            </Col>
+                        </Row>
 
-                <button onClick={this.props.save}>Save</button>
-                <button onClick={this.exit}>Exit</button>
+                    </Col>
+                    <Col sm={6}>
+                        <div className='poppy'>Venue:
+                                {venue ? <span>{venue.name} {venue.city}, {venue.state}</span>
+                                : <span>No Venue Set</span>}
+                        </div>
+                        <button onClick={this.props.toVenueDetails}>Edit Venue</button>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col sm={4}>
+                        <p>Date/Time</p>
+                        <DateTime onChange={this.timeChange} input={true} defaultValue={this.state.advertisedStart} />
+                    </Col>
+                </Row>
+
+                <Row>
+                    <button onClick={this.props.save}>Save</button>
+                    <button onClick={this.exit}>Cancel</button>
+                </Row>
+
             </div>
         )
+    }
+
+    timeChange(timestamp) {
+        this.setState({ advertisedStart: timestamp.format('MM/DD/YYYY hh:mm a') }, this.updateBout)
     }
 
     handleChange(event) {
@@ -50,14 +77,16 @@ class BoutEdit extends React.Component {
         this.setState({
             [name]: value,
             saved: false
-        }, () => {
-            let bout = {
-                boutId: this.state.boutId,
-                name: this.state.name,
-                advertisedStart: this.state.advertisedStart
-            }
-            this.props.updateCurrent(bout)
-        });
+        }, this.updateBout);
+    }
+
+    updateBout() {
+        let bout = {
+            boutId: this.state.boutId,
+            name: this.state.name,
+            advertisedStart: this.state.advertisedStart
+        }
+        this.props.updateCurrent(bout)
     }
 
     exit() {

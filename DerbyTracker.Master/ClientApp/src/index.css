@@ -1,7 +1,48 @@
+html, body, .fill-height {
+    height: 100%;
+}
+
+body{
+    /*Background image by Jeff Griffith (@grifjef) and taken from Unsplash*/
+    /*https://unsplash.com/photos/YTViCPzKKOc*/
+    background: url("./images/hippos.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    opacity: .9;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#loadingBox{
+    margin: 10% auto auto auto;
+    padding: 1%;
+    width: 400px;
+    background-color: blueviolet;
+    color: black;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.left-box{
+    background-color: lightgrey;
+    opacity: .9;
+    height: 100%
+}
+
+.right-box{
+    background-color: lightgrey;
+    opacity: .9;
+    height: 100%
+}
+
+.poppy{
+    font-size: 1.2em;
+}
+
 @media (max-width: 767px) {
-    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
-    body {
-        padding-top: 50px;
+    .right-box{
+        min-height: 600px;
     }
 }
 

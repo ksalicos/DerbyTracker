@@ -7,7 +7,6 @@ import BoutEdit from './bout/BoutEdit'
 const Bout = props => {
     return (
         <div>
-            <h1>BOUT</h1>
             {
                 props.bout.current
                     ? (props.bout.edit ? <BoutEdit /> : <BoutDetails />)

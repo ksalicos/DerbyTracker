@@ -56,7 +56,6 @@ namespace DerbyTracker.Common.Services
 
             var json = File.ReadAllText(path);
             var boutData = JsonConvert.DeserializeObject<Bout>(json);
-            boutData.Venue = new Venue();
             return boutData;
         }
 

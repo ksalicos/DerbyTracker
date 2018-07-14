@@ -6,9 +6,7 @@ import VenueList from './venue/VenueList'
 const Venue = props =>
     <div>
         <h1>Venue</h1>
-        {
-            props.venue.selected ? <VenueEdit /> : <VenueList />
-        }
+        {props.venue.current ? <VenueEdit /> : <VenueList />}
     </div>
 
 const mapStateToProps = state => {

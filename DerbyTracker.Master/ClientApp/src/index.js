@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'normalize.css'
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -38,7 +39,6 @@ superagent
 //TODO: Handle ajax errors
 
 const rootElement = document.getElementById('root');
-
 ReactDOM.render(
     <Provider store={store}>
         <App />

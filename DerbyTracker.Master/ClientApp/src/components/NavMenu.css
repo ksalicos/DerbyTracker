@@ -14,13 +14,8 @@
 @media (min-width: 768px) {
     /* On large screens, convert the nav menu to a vertical sidebar */
     .navbar {
-        height: 100%;
-        width: calc(25% - 20px);
-    }
-    .navbar {
         border-radius: 0;
         border-width: 0;
-        height: 100%;
     }
     .navbar-header {
         float: none;

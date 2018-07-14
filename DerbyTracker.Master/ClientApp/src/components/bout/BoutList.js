@@ -3,21 +3,27 @@ import { connect } from 'react-redux'
 import { actionCreators as bout } from '../../store/Bout'
 import agent from 'superagent'
 import Moment from 'react-moment';
+import { Table } from 'react-bootstrap'
 
 class BoutList extends React.Component {
     render() {
         return (<div>
-            <h1>Bout List</h1>
-            <table>
+            <h1>Bouts</h1>
+            <Table striped bordered condensed hover>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Last Edited</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    <tr><th>Name</th><th>Last Edited</th></tr>
                     {this.props.bout.list.map(b => <tr className={'bout'} key={b.id}
                         onClick={() => { this.props.load(b.id) }}>
                         <td>{b.name}</td>
                         <td><Moment format="MMM DD YYYY, h:mmA">{b.timeStamp}</Moment></td>
                     </tr>)}
                 </tbody>
-            </table>
+            </Table>
             <button onClick={this.props.create}>Create</button>
         </div>)
     }
