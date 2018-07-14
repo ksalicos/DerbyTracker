@@ -1,10 +1,11 @@
 ﻿const signalrConnectedType = 'SIGNALR_CONNECTED'
 const boutListLoaded = 'BOUT_LIST_LOADED'
+const venueListLoaded = 'VENUE_LIST_LOADED'
 const changeScreen = 'CHANGE_SCREEN'
 
 const initialState = {
     screen: 'loading',
-    initialization: { complete: false, signalr: false, boutListLoaded: false }
+    initialization: { complete: false, signalr: false, boutListLoaded: false, venueListLoaded: false }
 };
 
 export const actionCreators = {
@@ -26,6 +27,11 @@ export const reducer = (state, action) => {
                 ...state, initialization: { ...state.initialization, boutListLoaded: true }
             }
             break
+        case venueListLoaded:
+            newstate = {
+                ...state, initialization: { ...state.initialization, venueListLoaded: true }
+            }
+            break
         case changeScreen:
             return { ...state, screen: action.screen }
         default:
@@ -41,5 +47,5 @@ export const reducer = (state, action) => {
 };
 
 const complete = state => {
-    return state.initialization.signalr && state.initialization.boutListLoaded
+    return state.initialization.signalr && state.initialization.boutListLoaded && state.initialization.venueListLoaded
 }

@@ -1,6 +1,7 @@
 ﻿import React from 'react'
 import Bout from './components/Bout'
 import LoadingScreen from './components/LoadingScreen'
+import Venue from './components/Venue'
 import { connect } from 'react-redux'
 
 const App = props => {
@@ -8,7 +9,8 @@ const App = props => {
         <div>
             {({
                 'loading': (<LoadingScreen />),
-                'bout': (<Bout />)
+                'bout': (<Bout />),
+                'venue': (<Venue />)
             })[props.system.screen]}
         </div>
     )

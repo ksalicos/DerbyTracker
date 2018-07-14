@@ -13,7 +13,7 @@ namespace DerbyTracker.Common.Entities
 
         //public RuleSet RuleSet { get; set; }
 
-        public string Venue { get; set; }
+        public Venue Venue { get; set; }
 
         public DateTime AdvertisedStart { get; set; }
         //public DateTime ActualStart { get; set; } //Do I need?  This is the timestamp of the first Jam Start event.

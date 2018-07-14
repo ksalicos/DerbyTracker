@@ -1,9 +1,13 @@
-﻿const boutListLoaded = 'BOUT_LIST_LOADED'
+﻿import agent from 'superagent'
+import uuid from 'uuid'
+
+const boutListLoaded = 'BOUT_LIST_LOADED'
 const boutLoaded = 'BOUT_LOADED'
 const boutUpdated = 'BOUT_UPDATED'
 const createBout = 'CREATE_BOUT'
 const exit = 'EXIT_BOUT'
 const toggleEdit = 'TOGGLE_EDIT'
+const selectVenue = 'SELECT_VENUE'
 
 const initialState = {
     list: null,
@@ -17,7 +21,23 @@ export const actionCreators = {
     boutUpdated: (data) => ({ type: boutUpdated, data: data }),
     create: () => ({ type: createBout }),
     exit: () => ({ type: exit }),
-    toggleEdit: () => ({ type: toggleEdit })
+    toggleEdit: () => ({ type: toggleEdit }),
+    selectVenue: (data) => ({ type: selectVenue, data: data }),
+    saveBout: () => (dispatch, getState) => {
+        let state = getState().bout
+        let bout = {
+            boutId: state.current.boutId,
+            name: state.current.name,
+            advertisedStart: state.current.advertisedStart,
+            venue: state.current.venue
+        }
+        agent.post('/api/bout/save')
+            .send(bout)
+            .set('Accept', 'application/json')
+            .then((r) => {
+                dispatch(actionCreators.toggleEdit())
+            })
+    }
 };
 
 export const reducer = (state, action) => {
@@ -33,15 +53,21 @@ export const reducer = (state, action) => {
                 ? { ...e, id: action.data.boutId, name: action.data.name } : e)
             let element = newList.find((e) => e.id === state.current.boutId)
             if (!element) {
-                newList.push({ id: action.data.boutId, name: action.data.name, timeStamp: new Date().toLocaleDateString() })
+                newList.push({
+                    id: action.data.boutId,
+                    name: action.data.name,
+                    timeStamp: new Date().toLocaleDateString()
+                })
             }
-            return { ...state, current: action.data, list: newList }
+            return { ...state, current: { ...state.current, ...action.data }, list: newList }
         case createBout:
-            return { ...state, current: defaultBout, edit: true }
+            return { ...state, current: { ...defaultBout, boutId: uuid.v4() }, edit: true }
         case exit:
             return { ...state, current: null }
         case toggleEdit:
             return { ...state, edit: !state.edit }
+        case selectVenue:
+            return { ...state, current: { ...state.current, venue: action.data } }
         default:
             break;
     }
@@ -50,8 +76,7 @@ export const reducer = (state, action) => {
 };
 
 const defaultBout = {
-    boutId: '00000000-0000-0000-0000-000000000000',
     name: 'New Bout',
-    venue: 'The Hangar',
+    venue: null,
     advertisedTime: new Date().toLocaleDateString()
 }

@@ -4,12 +4,14 @@ import { signalRInvokeMiddleware } from '../SignalRMiddleware'
 import * as Counter from './Counter'
 import * as System from './System'
 import * as Bout from './Bout'
+import * as Venue from './Venue'
 
 export default function configureStore(initialState) {
     const reducers = {
         counter: Counter.reducer,
         system: System.reducer,
-        bout: Bout.reducer
+        bout: Bout.reducer,
+        venue: Venue.reducer
     };
 
     const middleware = [

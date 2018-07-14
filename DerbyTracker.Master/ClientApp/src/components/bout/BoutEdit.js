@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as bout } from '../../store/Bout'
+import { actionCreators as system } from '../../store/System'
 import LabelledInput from '../common/LabelledTextInput'
-import agent from 'superagent'
+import VenueShortDetails from '../venue/VenueShortDetails';
 
 class BoutEdit extends React.Component {
     constructor(props) {
@@ -13,12 +14,10 @@ class BoutEdit extends React.Component {
             saved: true,
             boutId: props.bout.current.boutId,
             name: props.bout.current.name,
-            advertisedStart: props.bout.current.advertisedStart,
-            venue: props.bout.current.venue
+            advertisedStart: props.bout.current.advertisedStart
         }
 
         this.handleChange = this.handleChange.bind(this);
-        this.save = this.save.bind(this);
         this.exit = this.exit.bind(this);
     }
 
@@ -30,16 +29,14 @@ class BoutEdit extends React.Component {
                     name: 'name', label: 'Name', value: this.state.name,
                     onChange: this.handleChange, disabled: this.state.busy
                 }} />
-                <LabelledInput config={{
-                    name: 'venue', label: 'Venue', value: this.state.venue,
-                    onChange: this.handleChange, disabled: this.state.busy
-                }} />
+                <VenueShortDetails venue={this.props.bout.current.venue} />
+                <button onClick={this.props.toVenueDetails}>Edit Venue</button>
                 <LabelledInput config={{
                     name: 'advertisedStart', label: 'Date/Time', value: this.state.advertisedStart,
                     onChange: this.handleChange, disabled: this.state.busy
                 }} />
 
-                <button disabled={this.state.saved} onClick={this.save}>Save</button>
+                <button onClick={this.props.save}>Save</button>
                 <button onClick={this.exit}>Exit</button>
             </div>
         )
@@ -53,23 +50,14 @@ class BoutEdit extends React.Component {
         this.setState({
             [name]: value,
             saved: false
+        }, () => {
+            let bout = {
+                boutId: this.state.boutId,
+                name: this.state.name,
+                advertisedStart: this.state.advertisedStart
+            }
+            this.props.updateCurrent(bout)
         });
-    }
-
-    save() {
-        let bout = {
-            boutId: this.state.boutId,
-            name: this.state.name,
-            advertisedStart: this.state.advertisedStart,
-            venue: this.state.venue
-        }
-        agent.post('/api/bout/save')
-            .send(bout)
-            .set('Accept', 'application/json')
-            .then((r) => {
-                this.setState({ busy: false, saved: true, boutId: r.body })
-                this.props.updateCurrent(bout)
-            })
     }
 
     exit() {
@@ -91,7 +79,9 @@ const mapDispatchToProps = dispatch => {
     return {
         exit: () => dispatch(bout.exit()),
         toggleEdit: () => dispatch(bout.toggleEdit()),
-        updateCurrent: (b) => dispatch(bout.boutUpdated(b))
+        updateCurrent: (b) => dispatch(bout.boutUpdated(b)),
+        toVenueDetails: () => dispatch(system.changeScreen('venue')),
+        save: () => dispatch(bout.saveBout())
     }
 }
 

@@ -10,7 +10,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { signalRRegisterCommands } from './SignalRMiddleware'
 import superagent from 'superagent'
 import noCache from 'superagent-no-cache'
-import { actionCreators } from './store/Bout'
+import { actionCreators as bout } from './store/Bout'
+import { actionCreators as venue } from './store/Venue'
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const initialState = window.initialReduxState
@@ -27,8 +28,14 @@ superagent
     .get('/api/bout/list')
     .use(noCache)
     .set('Accept', 'application/json')
-    .end((e, r) => { store.dispatch(actionCreators.listLoaded(r.body)) })
-//TODO: Handle ajax error
+    .end((e, r) => { store.dispatch(bout.listLoaded(r.body)) })
+//Load Venue List
+superagent
+    .get('/api/venue/list')
+    .use(noCache)
+    .set('Accept', 'application/json')
+    .end((e, r) => { store.dispatch(venue.listLoaded(r.body)) })
+//TODO: Handle ajax errors
 
 const rootElement = document.getElementById('root');
 

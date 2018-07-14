@@ -10,25 +10,25 @@ namespace DerbyTracker.Master.Controllers
     [ApiController]
     public class BoutController : ControllerBase
     {
-        private readonly IBoutFileService _boutFileService;
+        private readonly IBoutDataService _boutDataService;
 
-        public BoutController(IBoutFileService boutFileService)
+        public BoutController(IBoutDataService boutDataService)
         {
-            _boutFileService = boutFileService;
+            _boutDataService = boutDataService;
         }
 
         [HttpGet]
         [Route("List")]
         public IEnumerable<BoutListItem> List()
         {
-            return _boutFileService.List();
+            return _boutDataService.List();
         }
 
         [HttpPost]
         [Route("Save")]
         public Guid Save(Bout bout)
         {
-            _boutFileService.Save(bout);
+            _boutDataService.Save(bout);
             return bout.BoutId;
         }
 
@@ -36,7 +36,7 @@ namespace DerbyTracker.Master.Controllers
         [Route("Load/{id}")]
         public Bout Load(Guid id)
         {
-            return _boutFileService.Load(id);
+            return _boutDataService.Load(id);
         }
     }
 }

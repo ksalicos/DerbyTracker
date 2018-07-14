@@ -2,9 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as bout } from '../../store/Bout'
 import Moment from 'react-moment';
+import VenueShortDetails from '../venue/VenueShortDetails'
 
 const BoutDetails = props => {
     let bout = props.bout.current
+    console.log(bout)
     if (!bout) {
         console.log('attempted to display BoutDetails with no current bout loaded')
         return null
@@ -14,7 +16,7 @@ const BoutDetails = props => {
         <div>
             <h1>Bout Details</h1>
             <h2>{bout.name}</h2>
-            <p>{bout.venue}</p>
+            {bout.venue ? <VenueShortDetails venue={bout.venue} /> : <p>No Venue Set</p>}
             <p><Moment format="MMM DD YYYY, h:mmA">{bout.advertisedStart}</Moment></p>
             <button onClick={props.edit}>Edit</button>
             <button onClick={props.exit}>Exit</button>

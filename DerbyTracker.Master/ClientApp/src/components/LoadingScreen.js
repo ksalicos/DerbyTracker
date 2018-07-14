@@ -9,6 +9,7 @@ const Loading = props => (
         <p>Loading.  Please Wait.</p>
         {props.system.initialization.signalr ? <p>SignalR GO</p> : null}
         {props.system.initialization.boutListLoaded ? <p>Bout List GO</p> : null}
+        {props.system.initialization.venueListLoaded ? <p>Venue List GO</p> : null}
         {props.system.initialization.complete
             ? <p>
                 <button onClick={props.go}>All Systems GO</button>

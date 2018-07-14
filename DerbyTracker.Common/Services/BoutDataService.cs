@@ -10,20 +10,20 @@ using System.Linq;
 
 namespace DerbyTracker.Common.Services
 {
-    public interface IBoutFileService
+    public interface IBoutDataService
     {
         Bout Load(Guid id);
         List<BoutListItem> List();
         void Save(Bout bout);
     }
 
-    public class BoutFileService : IBoutFileService
+    public class BoutDataService : IBoutDataService
     {
         private static IConfiguration Configuration { get; set; }
 
         private static string _boutDataPath;
 
-        public BoutFileService(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public BoutDataService(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
             _boutDataPath = $"{hostingEnvironment.ContentRootPath}/{Configuration["BoutDataPath"]}";
@@ -34,7 +34,7 @@ namespace DerbyTracker.Common.Services
         {
             var path = $"{_boutDataPath}/boutdata.json";
 
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(_boutDataPath))
             { Directory.CreateDirectory(_boutDataPath); }
 
             if (File.Exists(path))
@@ -56,6 +56,7 @@ namespace DerbyTracker.Common.Services
 
             var json = File.ReadAllText(path);
             var boutData = JsonConvert.DeserializeObject<Bout>(json);
+            boutData.Venue = new Venue();
             return boutData;
         }
 

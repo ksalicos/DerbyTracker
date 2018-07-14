@@ -10,14 +10,14 @@ namespace DerbyTracker.Master.Tests.Controllers
         [Fact]
         public void BoutControllerCanBeConstructed()
         {
-            var controller = new BoutController(new MockBoutFileService());
+            var controller = new BoutController(new MockBoutDataService());
             Assert.NotNull(controller);
         }
 
         [Fact]
         public void ListReturns()
         {
-            var controller = new BoutController(new MockBoutFileService());
+            var controller = new BoutController(new MockBoutDataService());
             var list = controller.List();
             Assert.NotNull(list);
         }
@@ -25,16 +25,16 @@ namespace DerbyTracker.Master.Tests.Controllers
         [Fact]
         public void SaveDoesntExplode()
         {
-            var controller = new BoutController(new MockBoutFileService());
+            var controller = new BoutController(new MockBoutDataService());
             controller.Save(new Common.Entities.Bout());
         }
 
         [Fact]
         public void LoadReturnsABout()
         {
-            var controller = new BoutController(new MockBoutFileService());
-            var bout = controller.Load(MockBoutFileService.EmptyBoutId);
-            Assert.Equal(MockBoutFileService.EmptyBoutId, bout.BoutId);
+            var controller = new BoutController(new MockBoutDataService());
+            var bout = controller.Load(MockBoutDataService.EmptyBoutId);
+            Assert.Equal(MockBoutDataService.EmptyBoutId, bout.BoutId);
         }
     }
 }

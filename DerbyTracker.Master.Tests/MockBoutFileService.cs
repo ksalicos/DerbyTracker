@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DerbyTracker.Master.Tests
 {
-    public class MockBoutFileService : IBoutFileService
+    public class MockBoutDataService : IBoutDataService
     {
         public static Guid EmptyBoutId { get; set; }
         private readonly List<BoutListItem> _boutList = new List<BoutListItem> { new BoutListItem { Id = EmptyBoutId } };

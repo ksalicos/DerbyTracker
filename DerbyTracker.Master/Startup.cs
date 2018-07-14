@@ -47,9 +47,11 @@ namespace DerbyTracker.Master
             services.AddScoped<SignalRCallbackFactory>();
             services.AddSingleton<ICallbackFactory, SignalRCallbackFactory>();
             services.AddSingleton<IDispatcher, ImmediateDispatcher>();
-            services.AddSingleton<IBoutFileService, BoutFileService>();
-            services.AddSingleton<INodeService, NodeService>();
             services.AddTransient<HandlerRegistrar>();
+
+            services.AddSingleton<IBoutDataService, BoutDataService>();
+            services.AddSingleton<INodeService, NodeService>();
+            services.AddSingleton<IVenueDataService, VenueDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
