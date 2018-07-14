@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DerbyTracker.Master", "Derb
 EndProject
 Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "DerbyTracker.Node", "DerbyTracker.Node\DerbyTracker.Node.jsproj", "{7EE4678A-3D7B-4301-B10D-21AB1B0A4454}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DerbyTracker.Master.Tests", "DerbyTracker.Master.Tests\DerbyTracker.Master.Tests.csproj", "{43FACF9C-03F7-4A28-8930-BBB27D959447}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DerbyTracker.Master.Tests", "DerbyTracker.Master.Tests\DerbyTracker.Master.Tests.csproj", "{43FACF9C-03F7-4A28-8930-BBB27D959447}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DerbyTracker.Common.Tests", "DerbyTracker.Common.Tests\DerbyTracker.Common.Tests.csproj", "{F4D6DBA8-0C7F-461E-9BE4-6A4E803424AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DerbyTracker.Common.Tests", "DerbyTracker.Common.Tests\DerbyTracker.Common.Tests.csproj", "{F4D6DBA8-0C7F-461E-9BE4-6A4E803424AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DerbyTracker.Messaging", "DerbyTracker.Messaging\DerbyTracker.Messaging.csproj", "{15BA23C7-6434-4712-A6A9-4B2E0701A266}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -209,6 +211,30 @@ Global
 		{F4D6DBA8-0C7F-461E-9BE4-6A4E803424AC}.Release|Windows-x64.Build.0 = Release|Any CPU
 		{F4D6DBA8-0C7F-461E-9BE4-6A4E803424AC}.Release|Windows-x86.ActiveCfg = Release|Any CPU
 		{F4D6DBA8-0C7F-461E-9BE4-6A4E803424AC}.Release|Windows-x86.Build.0 = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Android.ActiveCfg = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Android.Build.0 = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|iOS.ActiveCfg = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|iOS.Build.0 = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Windows-ARM.ActiveCfg = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Windows-ARM.Build.0 = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Windows-x64.ActiveCfg = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Windows-x64.Build.0 = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Windows-x86.ActiveCfg = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Debug|Windows-x86.Build.0 = Debug|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Android.ActiveCfg = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Android.Build.0 = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|iOS.ActiveCfg = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|iOS.Build.0 = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Windows-ARM.ActiveCfg = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Windows-ARM.Build.0 = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Windows-x64.ActiveCfg = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Windows-x64.Build.0 = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Windows-x86.ActiveCfg = Release|Any CPU
+		{15BA23C7-6434-4712-A6A9-4B2E0701A266}.Release|Windows-x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

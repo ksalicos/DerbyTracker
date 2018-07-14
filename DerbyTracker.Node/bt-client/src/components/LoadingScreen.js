@@ -8,6 +8,7 @@ const Loading = props => (
         <h2>Client App</h2>
         <p>Loading.  Please Wait.</p>
         {props.system.initialization.signalr ? <p>SignalR GO</p> : null}
+        {props.system.connectionNumber ? <p>My Number Is {props.system.connectionNumber}</p> : null}
         {props.system.initialization.complete
             ? <p>
                 <button onClick={props.go}>All Systems GO</button>

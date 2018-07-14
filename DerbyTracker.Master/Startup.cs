@@ -1,10 +1,15 @@
+using DerbyTracker.Common.Messaging.CommandHandlers;
 using DerbyTracker.Common.Services;
+using DerbyTracker.Master.SignalR;
+using DerbyTracker.Messaging.Callbacks;
+using DerbyTracker.Messaging.Dispatchers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace DerbyTracker.Master
 {
@@ -22,6 +27,7 @@ namespace DerbyTracker.Master
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            //TODO: Verify CORS settings for signalr clients
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                 builder =>
                 {
@@ -38,12 +44,16 @@ namespace DerbyTracker.Master
             });
 
             services.AddSignalR();
-
+            services.AddScoped<SignalRCallbackFactory>();
+            services.AddSingleton<ICallbackFactory, SignalRCallbackFactory>();
+            services.AddSingleton<IDispatcher, ImmediateDispatcher>();
             services.AddSingleton<IBoutFileService, BoutFileService>();
+            services.AddSingleton<INodeService, NodeService>();
+            services.AddTransient<HandlerRegistrar>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -80,7 +90,9 @@ namespace DerbyTracker.Master
                 }
             });
 
-
+            var registrar = serviceProvider.GetService<HandlerRegistrar>();
+            var dispatcher = serviceProvider.GetService<IDispatcher>() as ImmediateDispatcher;
+            registrar.RegisterHandlers(dispatcher);
         }
     }
 }

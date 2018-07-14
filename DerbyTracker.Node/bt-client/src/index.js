@@ -16,7 +16,7 @@ const store = configureStore(initialState)
 //Initialize SignalR
 signalRRegisterCommands(store, () => {
     store.dispatch({ type: 'SIGNALR_CONNECTED' })
-    store.dispatch({ type: 'SIGNALR_TEST' })
+    store.dispatch({ type: 'CONNECT_NODE' })
 })
 
 const rootElement = document.getElementById('root');

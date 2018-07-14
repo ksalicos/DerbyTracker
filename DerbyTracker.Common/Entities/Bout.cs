@@ -16,7 +16,7 @@ namespace DerbyTracker.Common.Entities
         public string Venue { get; set; }
 
         public DateTime AdvertisedStart { get; set; }
-        //public DateTime ActualStart { get; set; }
+        //public DateTime ActualStart { get; set; } //Do I need?  This is the timestamp of the first Jam Start event.
         //public DateTime End { get; set; }
 
         //public IEnumerable<Official> Officials { get; set; }
