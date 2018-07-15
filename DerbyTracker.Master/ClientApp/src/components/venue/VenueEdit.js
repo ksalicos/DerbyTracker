@@ -33,7 +33,7 @@ class VenueEdit extends React.Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Col sm={1}><label>Sity</label></Col>
+                            <Col sm={1}><label>City</label></Col>
                             <Col sm={5}>
                                 <input name='city' value={this.state.city} onChange={this.handleChange} disabled={this.state.busy} />
                             </Col>
