@@ -8,6 +8,7 @@ const createBout = 'CREATE_BOUT'
 const exit = 'EXIT_BOUT'
 const toggleEdit = 'TOGGLE_EDIT'
 const venueSelected = 'VENUE_SELECTED'
+const rosterUpdated = 'ROSTER_UPDATED'
 
 const initialState = {
     list: null,
@@ -23,14 +24,9 @@ export const actionCreators = {
     exit: () => ({ type: exit }),
     toggleEdit: () => ({ type: toggleEdit }),
     venueSelected: (data) => ({ type: venueSelected, data: data }),
+    rosterUpdated: (data, side) => ({ type: rosterUpdated, data: data, side: side }),
     saveBout: () => (dispatch, getState) => {
-        let state = getState().bout
-        let bout = {
-            boutId: state.current.boutId,
-            name: state.current.name,
-            advertisedStart: state.current.advertisedStart,
-            venue: state.current.venue
-        }
+        let bout = getState().bout.current
         agent.post('/api/bout/save')
             .send(bout)
             .set('Accept', 'application/json')
@@ -68,6 +64,13 @@ export const reducer = (state, action) => {
             return { ...state, edit: !state.edit }
         case venueSelected:
             return { ...state, current: { ...state.current, venue: action.data } }
+        case rosterUpdated:
+            if (action.side === 'left')
+                return { ...state, current: { ...state.current, leftTeam: { ...action.data } } }
+            if (action.side === 'right')
+                return { ...state, current: { ...state.current, rightTeam: { ...action.data } } }
+            console.log('Invalid Side Set, Doing Nothing')
+            break;
         default:
             break;
     }
@@ -77,6 +80,19 @@ export const reducer = (state, action) => {
 
 const defaultBout = {
     name: 'New Bout',
-    venue: null,
-    advertisedTime: new Date().toLocaleDateString()
+    advertisedStart: '08/26/2020 7:00 PM',
+    venue: {
+        name: 'The Hangar',
+        city: 'Portland',
+        state: 'OR'
+    },
+    advertisedTime: new Date().toLocaleDateString(),
+    leftTeam: {
+        name: 'Left Team',
+        roster: []
+    },
+    rightTeam: {
+        name: 'Right Team',
+        roster: []
+    }
 }

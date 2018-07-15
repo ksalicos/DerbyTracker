@@ -5,13 +5,15 @@ import * as Counter from './Counter'
 import * as System from './System'
 import * as Bout from './Bout'
 import * as Venue from './Venue'
+import * as Roster from './Roster'
 
 export default function configureStore(initialState) {
     const reducers = {
         counter: Counter.reducer,
         system: System.reducer,
         bout: Bout.reducer,
-        venue: Venue.reducer
+        venue: Venue.reducer,
+        roster: Roster.reducer
     };
 
     const middleware = [

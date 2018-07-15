@@ -5,6 +5,7 @@ import { actionCreators as system } from '../../store/System'
 import DateTime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 import { Col, Row } from 'react-bootstrap'
+import MatchupText from './MatchupText'
 
 class BoutEdit extends React.Component {
     constructor(props) {
@@ -53,6 +54,10 @@ class BoutEdit extends React.Component {
                     <Col sm={4}>
                         <p>Date/Time</p>
                         <DateTime onChange={this.timeChange} input={true} defaultValue={this.state.advertisedStart} />
+                    </Col>
+                    <Col sm={4}>
+                        <div><MatchupText bout={this.props.bout.current} /></div>
+                        <button onClick={this.props.editRosters}>Edit Rosters</button>
                     </Col>
                 </Row>
 
@@ -110,7 +115,8 @@ const mapDispatchToProps = dispatch => {
         toggleEdit: () => dispatch(bout.toggleEdit()),
         updateCurrent: (b) => dispatch(bout.boutUpdated(b)),
         toVenueDetails: () => dispatch(system.changeScreen('venue')),
-        save: () => dispatch(bout.saveBout())
+        save: () => dispatch(bout.saveBout()),
+        editRosters: () => dispatch(system.changeScreen('rosters'))
     }
 }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as bout } from '../../store/Bout'
 import Moment from 'react-moment';
+import MatchupText from './MatchupText'
 
 const BoutDetails = props => {
     let bout = props.bout.current
@@ -15,6 +16,7 @@ const BoutDetails = props => {
             <div>
                 <h1>Bout Details</h1>
                 <h2>{bout.name}</h2>
+                <MatchupText bout={bout} />
                 {bout.venue ? <p>{bout.venue.name} {bout.venue.city}, {bout.venue.state}</p>
                     : <p>No Venue Set</p>}
                 <p><Moment format="MMM DD YYYY, h:mmA">{bout.advertisedStart}</Moment></p>

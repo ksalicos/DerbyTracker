@@ -10,14 +10,7 @@ const Venue = props =>
     </div>
 
 const mapStateToProps = state => {
-    return {
-        venue: state.venue
-    }
+    return { venue: state.venue }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Venue);
+export default connect(mapStateToProps)(Venue);
