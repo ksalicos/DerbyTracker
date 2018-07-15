@@ -1,14 +1,13 @@
 ﻿using DerbyTracker.Common.Entities;
-using DerbyTracker.Common.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DerbyTracker.Master.Tests
+namespace DerbyTracker.Common.Services.Mocks
 {
     public class MockBoutDataService : IBoutDataService
     {
-        public static Guid EmptyBoutId { get; set; }
+        public static Guid EmptyBoutId = Guid.Empty;
         private readonly List<BoutListItem> _boutList = new List<BoutListItem> { new BoutListItem { Id = EmptyBoutId } };
         private readonly Dictionary<Guid, Bout> _bouts = new Dictionary<Guid, Bout>
         {

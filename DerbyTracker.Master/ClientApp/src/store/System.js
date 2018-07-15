@@ -15,6 +15,8 @@ export const actionCreators = {
     //initialize: (data) => ({ type: initializeType, data: data })
 };
 
+const boutScreens = ['bout', 'venue', 'rosters']
+
 export const reducer = (state, action) => {
     state = state || initialState
     let newstate
@@ -35,6 +37,13 @@ export const reducer = (state, action) => {
             }
             break
         case changeScreen:
+            //TODO: This is getting kludgy - rework
+            if (boutScreens.includes(state.screen)) {
+                return { ...state, lastBoutScreen: state.screen, screen: action.screen }
+            }
+            if (action.screen === 'bout' && !boutScreens.includes(state.screen) && state.lastBoutScreen) {
+                return { ...state, screen: state.lastBoutScreen }
+            }
             return { ...state, screen: action.screen }
         case venueSelected:
             return { ...state, screen: 'bout' }

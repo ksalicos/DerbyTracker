@@ -9,7 +9,13 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Node
 {
     public class ConnectNodeCommandHandlerTests
     {
-        private readonly INodeService _nodeService = new NodeService();
+        private readonly INodeService _nodeService;
+
+        public ConnectNodeCommandHandlerTests()
+        {
+            IBoutRunnerService boutRunnerService = new BoutRunnerService();
+            _nodeService = new NodeService(boutRunnerService);
+        }
 
         [Fact]
         public void NewNodeCanConnect()
@@ -19,7 +25,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Node
             var result = handler.Handle(command);
             var @event = result.Events.FirstOrDefault(x => x.Event.type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
             Assert.NotNull(@event);
-            Assert.Equal("NodeId", @event.NodeId);
+            Assert.Equal("NodeId", @event.data.NodeId);
         }
 
         [Fact]
@@ -33,7 +39,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Node
             var event2 = result2.Events.FirstOrDefault(x => x.Event.type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
             Assert.NotNull(@event);
             Assert.NotNull(event2);
-            Assert.Equal(@event.ConnectionNumber, event2.ConnectionNumber);
+            Assert.Equal(@event.data.ConnectionNumber, event2.data.ConnectionNumber);
         }
     }
 }

@@ -4,13 +4,14 @@ import Layout from './Layout'
 import Bout from './Bout'
 import Venue from './Venue'
 import Roster from './Roster'
-
+import Nodes from './Nodes'
 const Home = props => (
     <Layout>
         {({
             'bout': (<Bout />),
             'venue': (<Venue />),
-            'rosters': (<Roster />)
+            'rosters': (<Roster />),
+            'nodes': (<Nodes />)
         })[props.system.screen]}
     </Layout>
 );

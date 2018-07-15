@@ -13,6 +13,7 @@ import superagent from 'superagent'
 import noCache from 'superagent-no-cache'
 import { actionCreators as bout } from './store/Bout'
 import { actionCreators as venue } from './store/Venue'
+import { actionCreators as nodes } from './store/Nodes'
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const initialState = window.initialReduxState
@@ -36,6 +37,16 @@ superagent
     .use(noCache)
     .set('Accept', 'application/json')
     .end((e, r) => { store.dispatch(venue.listLoaded(r.body)) })
+superagent
+    .get('/api/node/list')
+    .use(noCache)
+    .set('Accept', 'application/json')
+    .end((e, r) => { store.dispatch(nodes.listLoaded(r.body)) })
+superagent
+    .get('/api/bout/running')
+    .use(noCache)
+    .set('Accept', 'application/json')
+    .end((e, r) => { store.dispatch(bout.runningListLoaded(r.body)) })
 //TODO: Handle ajax errors
 
 const rootElement = document.getElementById('root');

@@ -49,3 +49,22 @@ body{
 .bout:hover {
     color: red;
 }
+
+.in-role{
+    color:green;
+}
+.not-in-role{
+    color: black;
+}
+
+.role-glyph{
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid black;
+    border-bottom: 0;
+}
+.role-label{
+    text-align: center;
+    border: 1px solid black;
+    border-top: 0;
+}

@@ -46,7 +46,6 @@ class RosterEdit extends React.Component {
                             )
                         }
 
-
                         <Row>
                             <Col sm={4}>
                                 <input value={this.state.newnumber} onChange={this.handleChange} name='newnumber' />

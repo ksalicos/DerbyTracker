@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as bout } from '../../store/Bout'
+import { actionCreators as signalr } from '../../SignalRMiddleware'
+
 import Moment from 'react-moment';
 import MatchupText from './MatchupText'
 
@@ -24,7 +26,7 @@ const BoutDetails = props => {
                 <button onClick={props.exit}>Exit</button>
             </div>
             <div>
-                <button>Run</button>
+                <button onClick={() => { props.runBout(bout.boutId) }}>Run</button>
             </div>
         </div>
     )
@@ -38,10 +40,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        exit: () =>
-            dispatch(bout.exit()),
-        edit: () =>
-            dispatch(bout.toggleEdit())
+        exit: () => dispatch(bout.exit()),
+        edit: () => dispatch(bout.toggleEdit()),
+        runBout: (b) => dispatch(signalr.runBout(b))
     }
 }
 

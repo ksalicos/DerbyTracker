@@ -30,8 +30,8 @@ export const reducer = (state, action) => {
             break
         case nodeConnected:
             let s = settings.get()
-            if (action.nodeId === s.nodeId) {
-                newstate = { ...state, connectionNumber: action.connectionNumber, roles: action.roles }
+            if (action.data.nodeId === s.nodeId) {
+                newstate = { ...state, connectionNumber: action.data.connectionNumber, roles: action.data.roles }
             }
             break
         default:

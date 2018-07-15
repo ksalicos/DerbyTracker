@@ -21,7 +21,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.Node
             var response = new CommandResponse();
             var connection = _nodeService.ConnectNode(command.Originator, command.ConnectionId);
 
-            response.AddEvent(new NodeConnectedEvent(command.Originator, connection.ConnectionNumber, connection.NodeRoles), Audiences.All);
+            response.AddEvent(new NodeConnectedEvent(connection), Audiences.All);
 
             return response;
         }

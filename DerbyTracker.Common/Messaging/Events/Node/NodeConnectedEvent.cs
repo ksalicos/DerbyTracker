@@ -1,20 +1,16 @@
-﻿using DerbyTracker.Messaging.Events;
-using System.Collections.Generic;
+﻿using DerbyTracker.Common.Services;
+using DerbyTracker.Messaging.Events;
 
 namespace DerbyTracker.Common.Messaging.Events.Node
 {
     public class NodeConnectedEvent : BaseEvent
     {
         public override string type => "NODE_CONNECTED";
-        public string NodeId { get; set; }
-        public int ConnectionNumber { get; set; }
-        public IEnumerable<string> Roles { get; set; }
+        public NodeConnection data;
 
-        public NodeConnectedEvent(string nodeId, int connectionNumber, IEnumerable<string> roles)
+        public NodeConnectedEvent(NodeConnection connection)
         {
-            NodeId = nodeId;
-            ConnectionNumber = connectionNumber;
-            Roles = roles;
+            data = connection;
         }
     }
 }

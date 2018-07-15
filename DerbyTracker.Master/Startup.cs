@@ -49,6 +49,7 @@ namespace DerbyTracker.Master
             services.AddSingleton<IDispatcher, ImmediateDispatcher>();
             services.AddTransient<HandlerRegistrar>();
 
+            services.AddSingleton<IBoutRunnerService, BoutRunnerService>();
             services.AddSingleton<IBoutDataService, BoutDataService>();
             services.AddSingleton<INodeService, NodeService>();
             services.AddSingleton<IVenueDataService, VenueDataService>();

@@ -6,6 +6,7 @@ import * as System from './System'
 import * as Bout from './Bout'
 import * as Venue from './Venue'
 import * as Roster from './Roster'
+import * as Nodes from './Nodes'
 
 export default function configureStore(initialState) {
     const reducers = {
@@ -13,7 +14,8 @@ export default function configureStore(initialState) {
         system: System.reducer,
         bout: Bout.reducer,
         venue: Venue.reducer,
-        roster: Roster.reducer
+        roster: Roster.reducer,
+        nodes: Nodes.reducer
     };
 
     const middleware = [

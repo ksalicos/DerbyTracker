@@ -1,8 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Glyphicon, Nav, Navbar, NavItem } from 'react-bootstrap'
 import './NavMenu.css'
+import { actionCreators as system } from '../store/System'
 
-const foo = props => (
+const NavMenu = props => (
     <Navbar fluid collapseOnSelect>
         <Navbar.Header>
             <Navbar.Brand>
@@ -12,10 +14,10 @@ const foo = props => (
         </Navbar.Header>
         <Navbar.Collapse>
             <Nav>
-                <NavItem>
+                <NavItem onClick={() => { props.changeScreen('bout') }}>
                     <Glyphicon glyph='bullhorn' /> Bout Info
                 </NavItem>
-                <NavItem>
+                <NavItem onClick={() => { props.changeScreen('nodes') }}>
                     <Glyphicon glyph='phone' /> Nodes
                 </NavItem>
             </Nav>
@@ -23,4 +25,16 @@ const foo = props => (
     </Navbar>
 );
 
-export default foo
+const mapStateToProps = state => {
+    return {
+        system: state.system
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        changeScreen: (s) => dispatch(system.changeScreen(s))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavMenu);

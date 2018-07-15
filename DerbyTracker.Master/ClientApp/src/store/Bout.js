@@ -2,6 +2,7 @@
 import uuid from 'uuid'
 
 const boutListLoaded = 'BOUT_LIST_LOADED'
+const runningListLoaded = 'RUNNING_BOUT_LIST_LOADED'
 const boutLoaded = 'BOUT_LOADED'
 const boutUpdated = 'BOUT_UPDATED'
 const createBout = 'CREATE_BOUT'
@@ -9,15 +10,18 @@ const exit = 'EXIT_BOUT'
 const toggleEdit = 'TOGGLE_EDIT'
 const venueSelected = 'VENUE_SELECTED'
 const rosterUpdated = 'ROSTER_UPDATED'
+const boutRunning = 'BOUT_RUNNING'
 
 const initialState = {
     list: null,
     current: null,
-    edit: false
+    edit: false,
+    running: []
 };
 
 export const actionCreators = {
     listLoaded: (data) => ({ type: boutListLoaded, data: data }),
+    runningListLoaded: (data) => ({ type: runningListLoaded, data: data }),
     boutLoaded: (data) => ({ type: boutLoaded, data: data }),
     boutUpdated: (data) => ({ type: boutUpdated, data: data }),
     create: () => ({ type: createBout }),
@@ -42,6 +46,8 @@ export const reducer = (state, action) => {
     switch (action.type) {
         case boutListLoaded:
             return { ...state, list: action.data }
+        case runningListLoaded:
+            return { ...state, running: action.data }
         case boutLoaded:
             return { ...state, current: action.data }
         case boutUpdated:
@@ -71,6 +77,8 @@ export const reducer = (state, action) => {
                 return { ...state, current: { ...state.current, rightTeam: { ...action.data } } }
             console.log('Invalid Side Set, Doing Nothing')
             break;
+        case boutRunning:
+            return { ...state, running: [...state.running, { boutId: action.boutId, name: action.name }] }
         default:
             break;
     }
