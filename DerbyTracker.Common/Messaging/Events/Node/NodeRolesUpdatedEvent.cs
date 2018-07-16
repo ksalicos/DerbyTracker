@@ -1,17 +1,14 @@
-﻿using DerbyTracker.Messaging.Events;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DerbyTracker.Common.Messaging.Events.Node
 {
-    public class NodeRolesUpdatedEvent : BaseEvent
+    public class NodeRolesUpdatedEvent : BaseNodeEvent
     {
-        public override string type => "NODE_ROLES_UPDATED";
-        public string NodeId { get; set; }
+        public override string Type => "NODE_ROLES_UPDATED";
         public List<string> NewRoles { get; set; }
 
-        public NodeRolesUpdatedEvent(string nodeId, List<string> newRoles)
+        public NodeRolesUpdatedEvent(string nodeId, List<string> newRoles) : base(nodeId)
         {
-            NodeId = nodeId;
             NewRoles = newRoles;
         }
     }

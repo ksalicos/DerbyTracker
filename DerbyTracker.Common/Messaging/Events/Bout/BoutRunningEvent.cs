@@ -1,17 +1,14 @@
-﻿using DerbyTracker.Messaging.Events;
-using System;
+﻿using System;
 
 namespace DerbyTracker.Common.Messaging.Events.Bout
 {
-    public class BoutRunningEvent : BaseEvent
+    public class BoutRunningEvent : BaseBoutEvent
     {
-        public override string type => "BOUT_RUNNING";
-        public Guid BoutId { get; set; }
+        public override string Type => "BOUT_RUNNING";
         public string Title { get; set; }
 
-        public BoutRunningEvent(Guid boutId, string title)
+        public BoutRunningEvent(Guid boutId, string title) : base(boutId)
         {
-            BoutId = boutId;
             Title = title;
         }
     }

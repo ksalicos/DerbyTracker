@@ -1,12 +1,15 @@
 import * as settings from '../Settings'
+import { initializeBoutState } from './BoutState'
 
 const signalrConnectedType = 'SIGNALR_CONNECTED'
 const changeScreen = 'CHANGE_SCREEN'
 const nodeConnected = 'NODE_CONNECTED'
+const rolesUpdated = 'NODE_ROLES_UPDATED'
 
 const initialState = {
     screen: 'loading',
     connectionNumber: null,
+    boutId: null,
     roles: [],
     initialization: { complete: false, signalr: false }
 };
@@ -31,11 +34,22 @@ export const reducer = (state, action) => {
         case nodeConnected:
             let s = settings.get()
             if (action.data.nodeId === s.nodeId) {
-                newstate = { ...state, connectionNumber: action.data.connectionNumber, roles: action.data.roles }
+                newstate = {
+                    ...state,
+                    connectionNumber: action.data.connectionNumber,
+                    roles: action.data.roles,
+                    boutId: action.data.boutId
+                }
             }
             break
+        case rolesUpdated:
+            return { ...state, roles: action.newRoles }
+        case initializeBoutState:
+            if (!state.boutId) {
+                return { ...state, boutId: action.boutState.boutId }
+            }
+            break;
         default:
-            if (!action.type.startsWith('@@redux')) { console.log(action) }
             break
     }
 
@@ -48,5 +62,5 @@ export const reducer = (state, action) => {
 };
 
 const complete = state => {
-    return state.initialization.signalr && state.connectionNumber
+    return state.initialization.signalr && state.connectionNumber && state.boutId
 }

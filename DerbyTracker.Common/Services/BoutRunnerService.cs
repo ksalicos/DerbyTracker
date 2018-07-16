@@ -9,7 +9,7 @@ namespace DerbyTracker.Common.Services
     public interface IBoutRunnerService
     {
         void StartBout(Bout bout);
-        BoutState Get(Guid boutId);
+        BoutState GetBoutState(Guid boutId);
         bool IsRunning(Guid boutId);
         List<RunningBout> RunningBouts();
     }
@@ -26,10 +26,10 @@ namespace DerbyTracker.Common.Services
                 throw new BoutAlreadyRunningException(bout.BoutId);
             }
             _bouts[bout.BoutId] = bout;
-            _boutStates[bout.BoutId] = new BoutState();
+            _boutStates[bout.BoutId] = new BoutState() { BoutId = bout.BoutId };
         }
 
-        public BoutState Get(Guid boutId)
+        public BoutState GetBoutState(Guid boutId)
         {
             return _boutStates[boutId];
         }

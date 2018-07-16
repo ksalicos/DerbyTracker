@@ -1,16 +1,15 @@
 ﻿using DerbyTracker.Common.Services;
-using DerbyTracker.Messaging.Events;
 
 namespace DerbyTracker.Common.Messaging.Events.Node
 {
-    public class NodeConnectedEvent : BaseEvent
+    public class NodeConnectedEvent : BaseNodeEvent
     {
-        public override string type => "NODE_CONNECTED";
-        public NodeConnection data;
+        public override string Type => "NODE_CONNECTED";
+        public NodeConnection Data;
 
-        public NodeConnectedEvent(NodeConnection connection)
+        public NodeConnectedEvent(NodeConnection connection) : base(connection.NodeId)
         {
-            data = connection;
+            Data = connection;
         }
     }
 }

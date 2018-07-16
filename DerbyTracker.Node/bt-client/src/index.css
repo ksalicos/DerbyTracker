@@ -1,5 +1,73 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+
+
+html, body, .fill-height {
+  height: 100%;
+}
+
+body{
+  /*Background image by Jeff Griffith (@grifjef) and taken from Unsplash*/
+  /*https://unsplash.com/photos/YTViCPzKKOc*/
+  background: url("./images/betties-faded.png") no-repeat center center fixed;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
+  background-color: #F2F2F2;
+  opacity: .9;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#loadingBox{
+  margin: 10% auto auto auto;
+  padding: 1%;
+  width: 400px;
+  background-color: blueviolet;
+  color: black;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.left-box{
+  background-color: lightgrey;
+  opacity: .9;
+  height: 100%
+}
+
+.right-box{
+  background-color: lightgrey;
+  opacity: .9;
+  height: 100%
+}
+
+.poppy{
+  font-size: 1.2em;
+}
+
+@media (max-width: 767px) {
+  .right-box{
+      min-height: 600px;
+  }
+}
+
+.bout:hover {
+  color: red;
+}
+
+.in-role{
+  color:green;
+}
+.not-in-role{
+  color: black;
+}
+
+.role-glyph{
+  text-align: center;
+  font-size: 2em;
+  border: 1px solid black;
+  border-bottom: 0;
+}
+.role-label{
+  text-align: center;
+  border: 1px solid black;
+  border-top: 0;
 }

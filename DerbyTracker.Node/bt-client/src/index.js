@@ -11,7 +11,6 @@ import { signalRRegisterCommands } from './SignalRMiddleware'
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const initialState = window.initialReduxState
-console.log(configureStore)
 const store = configureStore(initialState)
 //Initialize SignalR
 signalRRegisterCommands(store, () => {

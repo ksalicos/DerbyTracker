@@ -3,6 +3,7 @@
     public enum MessageType
     {
         Error,
+        Info,
         Group,
         System
     }

@@ -1,4 +1,5 @@
 ﻿using DerbyTracker.Common.Messaging.CommandHandlers.Bout;
+using DerbyTracker.Common.Messaging.CommandHandlers.JamClock;
 using DerbyTracker.Common.Messaging.CommandHandlers.Node;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Dispatchers;
@@ -21,10 +22,12 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers
 
         public void RegisterHandlers(ImmediateDispatcher dispatcher)
         {
-            dispatcher.RegisterHandler(new ConnectNodeCommandHandler(_nodeService));
+            dispatcher.RegisterHandler(new ConnectNodeCommandHandler(_nodeService, _boutRunnerService));
             dispatcher.RegisterHandler(new RunBoutCommandHandler(_boutRunnerService, _boutDataService));
             dispatcher.RegisterHandler(new AssignRoleToNodeCommandHandler(_nodeService));
             dispatcher.RegisterHandler(new RemoveRoleFromNodeCommandHandler(_nodeService));
+            dispatcher.RegisterHandler(new ExitPregameCommandHandler(_boutRunnerService, _boutDataService, _nodeService));
+            dispatcher.RegisterHandler(new StartJamCommandHandler(_boutRunnerService, _boutDataService));
         }
     }
 }

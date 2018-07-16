@@ -63,6 +63,8 @@ namespace DerbyTracker.Common.Services
         {
             if (bout.BoutId == Guid.Empty)
             { bout.BoutId = Guid.NewGuid(); }
+            if (bout.RuleSet == null)
+            { bout.RuleSet = RuleSet.WFTDA; }
 
             var filePath = $"{_boutDataPath}/{bout.BoutId}.json";
             var boutJson = JsonConvert.SerializeObject(bout);

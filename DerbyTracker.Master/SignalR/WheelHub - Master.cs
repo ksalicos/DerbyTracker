@@ -9,7 +9,7 @@ namespace DerbyTracker.Master.SignalR
     {
         public async Task RunBout(Guid boutId)
         {
-            var command = new RunBoutCommand(boutId, this.Context.ConnectionId);
+            var command = new RunBoutCommand(boutId, Context.ConnectionId);
             await _dispatcher.Dispatch(command);
         }
 

@@ -10,36 +10,36 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Node
     public class ConnectNodeCommandHandlerTests
     {
         private readonly INodeService _nodeService;
+        private readonly IBoutRunnerService _boutRunnerService = new BoutRunnerService();
 
         public ConnectNodeCommandHandlerTests()
         {
-            IBoutRunnerService boutRunnerService = new BoutRunnerService();
-            _nodeService = new NodeService(boutRunnerService);
+            _nodeService = new NodeService(_boutRunnerService);
         }
 
         [Fact]
         public void NewNodeCanConnect()
         {
-            var handler = new ConnectNodeCommandHandler(_nodeService);
+            var handler = new ConnectNodeCommandHandler(_nodeService, _boutRunnerService);
             var command = new ConnectNodeCommand("NodeId", "ConnectionId");
             var result = handler.Handle(command);
-            var @event = result.Events.FirstOrDefault(x => x.Event.type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
+            var @event = result.Events.FirstOrDefault(x => x.Event.Type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
             Assert.NotNull(@event);
-            Assert.Equal("NodeId", @event.data.NodeId);
+            Assert.Equal("NodeId", @event.Data.NodeId);
         }
 
         [Fact]
         public void NodeGetsSameNumberOnReconnect()
         {
-            var handler = new ConnectNodeCommandHandler(_nodeService);
+            var handler = new ConnectNodeCommandHandler(_nodeService, _boutRunnerService);
             var command = new ConnectNodeCommand("NodeId", "ConnectionId");
             var result = handler.Handle(command);
-            var @event = result.Events.FirstOrDefault(x => x.Event.type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
+            var @event = result.Events.FirstOrDefault(x => x.Event.Type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
             var result2 = handler.Handle(command);
-            var event2 = result2.Events.FirstOrDefault(x => x.Event.type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
+            var event2 = result2.Events.FirstOrDefault(x => x.Event.Type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
             Assert.NotNull(@event);
             Assert.NotNull(event2);
-            Assert.Equal(@event.data.ConnectionNumber, event2.data.ConnectionNumber);
+            Assert.Equal(@event.Data.ConnectionNumber, event2.Data.ConnectionNumber);
         }
     }
 }

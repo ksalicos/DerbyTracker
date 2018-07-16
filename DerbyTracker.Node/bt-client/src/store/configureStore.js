@@ -2,10 +2,12 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
 import { signalRInvokeMiddleware } from '../SignalRMiddleware'
 import * as System from './System'
+import * as BoutState from './BoutState'
 
 export default function configureStore(initialState) {
     const reducers = {
-        system: System.reducer
+        system: System.reducer,
+        boutState: BoutState.reducer
     };
 
     const middleware = [

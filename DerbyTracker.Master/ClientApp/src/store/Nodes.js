@@ -16,10 +16,12 @@ export const reducer = (state, action) => {
         case listLoaded:
             return { ...state, list: action.data }
         case nodeConnected:
-            return { ...state, list: [...state.list, action.data] }
+            return state.list.some((e) => { return e.nodeId === action.data.nodeId })
+                ? { ...state }
+                : { ...state, list: [...state.list, action.data] }
         case rolesUpdated:
             let newList = state.list.map((e) => {
-                return e.nodeId == action.nodeId ? { ...e, roles: action.newRoles } : e
+                return e.nodeId === action.nodeId ? { ...e, roles: action.newRoles } : e
             })
             return { ...state, list: newList }
         default:

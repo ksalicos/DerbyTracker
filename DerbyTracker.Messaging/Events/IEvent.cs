@@ -3,6 +3,6 @@
     public interface IEvent
     {
         // ReSharper disable once InconsistentNaming
-        string type { get; }
+        string Type { get; }
     }
 }

@@ -34,6 +34,7 @@ namespace DerbyTracker.Common.Services
         void RemoveRole(string nodeId, string role);
         void AddRole(string nodeId, string role);
         List<string> GetRoles(string nodeId);
+        bool ConnectionIsInRole(string connectionId, string role);
     }
 
     public class NodeConnection
@@ -124,6 +125,13 @@ namespace DerbyTracker.Common.Services
                 throw new NoSuchNodeException(nodeId);
             }
             return _nodeIdToConnectionId[nodeId].Roles;
+        }
+
+        public bool ConnectionIsInRole(string connectionId, string role)
+        {
+            var inRole = _nodeIdToConnectionId.Any(
+                x => x.Value.ConnectionId == connectionId && x.Value.Roles.Contains(role));
+            return inRole;
         }
 
         private int NextConnectionNumber()

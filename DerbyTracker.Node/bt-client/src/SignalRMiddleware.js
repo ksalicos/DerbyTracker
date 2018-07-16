@@ -11,16 +11,30 @@ const connection = new signalR.HubConnectionBuilder()
 var s = settings.get()
 const nodeId = s.nodeId
 
+//Jam Timer
+const exitPregame = 'EXIT_PREGAME'
+const startJam = 'START_JAM'
+
+export const actionCreators = {
+    exitPregame: (b) => ({ type: exitPregame, boutId: b }),
+    startJam: (b) => ({ type: startJam, boutId: b }),
+}
+
 export function signalRInvokeMiddleware(store) {
     return (next) => async (action) => {
         switch (action.type) {
             case "CONNECT_NODE":
                 connection.invoke('ConnectNode', nodeId)
-                break;
+                return;
+            case exitPregame:
+                connection.invoke('ExitPregame', action.boutId)
+                break
+            case startJam:
+                connection.invoke('StartJam', action.boutId)
+                break
             default:
-                break;
+                break
         }
-
         return next(action);
     }
 }
@@ -30,6 +44,7 @@ export function signalRRegisterCommands(store, callback) {
         console.log("SignalR Test: Success")
     })
     connection.on('dispatch', data => {
+        console.log('signalr event:', data)
         store.dispatch(data)
     })
 
