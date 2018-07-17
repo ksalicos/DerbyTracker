@@ -35,7 +35,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             response.AddEvent(new JamEndedEvent(command.BoutId), Audiences.All);
 
             //Check to see if bout is over
-            if (state.GameClock().Seconds < 30)//bout.RuleSet.PeriodDurationSeconds)
+            if (state.GameClock().Seconds < bout.RuleSet.PeriodDurationSeconds)
             {
                 //Still good
                 state.LineupStart = DateTime.Now;
