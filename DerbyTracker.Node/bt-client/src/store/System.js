@@ -1,6 +1,5 @@
 import * as settings from '../Settings'
 import { initializeBoutState } from './BoutState'
-
 const signalrConnectedType = 'SIGNALR_CONNECTED'
 const changeScreen = 'CHANGE_SCREEN'
 const nodeConnected = 'NODE_CONNECTED'

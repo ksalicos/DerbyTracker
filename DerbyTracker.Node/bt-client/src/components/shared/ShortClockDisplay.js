@@ -73,7 +73,6 @@ class ShortClockDisplay extends React.Component {
         let bs = this.props.boutState
         //TODO: pull jam duration from ruleset
         let dif = Math.max(120000 - now.diff(bs.jamStart), 0)
-        console.log(dif)
         return dif
     }
     //=> DateTime.Now - JamStart;

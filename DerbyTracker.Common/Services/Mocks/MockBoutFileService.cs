@@ -12,7 +12,7 @@ namespace DerbyTracker.Common.Services.Mocks
         private readonly Dictionary<Guid, Bout> _bouts = new Dictionary<Guid, Bout>
         {
             {
-                EmptyBoutId, new Bout{BoutId = EmptyBoutId, Name = "Empty"}
+                EmptyBoutId, new Bout{BoutId = EmptyBoutId, Name = "Empty", RuleSet = RuleSet.WFTDA}
             }
         };
 

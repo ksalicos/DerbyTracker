@@ -27,10 +27,10 @@ export function signalRInvokeMiddleware(store) {
                 connection.invoke('ConnectNode', nodeId)
                 return;
             case exitPregame:
-                connection.invoke('ExitPregame', action.boutId)
+                connection.invoke('ExitPregame', nodeId, action.boutId)
                 break
             case startJam:
-                connection.invoke('StartJam', action.boutId)
+                connection.invoke('StartJam', nodeId, action.boutId)
                 break
             default:
                 break

@@ -33,7 +33,7 @@ export function signalRInvokeMiddleware(store) {
                 connection.invoke('Test')
                 break
             case runBout:
-                connection.invoke('RunBout', action.boutId)
+                connection.invoke('RunBout', 'master', action.boutId)
                 break
             case assignRole:
                 connection.invoke('AssignRole', action.nodeId, action.role)

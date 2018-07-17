@@ -7,9 +7,9 @@ namespace DerbyTracker.Master.SignalR
 {
     public partial class WheelHub
     {
-        public async Task RunBout(Guid boutId)
+        public async Task RunBout(string nodeId, Guid boutId)
         {
-            var command = new RunBoutCommand(boutId, Context.ConnectionId);
+            var command = new RunBoutCommand(nodeId, boutId, Context.ConnectionId);
             await _dispatcher.Dispatch(command);
         }
 

@@ -6,15 +6,15 @@ namespace DerbyTracker.Master.SignalR
 {
     public partial class WheelHub
     {
-        public async Task ExitPregame(Guid boutId)
+        public async Task ExitPregame(string nodeId, Guid boutId)
         {
-            var command = new ExitPregameCommand(boutId, Context.ConnectionId);
+            var command = new ExitPregameCommand(nodeId, boutId, Context.ConnectionId);
             await _dispatcher.Dispatch(command);
         }
 
-        public async Task StartJam(Guid boutId)
+        public async Task StartJam(string nodeId, Guid boutId)
         {
-            var command = new StartJamCommand(boutId, Context.ConnectionId);
+            var command = new StartJamCommand(nodeId, boutId, Context.ConnectionId);
             await _dispatcher.Dispatch(command);
         }
     }

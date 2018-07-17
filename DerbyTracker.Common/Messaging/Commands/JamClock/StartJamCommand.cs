@@ -1,11 +1,11 @@
-﻿using DerbyTracker.Common.Messaging.CommandHandlers.Bout;
+﻿using DerbyTracker.Common.Messaging.Commands.Base;
 using System;
 
 namespace DerbyTracker.Common.Messaging.Commands.JamClock
 {
-    public class StartJamCommand : BoutCommandBase
+    public class StartJamCommand : BaseBoutCommand
     {
-        public StartJamCommand(Guid boutId, string originator) : base(boutId, originator)
+        public StartJamCommand(string nodeId, Guid boutId, string originator) : base(nodeId, boutId, originator)
         { }
     }
 }
