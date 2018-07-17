@@ -3,7 +3,7 @@ mono: none
 solution: DerbyTracker.sln
 dotnet: 2.1
 install:
-  - nuget restore solution-name.sln
+  - nuget restore DerbyTracker.sln
   - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release DerbyTracker.sln
