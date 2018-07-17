@@ -1,7 +1,7 @@
 language: csharp
-solution: DerbyTracker.sln
 mono: none
-dotnet: 2.21
+solution: DerbyTracker.sln
+dotnet: 2.1
 install:
   - nuget restore solution-name.sln
   - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
