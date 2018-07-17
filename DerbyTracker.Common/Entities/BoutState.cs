@@ -15,10 +15,10 @@ namespace DerbyTracker.Common.Entities
 
         //When a timeout is called, replace GameTimeElapsed with GameClock()
         //Then set Lastclock to now when it starts
-        public TimeSpan GameTimeElapsed { get; set; }
+        public TimeSpan GameClockElapsed { get; set; }
         public DateTime LastClockStart { get; set; }
         public bool ClockRunning { get; set; }
-        public TimeSpan GameClock() => ClockRunning ? GameTimeElapsed + (DateTime.Now - LastClockStart) : GameTimeElapsed;
+        public TimeSpan GameClock() => ClockRunning ? GameClockElapsed + (DateTime.Now - LastClockStart) : GameClockElapsed;
 
         public DateTime JamStart { get; set; }
         public TimeSpan JamClock() => DateTime.Now - JamStart;

@@ -7,13 +7,12 @@ import ShortClockDisplay from './shared/ShortClockDisplay';
 
 const JamTimer = props => {
     let bs = props.boutState.current
-    console.log(props)
     return (<div>
         <h1>JamTimer</h1>
-        <h2><ShortClockDisplay boutState={bs} /></h2>
+        <ShortClockDisplay boutState={bs} />
 
-        {bs.phase === 0 //pregame
-            ? <div><button onClick={() => { props.exitPregame(bs.boutId) }}>Exit Pregame</button></div>
+        {bs.phase === 0 || bs.phase === 4 //pregame or halftime
+            ? <div><button onClick={() => { props.exitPregame(bs.boutId) }}>Start Lineup</button></div>
             : null
         }
 
@@ -22,6 +21,10 @@ const JamTimer = props => {
             : null
         }
 
+        {bs.phase === 2 //jam
+            ? <div><button onClick={() => { props.stopJam(bs.boutId) }}>Stop Jam</button></div>
+            : null
+        }
     </div>)
 }
 
@@ -36,7 +39,8 @@ const mapDispatchToProps = dispatch => {
     return {
         go: () => dispatch(system.changeScreen('bout')),
         exitPregame: (boutId) => dispatch(signalr.exitPregame(boutId)),
-        startJam: (boutId) => dispatch(signalr.startJam(boutId))
+        startJam: (boutId) => dispatch(signalr.startJam(boutId)),
+        stopJam: (boutId) => dispatch(signalr.stopJam(boutId))
     }
 }
 

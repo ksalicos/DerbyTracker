@@ -3,9 +3,9 @@ using System;
 
 namespace DerbyTracker.Common.Messaging.Commands.JamClock
 {
-    public class StartJamCommand : BaseBoutCommand
+    public class StopJamCommand : BaseBoutCommand
     {
-        public StartJamCommand(Guid boutId, string originator) : base(boutId, originator)
+        public StopJamCommand(Guid boutId, string originator) : base(boutId, originator)
         { }
     }
 }

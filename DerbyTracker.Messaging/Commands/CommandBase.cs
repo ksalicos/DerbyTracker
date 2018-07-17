@@ -5,7 +5,7 @@ namespace DerbyTracker.Messaging.Commands
     public class CommandBase : ICommand
     {
         public Guid CommandId { get; }
-        public string Originator { get; }
+        public string Originator { get; set; }
         public DateTime ServerTime { get; }
 
         public CommandBase(string originator)

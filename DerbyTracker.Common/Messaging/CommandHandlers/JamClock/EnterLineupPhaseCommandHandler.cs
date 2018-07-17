@@ -1,5 +1,4 @@
 ﻿using DerbyTracker.Common.Entities;
-using DerbyTracker.Common.Enums;
 using DerbyTracker.Common.Exceptions;
 using DerbyTracker.Common.Messaging.Commands.JamClock;
 using DerbyTracker.Common.Messaging.Events.Bout;
@@ -9,29 +8,21 @@ using DerbyTracker.Messaging.Handlers;
 
 namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 {
-    [Handles("ExitPregameCommand")]
-    public class ExitPregameCommandHandler : CommandHandlerBase<ExitPregameCommand>
+    [Handles("EnterLineupPhaseCommand")]
+    public class EnterLineupPhaseCommandHandler : CommandHandlerBase<EnterLineupPhaseCommand>
     {
         private readonly IBoutDataService _boutDataService;
         private readonly IBoutRunnerService _boutRunnerService;
-        private readonly INodeService _nodeService;
 
-        public ExitPregameCommandHandler(IBoutRunnerService boutRunnerService, IBoutDataService boutDataService, INodeService nodeService)
+        public EnterLineupPhaseCommandHandler(IBoutRunnerService boutRunnerService, IBoutDataService boutDataService)
         {
             _boutRunnerService = boutRunnerService;
             _boutDataService = boutDataService;
-            _nodeService = nodeService;
         }
 
-        public override ICommandResponse Handle(ExitPregameCommand command)
+        public override ICommandResponse Handle(EnterLineupPhaseCommand command)
         {
             var response = new CommandResponse();
-
-            //Node Must be jam timer
-            if (!_nodeService.ConnectionIsInRole(command.Originator, NodeRoles.JamTimer))
-            {
-                throw new NodeNotAuthorizedException(command.Originator, command.GetType().Name);
-            }
 
             //Bout must be running
             var bout = _boutDataService.Load(command.BoutId);
@@ -40,7 +31,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 
             //Game Must Be in pregame
             var state = _boutRunnerService.GetBoutState(command.BoutId);
-            if (state.Phase != BoutPhase.Pregame)
+            if (state.Phase != BoutPhase.Pregame && state.Phase != BoutPhase.Halftime)
             { return response; }
 
             state.Phase = BoutPhase.Lineup;

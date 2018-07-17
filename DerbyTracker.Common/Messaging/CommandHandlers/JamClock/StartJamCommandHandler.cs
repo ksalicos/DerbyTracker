@@ -4,6 +4,7 @@ using DerbyTracker.Common.Messaging.Commands.JamClock;
 using DerbyTracker.Common.Messaging.Events.JamClock;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
+using DerbyTracker.Messaging.Events;
 using DerbyTracker.Messaging.Handlers;
 using System;
 
@@ -32,12 +33,22 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             { throw new InvalidBoutPhaseException(state.Phase); }
 
             //There must be time left on the game clock
-            if (state.GameClock().TotalSeconds > bout.RuleSet.PeriodDurationSeconds)
-            { return response; } //ignore, probably an end-of-period event on the way
+            var elapsed = state.GameClock().TotalSeconds;
+            if (elapsed > bout.RuleSet.PeriodDurationSeconds)
+            {
+                response.AddEvent(
+                    MessageBaseEvent.Error($"Call to start jam came too late.  Elapsed: {state.GameClock()}"),
+                    command.Originator);
+                return response;
+            }
 
             state.Phase = BoutPhase.Jam;
             state.JamStart = DateTime.Now;
-            state.ClockRunning = true;
+            if (!state.ClockRunning)
+            {
+                state.ClockRunning = true;
+                state.LastClockStart = DateTime.Now;
+            }
 
             response.AddEvent(new JamStartedEvent(command.BoutId), Audiences.All);
 

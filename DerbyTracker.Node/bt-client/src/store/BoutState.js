@@ -2,6 +2,9 @@ import moment from 'moment'
 export const initializeBoutState = 'INITIALIZE_BOUT_STATE'
 const boutPhaseChanged = 'BOUT_PHASE_CHANGED'
 const jamStarted = 'JAM_STARTED'
+const jamEnded = 'JAM_ENDED'
+const periodEnded = 'PERIOD_ENDED'
+const boutEnded = 'BOUT_ENDED'
 
 const initialState = {
     //bouts: {},
@@ -9,7 +12,6 @@ const initialState = {
 }
 
 export const actionCreators = {
-
 }
 
 export const reducer = (state, action) => {
@@ -24,9 +26,25 @@ export const reducer = (state, action) => {
         case boutPhaseChanged:
             return { ...state, current: { ...state.current, phase: action.newPhase } }
         case jamStarted:
+            let lastClock = state.current.clockRunning ? state.current.lastClockStart : moment()
             return {
                 ...state,
-                current: { ...state.current, phase: 2, clockRunning: true, jamStart: moment() }
+                current: { ...state.current, phase: 2, clockRunning: true, jamStart: moment(), lastClockStart: lastClock }
+            }
+        case jamEnded:
+            return {
+                ...state,
+                current: { ...state.current, phase: 1, lineupStart: moment(), jam: state.current.jam + 1 }
+            }
+        case periodEnded:
+            return {
+                ...state,
+                current: { ...state.current, phase: 4, jam: 1, period: state.period + 1, lastClockStart: moment() }
+            }
+        case boutEnded:
+            return {
+                ...state,
+                current: { ...state.current, phase: 5 }
             }
         default:
             return state
@@ -42,7 +60,7 @@ const momentify = boutState => {
 }
 
 const timespanToSeconds = ts => {
-
+    return 0
 }
 
 export const phase = [

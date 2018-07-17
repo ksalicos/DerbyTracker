@@ -3,6 +3,7 @@ import React from 'react'
 import moment from 'moment'
 import TimeDisplay from './TimeDisplay'
 import { phase } from '../../store/BoutState'
+import { Row, Col } from 'react-bootstrap'
 
 class ShortClockDisplay extends React.Component {
     constructor(props) {
@@ -29,42 +30,46 @@ class ShortClockDisplay extends React.Component {
 
     render() {
         let bs = this.props.boutState
-        switch (bs.phase) {
-            case 0: //Pregame
-                return <span>{phase[bs.phase]}</span>
-            case 1: //Lineup,
-                if (bs.clockRunning) {
-                    return <span>
-                        Jam: {this.props.boutState.jam} <TimeDisplay ms={this.state.jamClock} />
-                    </span>
-                }
-                return <span>
-                    Jam: {this.props.boutState.jam} <TimeDisplay ms={120000} />
-                </span>
-            case 2: //Jam
-                return <span>
-                    Jam: {this.props.boutState.jam} <TimeDisplay ms={this.state.jamClock} />
-                </span>
-            case 3: //Timeout
-                return <span>
-                    Jam: {this.props.boutState.jam} {phase[bs.phase]}
-                </span>
-            case 4: //Halftime
-                break
-            case 5: //UnofficialScore
-                return <span>{phase[bs.phase]}</span>
-            case 6: //OfficialScore
-                return <span>{phase[bs.phase]}</span>
-            default:
-                return <span>Err...</span>
-        }
+        if (bs.phase === 0 || bs.phase === 4 || bs.phase === 5 || bs.phase === 6)
+            return (
+                < Row >
+                    <Col sm={12}>
+                        <span>{phase[bs.phase]}</span>
+                    </Col>
+                </Row >)
+
+        return (
+            < Row >
+                <Col sm={2}>
+                    <span>{phase[bs.phase]}</span>
+                </Col>
+                <Col sm={2}>
+                    <span>{bs.jam}</span>
+                </Col>
+                <Col sm={2}>
+                    <TimeDisplay ms={bs.phase === 1
+                        ? this.state.lineupClock
+                        : this.state.jamClock} />
+                </Col>
+                <Col sm={2}>
+                    Period:
+                </Col>
+                <Col sm={1}>
+                    {this.props.boutState.period}
+                </Col>
+                <Col sm={3}>
+                    <TimeDisplay ms={this.state.gameClock} />
+                </Col>
+            </Row >)
     }
 
     setClocks() {
         let now = moment()
-        let jamClock = this.JamClock(now)
-
-        this.setState({ jamClock: jamClock })
+        let bs = this.props.boutState
+        let jamClock = Math.max(120000 - now.diff(bs.jamStart), 0)
+        let lineupClock = Math.max(30000 - now.diff(bs.lineupStart), 0)
+        let gameClock = Math.max(1800000 - now.diff(bs.lastClockStart), 0)
+        this.setState({ jamClock: jamClock, lineupClock: lineupClock, gameClock: gameClock })
         setTimeout(this.setClocks, 500)
     }
 
@@ -75,8 +80,6 @@ class ShortClockDisplay extends React.Component {
         let dif = Math.max(120000 - now.diff(bs.jamStart), 0)
         return dif
     }
-    //=> DateTime.Now - JamStart;
-    //public TimeSpan LineupClock() => DateTime.Now - LineupStart;
 
     handleChange(event) {
         const target = event.target;

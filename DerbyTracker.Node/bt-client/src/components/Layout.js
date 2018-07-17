@@ -8,7 +8,7 @@ export default props => (
             <Col sm={2} className='left-box'>
                 <NavMenu />
             </Col>
-            <Col sm={3} className='right-box'>
+            <Col sm={10} className='right-box'>
                 {props.children}
             </Col>
         </Row>

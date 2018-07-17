@@ -1,5 +1,4 @@
 ﻿using DerbyTracker.Common.Entities;
-using DerbyTracker.Common.Enums;
 using DerbyTracker.Common.Messaging.CommandHandlers.JamClock;
 using DerbyTracker.Common.Messaging.Commands.JamClock;
 using DerbyTracker.Common.Services;
@@ -9,26 +8,22 @@ using Xunit;
 
 namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
 {
-    public class ExitPregameCommandHandlerTests
+    public class EnterLineupPhaseCommandHandlerTests
     {
         private readonly IBoutDataService _boutData = new MockBoutDataService();
         private readonly IBoutRunnerService _boutRunner = new BoutRunnerService();
-        private readonly INodeService _nodeService;
 
-        public ExitPregameCommandHandlerTests()
+        public EnterLineupPhaseCommandHandlerTests()
         {
-            _nodeService = new NodeService(_boutRunner);
             var bout = _boutData.Load(Guid.Empty);
             _boutRunner.StartBout(bout);
-            _nodeService.ConnectNode("nodeId", "connection");
-            _nodeService.AddRole("nodeId", NodeRoles.JamTimer);
         }
 
         [Fact]
         public void ExitPregameGoesToLineupPhase()
         {
-            var command = new ExitPregameCommand("test", Guid.Empty, "connection");
-            var handler = new ExitPregameCommandHandler(_boutRunner, _boutData, _nodeService);
+            var command = new EnterLineupPhaseCommand(Guid.Empty, "connection");
+            var handler = new EnterLineupPhaseCommandHandler(_boutRunner, _boutData);
             handler.Handle(command);
             var state = _boutRunner.GetBoutState(Guid.Empty);
             Assert.Equal(BoutPhase.Lineup, state.Phase);

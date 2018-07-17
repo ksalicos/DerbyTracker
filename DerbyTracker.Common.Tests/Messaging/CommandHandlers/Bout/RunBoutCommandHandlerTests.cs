@@ -17,7 +17,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Bout
         [Fact]
         public void BoutCanBeRun()
         {
-            var command = new RunBoutCommand("nodeId", Guid.Empty, "Test");
+            var command = new RunBoutCommand(Guid.Empty, "Test");
             var handler = new RunBoutCommandHandler(_boutRunner, _boutData);
             var result = handler.Handle(command);
             Assert.Contains(result.Events, x => x.Event.GetType() == typeof(BoutRunningEvent));
@@ -26,7 +26,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Bout
         [Fact]
         public void BoutCantBeRunTwice()
         {
-            var command = new RunBoutCommand("nodeId", Guid.Empty, "Test");
+            var command = new RunBoutCommand(Guid.Empty, "Test");
             var handler = new RunBoutCommandHandler(_boutRunner, _boutData);
             handler.Handle(command);
             Assert.Throws<BoutAlreadyRunningException>(() => { handler.Handle(command); });

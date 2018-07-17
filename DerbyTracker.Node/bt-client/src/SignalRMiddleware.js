@@ -14,10 +14,12 @@ const nodeId = s.nodeId
 //Jam Timer
 const exitPregame = 'EXIT_PREGAME'
 const startJam = 'START_JAM'
+const stopJam = 'STOP_JAM'
 
 export const actionCreators = {
     exitPregame: (b) => ({ type: exitPregame, boutId: b }),
     startJam: (b) => ({ type: startJam, boutId: b }),
+    stopJam: (b) => ({ type: stopJam, boutId: b })
 }
 
 export function signalRInvokeMiddleware(store) {
@@ -32,6 +34,10 @@ export function signalRInvokeMiddleware(store) {
             case startJam:
                 connection.invoke('StartJam', nodeId, action.boutId)
                 break
+            case stopJam:
+                connection.invoke('StopJam', nodeId, action.boutId)
+                break
+
             default:
                 break
         }

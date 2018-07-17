@@ -26,8 +26,9 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers
             dispatcher.RegisterHandler(new RunBoutCommandHandler(_boutRunnerService, _boutDataService));
             dispatcher.RegisterHandler(new AssignRoleToNodeCommandHandler(_nodeService));
             dispatcher.RegisterHandler(new RemoveRoleFromNodeCommandHandler(_nodeService));
-            dispatcher.RegisterHandler(new ExitPregameCommandHandler(_boutRunnerService, _boutDataService, _nodeService));
+            dispatcher.RegisterHandler(new EnterLineupPhaseCommandHandler(_boutRunnerService, _boutDataService));
             dispatcher.RegisterHandler(new StartJamCommandHandler(_boutRunnerService, _boutDataService));
+            dispatcher.RegisterHandler(new StopJamCommandHandler(_boutRunnerService, _boutDataService));
         }
     }
 }
