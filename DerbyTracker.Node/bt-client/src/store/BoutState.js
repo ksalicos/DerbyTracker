@@ -69,6 +69,6 @@ export const phase = [
     'Jam', //2
     'Timeout', //3
     'Halftime', //4
-    'UnofficialScore', //5
-    'OfficialScore' //6
+    'UnofficialFinal', //5
+    'Final' //6
 ]

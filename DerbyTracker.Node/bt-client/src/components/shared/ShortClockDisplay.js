@@ -25,9 +25,6 @@ class ShortClockDisplay extends React.Component {
         this.setClocks()
     }
 
-
-
-
     render() {
         let bs = this.props.boutState
         if (bs.phase === 0 || bs.phase === 4 || bs.phase === 5 || bs.phase === 6)
@@ -37,6 +34,13 @@ class ShortClockDisplay extends React.Component {
                         <span>{phase[bs.phase]}</span>
                     </Col>
                 </Row >)
+
+        let jamTimeColor = 'default'
+        if (this.props.alert && this.state.jamClock === 0) {
+            jamTimeColor = 'timeAlert'
+        } else if (this.props.warn && this.state.jamClock < 10000) {
+            jamTimeColor = 'timeWarning'
+        }
 
         return (
             < Row >
@@ -49,7 +53,9 @@ class ShortClockDisplay extends React.Component {
                 <Col sm={2}>
                     <TimeDisplay ms={bs.phase === 1
                         ? this.state.lineupClock
-                        : this.state.jamClock} />
+                        : this.state.jamClock}
+                        color={jamTimeColor}
+                    />
                 </Col>
                 <Col sm={2}>
                     Period:

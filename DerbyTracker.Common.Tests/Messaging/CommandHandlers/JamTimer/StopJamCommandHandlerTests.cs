@@ -35,5 +35,9 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
             //Assert.True(state.JamClock().TotalSeconds < 1);
             Assert.Contains(response.Events, x => x.Event.GetType() == typeof(JamEndedEvent));
         }
+
+        //IfJamStopsWithTimeOnClockGoToLineup
+        //IfJamStopsWithoutTimeOnClockInLastPeriodGoToUnofficialFinal
+
     }
 }

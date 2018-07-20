@@ -60,7 +60,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
                 else
                 //Game Over
                 {
-                    state.Phase = BoutPhase.UnofficialScore;
+                    state.Phase = BoutPhase.UnofficialFinal;
                     response.AddEvent(new BoutEndedEvent(command.BoutId), Audiences.All);
                 }
             }

@@ -1,12 +1,9 @@
 
-
 html, body, .fill-height {
   height: 100%;
 }
 
 body{
-  /*Background image by Jeff Griffith (@grifjef) and taken from Unsplash*/
-  /*https://unsplash.com/photos/YTViCPzKKOc*/
   background: url("./images/betties-faded.png") no-repeat center center fixed;
   -webkit-background-size: contain;
   -moz-background-size: contain;
@@ -34,7 +31,7 @@ body{
 }
 
 .right-box{
-  background-color: lightgrey;
+  background-color: white;
   opacity: .9;
   height: 100%
 }
@@ -70,4 +67,12 @@ body{
   text-align: center;
   border: 1px solid black;
   border-top: 0;
+}
+
+.timeWarning{
+  color: orange;
+}
+
+.timeAlert{
+  color: red;
 }

@@ -9,7 +9,7 @@ const JamTimer = props => {
     let bs = props.boutState.current
     return (<div>
         <h1>JamTimer</h1>
-        <ShortClockDisplay boutState={bs} />
+        <ShortClockDisplay boutState={bs} warn={true} alert={true} />
 
         {bs.phase === 0 || bs.phase === 4 //pregame or halftime
             ? <div><button onClick={() => { props.exitPregame(bs.boutId) }}>Start Lineup</button></div>

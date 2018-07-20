@@ -41,7 +41,7 @@ namespace DerbyTracker.Common.Entities
         Jam,
         Timeout,
         Halftime,
-        UnofficialScore,
-        OfficialScore
+        UnofficialFinal,
+        Final
     }
 }
