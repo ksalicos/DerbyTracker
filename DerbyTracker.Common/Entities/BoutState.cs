@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DerbyTracker.Common.Entities
 {
@@ -8,17 +10,30 @@ namespace DerbyTracker.Common.Entities
         {
             LeftTeamState = new TeamState();
             RightTeamState = new TeamState();
+            _runningTimes = new List<TimeSpan> { TimeSpan.FromSeconds(0) };
         }
 
         public Guid BoutId { get; set; }
         public BoutPhase Phase { get; set; } = BoutPhase.Pregame;
 
-        //When a timeout is called, replace GameTimeElapsed with GameClock()
-        //Then set Lastclock to now when it starts
-        public TimeSpan GameClockElapsed { get; set; }
+        private readonly List<TimeSpan> _runningTimes;
+        public TimeSpan GameClockElapsed => _runningTimes.Aggregate((a, b) => a + b);
+
         public DateTime LastClockStart { get; set; }
         public bool ClockRunning { get; set; }
         public TimeSpan GameClock() => ClockRunning ? GameClockElapsed + (DateTime.Now - LastClockStart) : GameClockElapsed;
+
+        public void StopGameClock()
+        {
+            ClockRunning = false;
+            _runningTimes.Add(DateTime.Now - LastClockStart);
+        }
+
+        public void StartClock()
+        {
+            ClockRunning = true;
+            LastClockStart = DateTime.Now;
+        }
 
         public DateTime JamStart { get; set; }
         public TimeSpan JamClock() => DateTime.Now - JamStart;
