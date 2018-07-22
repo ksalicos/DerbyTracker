@@ -9,6 +9,7 @@ const startTimeout = 'START_TIMEOUT'
 const stopTimeout = 'STOP_TIMEOUT'
 const setTimeoutType = 'CHANGE_TIMEOUT_TYPE'
 const setLoseReview = 'SET_LOSE_OFFICIAL_REVIEW'
+const endPeriod = 'END_PERIOD'
 
 export const actionCreators = {
     exitPregame: (b) => ({ type: exitPregame, boutId: b }),
@@ -17,7 +18,8 @@ export const actionCreators = {
     startTimeout: (b) => ({ type: startTimeout, boutId: b }),
     stopTimeout: (b) => ({ type: stopTimeout, boutId: b }),
     setTimeoutType: (b, t) => ({ type: setTimeoutType, boutId: b, timeoutType: t }),
-    setLoseReview: (b, l) => ({ type: setLoseReview, boutId: b, loseReview: l })
+    setLoseReview: (b, l) => ({ type: setLoseReview, boutId: b, loseReview: l }),
+    endPeriod: (b) => ({ type: endPeriod, boutId: b })
 }
 
 var s = settings.get()
@@ -47,6 +49,9 @@ export function middleware(store) {
             case setLoseReview:
                 connection.invoke('SetLoseOfficialReview', nodeId, action.boutId, action.loseReview)
                 break
+            case endPeriod:
+                connection.invoke('EndPeriod', nodeId, action.boutId)
+                break;
             default:
                 break
         }

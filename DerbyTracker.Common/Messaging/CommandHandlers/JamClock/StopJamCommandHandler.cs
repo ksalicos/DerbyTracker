@@ -35,7 +35,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             response.AddEvent(new JamEndedEvent(command.BoutId), Audiences.All);
 
             //Check to see if bout is over
-            if (state.GameClock().Seconds < bout.RuleSet.PeriodDurationSeconds)
+            if (state.GameClock.Elapsed.Seconds < bout.RuleSet.PeriodDurationSeconds)
             {
                 //Still good
                 state.LineupStart = DateTime.Now;
@@ -54,7 +54,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
                     response.AddEvent(new PeriodEndedEvent(command.BoutId), Audiences.All);
                     state.Jam = 1;
                     state.Period++;
-                    state.LastClockStart = DateTime.Now;
+                    state.GameClock.Clear();
                     state.Phase = BoutPhase.Halftime;
                 }
                 else
@@ -67,7 +67,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 
 
             state.JamStart = DateTime.Now;
-            state.ClockRunning = true;
+            state.GameClock.Start();
 
             response = new UpdateBoutStateResponse(state);
             return response;

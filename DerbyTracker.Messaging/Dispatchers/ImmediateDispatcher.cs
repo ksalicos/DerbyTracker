@@ -26,10 +26,14 @@ namespace DerbyTracker.Messaging.Dispatchers
         {
             var att = (HandlesAttribute)Attribute.GetCustomAttribute(handler.GetType(), typeof(HandlesAttribute));
 
-            if (Handlers.ContainsKey(att.CommandType))
+            if (att == null)
             {
-                throw new Exception($"Duplicate Type Registration: {att.CommandType}");
+                var name = handler.GetType().Name;
+                throw new HandlerRegistrationException(name, $"Missing HandlesAttribute: {name}");
             }
+
+            if (Handlers.ContainsKey(att.CommandType))
+            { throw new HandlerRegistrationException(handler.GetType().Name, $"Duplicate Type Registration: {att.CommandType}"); }
 
             Handlers[att.CommandType] = handler;
         }

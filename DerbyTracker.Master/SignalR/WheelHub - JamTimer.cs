@@ -10,7 +10,7 @@ namespace DerbyTracker.Master.SignalR
     {
         public async Task ExitPregame(string nodeId, Guid boutId)
         {
-            var command = new EnterLineupPhaseCommand(boutId, Context.ConnectionId);
+            var command = new StartPeriodCommand(boutId, Context.ConnectionId);
             await _dispatcher.Dispatch(command);
         }
 
@@ -47,6 +47,12 @@ namespace DerbyTracker.Master.SignalR
         public async Task SetLoseOfficialReview(string nodeId, Guid boutId, bool loseReview)
         {
             var command = new SetLoseOfficialReviewCommand(boutId, Context.ConnectionId, loseReview);
+            await Dispatch(nodeId, NodeRoles.JamTimer, command);
+        }
+
+        public async Task EndPeriod(string nodeId, Guid boutId)
+        {
+            var command = new EndPeriodCommand(boutId, Context.ConnectionId);
             await Dispatch(nodeId, NodeRoles.JamTimer, command);
         }
     }

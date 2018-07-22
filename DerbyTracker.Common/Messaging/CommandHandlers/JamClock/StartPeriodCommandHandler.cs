@@ -7,31 +7,33 @@ using DerbyTracker.Messaging.Handlers;
 
 namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 {
-    [Handles("EnterLineupPhaseCommand")]
-    public class EnterLineupPhaseCommandHandler : CommandHandlerBase<EnterLineupPhaseCommand>
+    [Handles("StartPeriodCommand")]
+    public class StartPeriodCommandHandler : CommandHandlerBase<StartPeriodCommand>
     {
         private readonly IBoutDataService _boutDataService;
         private readonly IBoutRunnerService _boutRunnerService;
 
-        public EnterLineupPhaseCommandHandler(IBoutRunnerService boutRunnerService, IBoutDataService boutDataService)
+        public StartPeriodCommandHandler(IBoutRunnerService boutRunnerService, IBoutDataService boutDataService)
         {
             _boutRunnerService = boutRunnerService;
             _boutDataService = boutDataService;
         }
 
-        public override ICommandResponse Handle(EnterLineupPhaseCommand command)
+        public override ICommandResponse Handle(StartPeriodCommand command)
         {
             //Bout must be running
             var bout = _boutDataService.Load(command.BoutId);
             if (!_boutRunnerService.IsRunning(bout.BoutId))
             { throw new BoutNotRunningException(bout.BoutId); }
 
-            //Game Must Be in pregame
+            //Game Must Be in pregame or halftime
             var state = _boutRunnerService.GetBoutState(command.BoutId);
             if (state.Phase != BoutPhase.Pregame && state.Phase != BoutPhase.Halftime)
             { return new CommandResponse(); }
 
             state.Phase = BoutPhase.Lineup;
+            state.GameClock.Clear();
+
             var response = new UpdateBoutStateResponse(state);
 
             return response;

@@ -8,12 +8,12 @@ using Xunit;
 
 namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
 {
-    public class EnterLineupPhaseCommandHandlerTests
+    public class StartPeriodCommandHandlerTests
     {
         private readonly IBoutDataService _boutData = new MockBoutDataService();
         private readonly IBoutRunnerService _boutRunner = new BoutRunnerService();
 
-        public EnterLineupPhaseCommandHandlerTests()
+        public StartPeriodCommandHandlerTests()
         {
             var bout = _boutData.Load(Guid.Empty);
             _boutRunner.StartBout(bout);
@@ -22,8 +22,8 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
         [Fact]
         public void ExitPregameGoesToLineupPhase()
         {
-            var command = new EnterLineupPhaseCommand(Guid.Empty, "connection");
-            var handler = new EnterLineupPhaseCommandHandler(_boutRunner, _boutData);
+            var command = new StartPeriodCommand(Guid.Empty, "connection");
+            var handler = new StartPeriodCommandHandler(_boutRunner, _boutData);
             handler.Handle(command);
             var state = _boutRunner.GetBoutState(Guid.Empty);
             Assert.Equal(BoutPhase.Lineup, state.Phase);

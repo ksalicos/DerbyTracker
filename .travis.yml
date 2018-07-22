@@ -5,5 +5,5 @@ dotnet: 2.1
 install:
 - dotnet restore
 script:
-- dotnet build
+- dotnet build derbytracker.common.tests/derbytracker.common.tests.csproj
 - dotnet test DerbyTracker.Common.Tests/DerbyTracker.Common.Tests.csproj

@@ -13,23 +13,25 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.Node
     {
         private readonly INodeService _nodeService;
         private readonly IBoutRunnerService _boutRunnerService;
+        private readonly IBoutDataService _boutData;
 
-        public ConnectNodeCommandHandler(INodeService nodeService, IBoutRunnerService boutRunnerService)
+        public ConnectNodeCommandHandler(INodeService nodeService, IBoutRunnerService boutRunnerService, IBoutDataService boutData)
         {
             _nodeService = nodeService;
             this._boutRunnerService = boutRunnerService;
+            _boutData = boutData;
         }
 
         public override ICommandResponse Handle(ConnectNodeCommand command)
         {
             var response = new CommandResponse();
             var connection = _nodeService.ConnectNode(command.Originator, command.ConnectionId);
-
             response.AddEvent(new NodeConnectedEvent(connection), Audiences.All);
             if (connection.BoutId != Guid.Empty)
             {
                 var boutState = _boutRunnerService.GetBoutState(connection.BoutId);
-                response.AddEvent(new BoutStateUpdatedEvent(boutState), command.ConnectionId);
+                var rules = _boutData.Load(connection.BoutId).RuleSet;
+                response.AddEvent(new InitializeBoutEvent(boutState, rules), command.ConnectionId);
             }
             return response;
         }

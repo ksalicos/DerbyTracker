@@ -28,7 +28,10 @@ export const reducer = (state, action) => {
             }
             break
         case changeScreen:
-            newstate = { ...state, screen: action.screen }
+            newstate = (action.screen === 'bout' && state.roles.length > 0)
+                ?
+                { ...state, screen: state.roles[0] }
+                : { ...state, screen: action.screen }
             break
         case nodeConnected:
             let s = settings.get()
@@ -42,7 +45,13 @@ export const reducer = (state, action) => {
             }
             break
         case rolesUpdated:
-            return { ...state, roles: action.newRoles }
+            return {
+                ...state,
+                roles: action.newRoles,
+                screen: state.screen === 'bout' && action.newRoles.length > 0
+                    ? action.newRoles[0]
+                    : state.screen
+            }
         case initializeBoutState:
             if (!state.boutId) {
                 return { ...state, boutId: action.boutState.boutId }

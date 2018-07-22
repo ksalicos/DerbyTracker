@@ -22,7 +22,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
             _boutRunner.StartBout(bout);
             var state = _boutRunner.GetBoutState(Guid.Empty);
             state.Phase = BoutPhase.Timeout;
-            state.ClockRunning = false;
+            state.GameClock.Running = false;
             _handler = new SetTimeoutTypeCommandHandler(_boutRunner);
         }
 

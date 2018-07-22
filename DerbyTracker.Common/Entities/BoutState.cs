@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DerbyTracker.Common.Entities
 {
@@ -11,36 +9,12 @@ namespace DerbyTracker.Common.Entities
             BoutId = bout.BoutId;
             LeftTeamState = new TeamState(bout.RuleSet);
             RightTeamState = new TeamState(bout.RuleSet);
-            _runningTimes = new List<TimeSpan> { TimeSpan.FromSeconds(0) };
         }
 
         public Guid BoutId { get; set; }
         public BoutPhase Phase { get; set; } = BoutPhase.Pregame;
 
-        private readonly List<TimeSpan> _runningTimes;
-        public TimeSpan GameClockElapsed => _runningTimes.Aggregate((a, b) => a + b);
-
-        public DateTime LastClockStart { get; set; }
-        public bool ClockRunning { get; set; }
-        public TimeSpan GameClock() => ClockRunning ? GameClockElapsed + (DateTime.Now - LastClockStart) : GameClockElapsed;
-
-        public void StopGameClock()
-        {
-            if (ClockRunning)
-            {
-                ClockRunning = false;
-                _runningTimes.Add(DateTime.Now - LastClockStart);
-            }
-        }
-
-        public void StartGameClock()
-        {
-            if (!ClockRunning)
-            {
-                ClockRunning = true;
-                LastClockStart = DateTime.Now;
-            }
-        }
+        public StopWatch GameClock = new StopWatch();
 
         public DateTime JamStart { get; set; }
         public TimeSpan JamClock() => DateTime.Now - JamStart;
@@ -49,8 +23,6 @@ namespace DerbyTracker.Common.Entities
 
         public int Period { get; set; } = 1;
         public int Jam { get; set; } = 1;
-        //public int LeftPass { get; set; }
-        //public int RightPass { get; set; }
 
         public TeamState LeftTeamState { get; set; }
         public TeamState RightTeamState { get; set; }

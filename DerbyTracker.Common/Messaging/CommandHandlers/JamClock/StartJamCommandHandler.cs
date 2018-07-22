@@ -32,18 +32,18 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             { throw new InvalidBoutPhaseException(state.Phase); }
 
             //There must be time left on the game clock
-            var elapsed = state.GameClock().TotalSeconds;
+            var elapsed = state.GameClock.Elapsed.TotalSeconds;
             if (elapsed > bout.RuleSet.PeriodDurationSeconds)
             {
                 response.AddEvent(
-                    MessageBaseEvent.Error($"Call to start jam came too late.  Elapsed: {state.GameClock()}"),
+                    MessageBaseEvent.Error($"Call to start jam came too late.  Elapsed: {state.GameClock.Elapsed.TotalSeconds}"),
                     command.Originator);
                 return response;
             }
 
             state.Phase = BoutPhase.Jam;
             state.JamStart = DateTime.Now;
-            state.StartGameClock();
+            state.GameClock.Start();
 
             response = new UpdateBoutStateResponse(state);
             return response;

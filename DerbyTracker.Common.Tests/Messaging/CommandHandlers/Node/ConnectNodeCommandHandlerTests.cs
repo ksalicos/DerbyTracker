@@ -2,6 +2,7 @@
 using DerbyTracker.Common.Messaging.Commands.Node;
 using DerbyTracker.Common.Messaging.Events.Node;
 using DerbyTracker.Common.Services;
+using DerbyTracker.Common.Services.Mocks;
 using System.Linq;
 using Xunit;
 
@@ -11,6 +12,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Node
     {
         private readonly INodeService _nodeService;
         private readonly IBoutRunnerService _boutRunnerService = new BoutRunnerService();
+        private readonly IBoutDataService _boutData = new MockBoutDataService();
 
         public ConnectNodeCommandHandlerTests()
         {
@@ -20,7 +22,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Node
         [Fact]
         public void NewNodeCanConnect()
         {
-            var handler = new ConnectNodeCommandHandler(_nodeService, _boutRunnerService);
+            var handler = new ConnectNodeCommandHandler(_nodeService, _boutRunnerService, _boutData);
             var command = new ConnectNodeCommand("NodeId", "ConnectionId");
             var result = handler.Handle(command);
             var @event = result.Events.FirstOrDefault(x => x.Event.Type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;
@@ -31,7 +33,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.Node
         [Fact]
         public void NodeGetsSameNumberOnReconnect()
         {
-            var handler = new ConnectNodeCommandHandler(_nodeService, _boutRunnerService);
+            var handler = new ConnectNodeCommandHandler(_nodeService, _boutRunnerService, _boutData);
             var command = new ConnectNodeCommand("NodeId", "ConnectionId");
             var result = handler.Handle(command);
             var @event = result.Events.FirstOrDefault(x => x.Event.Type == "NODE_CONNECTED")?.Event as NodeConnectedEvent;

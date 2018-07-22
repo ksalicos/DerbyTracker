@@ -1,5 +1,8 @@
 import moment from 'moment'
+import { setRules, setClocks } from '../clocks'
+
 export const initializeBoutState = 'INITIALIZE_BOUT_STATE'
+const updateBoutState = 'UPDATE_BOUT_STATE'
 const boutPhaseChanged = 'BOUT_PHASE_CHANGED'
 const jamStarted = 'JAM_STARTED'
 const jamEnded = 'JAM_ENDED'
@@ -8,7 +11,8 @@ const boutEnded = 'BOUT_ENDED'
 
 const initialState = {
     //bouts: {},
-    current: null
+    current: null,
+    rules: null
 }
 
 export const actionCreators = {
@@ -16,11 +20,18 @@ export const actionCreators = {
 
 export const reducer = (state, action) => {
     state = state || initialState
+    //This and the below commented code are for when multiple bouts are implemented.
+    let convertedState = action.boutState ? momentify(action.boutState) : null
     switch (action.type) {
+        case updateBoutState:
+            setClocks(action.boutState)
+            return { ...state, current: convertedState }
         case initializeBoutState:
-            let convertedState = momentify(action.boutState)
+            setClocks(action.boutState)
+            setRules(action.rules)
             return {
-                current: convertedState,
+                rules: action.rules,
+                current: convertedState
                 //current: state.current ? state.current : convertedState,
                 //bouts: { ...state.bouts, [action.boutState.boutId]: convertedState }
             }
@@ -55,26 +66,12 @@ export const reducer = (state, action) => {
 const momentify = boutState => {
     return {
         ...boutState,
-        gameClockElapsed: timespanToSeconds(boutState.gameClockElapsed),
+        //gameClockElapsed: timespanToSeconds(boutState.gameClockElapsed),
         jamStart: moment(boutState.jamStart)
     }
 }
 
-const timespanToSeconds = ts => {
-    //gameClockElapsed:"00:00:33.0023251"
-    var arr = ts.split(':')
-    if (arr.length !== 3) {
-        console.log('Invalid timestamp recieved')
-        return 0
-    }
-    var sec = arr[2].split('.')
-    var ms = Math.floor(sec[1] / 1000)
-
-    var time = ms + sec[0] * 1000 + arr[1] * 60000 + arr[0] * 36000000
-    return time
-}
-
-export const phase = [
+export const phaseList = [
     'Pre-game', //0
     'Lineup', //1
     'Jam', //2

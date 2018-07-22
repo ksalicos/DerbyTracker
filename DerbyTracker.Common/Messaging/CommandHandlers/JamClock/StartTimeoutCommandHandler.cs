@@ -25,7 +25,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             state.LoseOfficialReview = false;
             state.TimeoutType = TimeoutType.Official;
             state.Phase = BoutPhase.Timeout;
-            state.StopGameClock();
+            state.GameClock.Stop();
             var response = new UpdateBoutStateResponse(state);
             return response;
         }
