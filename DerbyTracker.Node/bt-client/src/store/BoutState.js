@@ -18,10 +18,11 @@ export const reducer = (state, action) => {
     state = state || initialState
     switch (action.type) {
         case initializeBoutState:
+            let convertedState = momentify(action.boutState)
             return {
-                ...state,
-                current: state.current ? state.current : momentify(action.boutState),
-                bouts: { ...state.bouts, [action.boutState.boutId]: momentify(action.boutState) }
+                current: convertedState,
+                //current: state.current ? state.current : convertedState,
+                //bouts: { ...state.bouts, [action.boutState.boutId]: convertedState }
             }
         case boutPhaseChanged:
             return { ...state, current: { ...state.current, phase: action.newPhase } }
@@ -54,13 +55,23 @@ export const reducer = (state, action) => {
 const momentify = boutState => {
     return {
         ...boutState,
-        gameTimeElapsed: timespanToSeconds(boutState.gameTimeElapsed),
+        gameClockElapsed: timespanToSeconds(boutState.gameClockElapsed),
         jamStart: moment(boutState.jamStart)
     }
 }
 
 const timespanToSeconds = ts => {
-    return 0
+    //gameClockElapsed:"00:00:33.0023251"
+    var arr = ts.split(':')
+    if (arr.length !== 3) {
+        console.log('Invalid timestamp recieved')
+        return 0
+    }
+    var sec = arr[2].split('.')
+    var ms = Math.floor(sec[1] / 1000)
+
+    var time = ms + sec[0] * 1000 + arr[1] * 60000 + arr[0] * 36000000
+    return time
 }
 
 export const phase = [
@@ -71,4 +82,12 @@ export const phase = [
     'Halftime', //4
     'UnofficialFinal', //5
     'Final' //6
+]
+
+export const timeoutType = [
+    'Official',//0
+    'LeftTeam',//1
+    'RightTeam',//2
+    'LeftReview',//3
+    'RightReview'//4
 ]

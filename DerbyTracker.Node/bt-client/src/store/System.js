@@ -2,7 +2,7 @@ import * as settings from '../Settings'
 import { initializeBoutState } from './BoutState'
 const signalrConnectedType = 'SIGNALR_CONNECTED'
 const changeScreen = 'CHANGE_SCREEN'
-const nodeConnected = 'NODE_CONNECTED'
+export const nodeConnected = 'NODE_CONNECTED'
 const rolesUpdated = 'NODE_ROLES_UPDATED'
 
 const initialState = {

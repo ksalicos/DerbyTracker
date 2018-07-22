@@ -30,7 +30,9 @@ namespace DerbyTracker.Master.SignalR
                         target = _hubContext.Clients.Groups("Nodes");
                         break;
                     default:
-                        target = _hubContext.Clients.Client(e.Audience);
+                        target = e.Audience.StartsWith("Bout:")
+                            ? _hubContext.Clients.Group(e.Audience)
+                            : _hubContext.Clients.Client(e.Audience);
                         break;
                 }
                 target.SendAsync("dispatch", e.Event);

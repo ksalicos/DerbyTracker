@@ -3,6 +3,7 @@ using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
 using DerbyTracker.Messaging.Dispatchers;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Threading.Tasks;
 
 namespace DerbyTracker.Master.SignalR
@@ -15,7 +16,7 @@ namespace DerbyTracker.Master.SignalR
         public WheelHub(IDispatcher dispatcher, INodeService nodeService)
         {
             _dispatcher = dispatcher;
-            this._nodeService = nodeService;
+            _nodeService = nodeService;
         }
 
         private async Task Dispatch(ICommand command)
@@ -25,7 +26,7 @@ namespace DerbyTracker.Master.SignalR
 
         private async Task Dispatch(string nodeId, string role, ICommand command)
         {
-            if (_nodeService.ValidateNode(nodeId, role, Context.ConnectionId))
+            if (_nodeService.ValidateNode(nodeId, Context.ConnectionId, role))
             { await _dispatcher.Dispatch(command); }
             else
             { await Clients.Caller.SendAsync("Error", "Error creating command"); }
@@ -39,8 +40,17 @@ namespace DerbyTracker.Master.SignalR
         public async Task ConnectNode(string nodeId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, "Nodes");
-            var command = new ConnectNodeCommand(nodeId, this.Context.ConnectionId);
+            var command = new ConnectNodeCommand(nodeId, Context.ConnectionId);
             await Dispatch(command);
+        }
+
+        public async Task JoinBoutGroup(string nodeId, Guid boutId)
+        {
+            if (_nodeService.ValidateNode(nodeId, Context.ConnectionId)
+                && _nodeService.IsInBout(nodeId, boutId))
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, $"Bout:{boutId}");
+            }
         }
 
         public async Task ConnectMaster()

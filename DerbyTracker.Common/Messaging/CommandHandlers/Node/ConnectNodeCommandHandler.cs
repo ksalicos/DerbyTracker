@@ -29,7 +29,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.Node
             if (connection.BoutId != Guid.Empty)
             {
                 var boutState = _boutRunnerService.GetBoutState(connection.BoutId);
-                response.AddEvent(new InitializeBoutStateEvent(boutState), command.ConnectionId);
+                response.AddEvent(new BoutStateUpdatedEvent(boutState), command.ConnectionId);
             }
             return response;
         }

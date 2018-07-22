@@ -1,7 +1,6 @@
 ﻿using DerbyTracker.Common.Entities;
 using DerbyTracker.Common.Exceptions;
 using DerbyTracker.Common.Messaging.Commands.JamClock;
-using DerbyTracker.Common.Messaging.Events.JamClock;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
 using DerbyTracker.Messaging.Events;
@@ -44,14 +43,9 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 
             state.Phase = BoutPhase.Jam;
             state.JamStart = DateTime.Now;
-            if (!state.ClockRunning)
-            {
-                state.ClockRunning = true;
-                state.LastClockStart = DateTime.Now;
-            }
+            state.StartGameClock();
 
-            response.AddEvent(new JamStartedEvent(command.BoutId), Audiences.All);
-
+            response = new UpdateBoutStateResponse(state);
             return response;
         }
     }

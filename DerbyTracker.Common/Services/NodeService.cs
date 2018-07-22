@@ -22,9 +22,7 @@ namespace DerbyTracker.Common.Services
         /// <returns>Connection data for node</returns>
         NodeConnection ConnectNode(string nodeId, string connectionId);
 
-
         List<NodeConnection> ListConnected();
-
 
         //Register node
         //Disconnect node
@@ -34,7 +32,8 @@ namespace DerbyTracker.Common.Services
         void RemoveRole(string nodeId, string role);
         void AddRole(string nodeId, string role);
         List<string> GetRoles(string nodeId);
-        bool ValidateNode(string nodeId, string role, string connectionId);
+        bool ValidateNode(string nodeId, string connectionId, string role = "");
+        bool IsInBout(string nodeId, Guid boutId);
     }
 
     public class NodeConnection
@@ -127,11 +126,16 @@ namespace DerbyTracker.Common.Services
             return _nodeIdToConnectionId[nodeId].Roles;
         }
 
-        public bool ValidateNode(string nodeId, string role, string connectionId)
+        public bool ValidateNode(string nodeId, string connectionId, string role)
         {
             var connection = _nodeIdToConnectionId[nodeId];
             return connection.ConnectionId == connectionId
-                && connection.Roles.Contains(role);
+                && (role == "" || connection.Roles.Contains(role));
+        }
+
+        public bool IsInBout(string nodeId, Guid boutId)
+        {
+            return _nodeIdToConnectionId[nodeId].BoutId == boutId;
         }
 
         public bool ConnectionIsInRole(string connectionId, string role)

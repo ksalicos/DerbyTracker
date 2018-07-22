@@ -27,11 +27,20 @@ class ShortClockDisplay extends React.Component {
 
     render() {
         let bs = this.props.boutState
-        if (bs.phase === 0 || bs.phase === 4 || bs.phase === 5 || bs.phase === 6)
+        if (bs.phase === 0 || bs.phase >= 3)
             return (
                 < Row >
-                    <Col sm={12}>
+                    <Col sm={6}>
                         <span>{phase[bs.phase]}</span>
+                    </Col>
+                    <Col sm={2}>
+                        Period:
+                    </Col>
+                    <Col sm={1}>
+                        {this.props.boutState.period}
+                    </Col>
+                    <Col sm={3}>
+                        <TimeDisplay ms={this.state.gameClock} />
                     </Col>
                 </Row >)
 
@@ -74,7 +83,9 @@ class ShortClockDisplay extends React.Component {
         let bs = this.props.boutState
         let jamClock = Math.max(120000 - now.diff(bs.jamStart), 0)
         let lineupClock = Math.max(30000 - now.diff(bs.lineupStart), 0)
-        let gameClock = Math.max(1800000 - now.diff(bs.lastClockStart), 0)
+        let gameClock = bs.clockRunning
+            ? Math.max(1800000 - (bs.gameClockElapsed + now.diff(bs.lastClockStart)), 0)
+            : 1800000 - bs.gameClockElapsed
         this.setState({ jamClock: jamClock, lineupClock: lineupClock, gameClock: gameClock })
         setTimeout(this.setClocks, 500)
     }

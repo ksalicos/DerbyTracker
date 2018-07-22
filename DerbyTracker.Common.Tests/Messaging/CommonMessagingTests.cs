@@ -1,32 +1,53 @@
-﻿using DerbyTracker.Messaging.Commands;
+﻿using DerbyTracker.Common.Messaging.CommandHandlers;
+using DerbyTracker.Messaging.Commands;
 using DerbyTracker.Messaging.Handlers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace DerbyTracker.Common.Tests.Messaging
 {
     public class CommonMessagingTests
     {
+        private readonly IEnumerable<Type> _allHandlers;
+        private readonly Assembly _commonAssembly;
+
+        public CommonMessagingTests()
+        {
+            _commonAssembly = typeof(HandlerRegistrar).Assembly;
+
+            var handlerType = typeof(ICommandHandler);
+            _allHandlers = _commonAssembly.GetTypes()
+                .Where(p => handlerType.IsAssignableFrom(p) && !p.IsAbstract);
+        }
+
         [Fact]
         public void AllCommandsHaveHandlers()
         {
-            var commonAssembly = AppDomain.CurrentDomain.GetAssemblies()
-                .Single(x => x.FullName.StartsWith("DerbyTracker.Common") && !x.FullName.Contains("Test"));
-
             var commandType = typeof(ICommand);
-            var handlerType = typeof(ICommandHandler);
-
-            var types = commonAssembly.GetTypes()
+            var commands = _commonAssembly.GetTypes()
                 .Where(p => commandType.IsAssignableFrom(p) && !p.IsAbstract);
-
-            foreach (var type in types)
+            foreach (var type in commands)
             {
-                var handlers = commonAssembly.GetTypes()
-                    .Where(p => handlerType.IsAssignableFrom(p) && !p.IsAbstract);
-                Assert.Contains(handlers, x => x.Name.Contains($"{type.Name}Handler"));
+                Assert.Contains(_allHandlers, x => x.Name.Contains($"{type.Name}Handler"));
                 //TODO: Check for HandlesAttribute?
             }
+        }
+
+        [Fact]
+        public void AllHandlersHaveOnlyOneConstructor()
+        {
+            Assert.True(_allHandlers.All(x => x.GetConstructors().Count() == 1));
+        }
+
+        [Fact]
+        public void AllHandlersHaveHandlesAttribute()
+        {
+            Assert.True(_allHandlers.All(handler =>
+                Attribute.GetCustomAttribute(handler, typeof(HandlesAttribute)) != null
+            ));
         }
     }
 }

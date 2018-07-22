@@ -15,7 +15,7 @@ namespace DerbyTracker.Messaging.Dispatchers
     public class ImmediateDispatcher : IDispatcher
     {
         protected readonly Dictionary<string, ICommandHandler> Handlers = new Dictionary<string, ICommandHandler>();
-        protected readonly ICallbackFactory _callbackFactory;
+        private readonly ICallbackFactory _callbackFactory;
 
         public ImmediateDispatcher(ICallbackFactory callbackFactory)
         {

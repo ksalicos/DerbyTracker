@@ -26,7 +26,7 @@ namespace DerbyTracker.Common.Services
                 throw new BoutAlreadyRunningException(bout.BoutId);
             }
             _bouts[bout.BoutId] = bout;
-            _boutStates[bout.BoutId] = new BoutState() { BoutId = bout.BoutId };
+            _boutStates[bout.BoutId] = new BoutState(bout);
         }
 
         public BoutState GetBoutState(Guid boutId)

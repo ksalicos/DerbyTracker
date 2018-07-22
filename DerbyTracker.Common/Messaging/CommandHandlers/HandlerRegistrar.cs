@@ -1,34 +1,33 @@
-﻿using DerbyTracker.Common.Messaging.CommandHandlers.Bout;
-using DerbyTracker.Common.Messaging.CommandHandlers.JamClock;
-using DerbyTracker.Common.Messaging.CommandHandlers.Node;
-using DerbyTracker.Common.Services;
-using DerbyTracker.Messaging.Dispatchers;
+﻿using DerbyTracker.Messaging.Dispatchers;
+using DerbyTracker.Messaging.Handlers;
+using System;
+using System.Linq;
 
 namespace DerbyTracker.Common.Messaging.CommandHandlers
 {
-    //TODO: This will get unweildy, and should be reworked to use DI/Reflection
     public class HandlerRegistrar
     {
-        private readonly INodeService _nodeService;
-        private readonly IBoutDataService _boutDataService;
-        private readonly IBoutRunnerService _boutRunnerService;
+        private readonly IServiceProvider _serviceProvider;
 
-        public HandlerRegistrar(INodeService nodeService, IBoutDataService boutDataService, IBoutRunnerService boutRunnerService)
+        public HandlerRegistrar(IServiceProvider serviceProvider)
         {
-            _nodeService = nodeService;
-            _boutDataService = boutDataService;
-            _boutRunnerService = boutRunnerService;
+            _serviceProvider = serviceProvider;
         }
 
         public void RegisterHandlers(ImmediateDispatcher dispatcher)
         {
-            dispatcher.RegisterHandler(new ConnectNodeCommandHandler(_nodeService, _boutRunnerService));
-            dispatcher.RegisterHandler(new RunBoutCommandHandler(_boutRunnerService, _boutDataService));
-            dispatcher.RegisterHandler(new AssignRoleToNodeCommandHandler(_nodeService));
-            dispatcher.RegisterHandler(new RemoveRoleFromNodeCommandHandler(_nodeService));
-            dispatcher.RegisterHandler(new EnterLineupPhaseCommandHandler(_boutRunnerService, _boutDataService));
-            dispatcher.RegisterHandler(new StartJamCommandHandler(_boutRunnerService, _boutDataService));
-            dispatcher.RegisterHandler(new StopJamCommandHandler(_boutRunnerService, _boutDataService));
+            var assembly = typeof(HandlerRegistrar).Assembly;
+            var handlerType = typeof(ICommandHandler);
+            var handlers = assembly.GetTypes()
+                .Where(p => handlerType.IsAssignableFrom(p) && !p.IsAbstract);
+            foreach (var handler in handlers)
+            {
+                var constructor = handler.GetConstructors().Single();
+                var parameters = constructor.GetParameters();
+                var instances = parameters.Select(p => _serviceProvider.GetService(p.ParameterType)).ToArray();
+                var newHandler = Activator.CreateInstance(handler, instances) as ICommandHandler;
+                dispatcher.RegisterHandler(newHandler);
+            }
         }
     }
 }

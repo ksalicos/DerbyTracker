@@ -1,9 +1,11 @@
 ﻿import * as signalR from '@aspnet/signalr'
 import * as settings from './Settings'
+import { nodeConnected } from './store/System'
+import { middleware as jamTimer } from './store/jamTimerSignalR'
 
 //TODO: Set log level programmatically
 const signalrLogLevel = signalR.LogLevel.Information
-const connection = new signalR.HubConnectionBuilder()
+export const connection = new signalR.HubConnectionBuilder()
     .withUrl("https://localhost:44347/wheelhub")
     .configureLogging(signalrLogLevel)
     .build();
@@ -11,16 +13,10 @@ const connection = new signalR.HubConnectionBuilder()
 var s = settings.get()
 const nodeId = s.nodeId
 
-//Jam Timer
-const exitPregame = 'EXIT_PREGAME'
-const startJam = 'START_JAM'
-const stopJam = 'STOP_JAM'
-
-export const actionCreators = {
-    exitPregame: (b) => ({ type: exitPregame, boutId: b }),
-    startJam: (b) => ({ type: startJam, boutId: b }),
-    stopJam: (b) => ({ type: stopJam, boutId: b })
-}
+export const signalRMiddleware = [
+    signalRInvokeMiddleware,
+    jamTimer
+]
 
 export function signalRInvokeMiddleware(store) {
     return (next) => async (action) => {
@@ -28,16 +24,12 @@ export function signalRInvokeMiddleware(store) {
             case "CONNECT_NODE":
                 connection.invoke('ConnectNode', nodeId)
                 return;
-            case exitPregame:
-                connection.invoke('ExitPregame', nodeId, action.boutId)
-                break
-            case startJam:
-                connection.invoke('StartJam', nodeId, action.boutId)
-                break
-            case stopJam:
-                connection.invoke('StopJam', nodeId, action.boutId)
-                break
-
+            case nodeConnected:
+                if (action.data.boutId) {
+                    console.log(`Joining Bout: ${action.data.boutId}`)
+                    connection.invoke('JoinBoutGroup', nodeId, action.data.boutId)
+                }
+                break;
             default:
                 break
         }

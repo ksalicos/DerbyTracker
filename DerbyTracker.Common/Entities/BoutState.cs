@@ -6,10 +6,11 @@ namespace DerbyTracker.Common.Entities
 {
     public class BoutState
     {
-        public BoutState()
+        public BoutState(Bout bout)
         {
-            LeftTeamState = new TeamState();
-            RightTeamState = new TeamState();
+            BoutId = bout.BoutId;
+            LeftTeamState = new TeamState(bout.RuleSet);
+            RightTeamState = new TeamState(bout.RuleSet);
             _runningTimes = new List<TimeSpan> { TimeSpan.FromSeconds(0) };
         }
 
@@ -25,14 +26,20 @@ namespace DerbyTracker.Common.Entities
 
         public void StopGameClock()
         {
-            ClockRunning = false;
-            _runningTimes.Add(DateTime.Now - LastClockStart);
+            if (ClockRunning)
+            {
+                ClockRunning = false;
+                _runningTimes.Add(DateTime.Now - LastClockStart);
+            }
         }
 
-        public void StartClock()
+        public void StartGameClock()
         {
-            ClockRunning = true;
-            LastClockStart = DateTime.Now;
+            if (!ClockRunning)
+            {
+                ClockRunning = true;
+                LastClockStart = DateTime.Now;
+            }
         }
 
         public DateTime JamStart { get; set; }
@@ -47,6 +54,9 @@ namespace DerbyTracker.Common.Entities
 
         public TeamState LeftTeamState { get; set; }
         public TeamState RightTeamState { get; set; }
+
+        public TimeoutType TimeoutType { get; set; }
+        public bool LoseOfficialReview { get; set; }
     }
 
     public enum BoutPhase
@@ -58,5 +68,14 @@ namespace DerbyTracker.Common.Entities
         Halftime,
         UnofficialFinal,
         Final
+    }
+
+    public enum TimeoutType
+    {
+        Official,
+        LeftTeam,
+        RightTeam,
+        LeftReview,
+        RightReview
     }
 }

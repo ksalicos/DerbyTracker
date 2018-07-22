@@ -7,25 +7,27 @@ using DerbyTracker.Messaging.Handlers;
 
 namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 {
-    [Handles("StartTimeoutCommand")]
-    public class StartTimeoutCommandHandler : CommandHandlerBase<StartTimeoutCommand>
+    [Handles("SetLoseOfficialReviewCommand")]
+    public class SetLoseOfficialReviewCommandHandler : CommandHandlerBase<SetLoseOfficialReviewCommand>
     {
         private readonly IBoutRunnerService _boutRunner;
 
-        public StartTimeoutCommandHandler(IBoutRunnerService boutRunner)
+        public SetLoseOfficialReviewCommandHandler(IBoutRunnerService boutRunner)
         {
             _boutRunner = boutRunner;
         }
 
-        public override ICommandResponse Handle(StartTimeoutCommand command)
+        public override ICommandResponse Handle(SetLoseOfficialReviewCommand command)
         {
             var state = _boutRunner.GetBoutState(command.BoutId);
-            if (state.Phase != BoutPhase.Lineup)
+            if (state.Phase != BoutPhase.Timeout)
             { throw new InvalidBoutPhaseException(state.Phase); }
-            state.LoseOfficialReview = false;
-            state.TimeoutType = TimeoutType.Official;
-            state.Phase = BoutPhase.Timeout;
-            state.StopGameClock();
+
+            if (command.LoseOfficialReview == state.LoseOfficialReview)
+            { return new CommandResponse(); }
+
+            state.LoseOfficialReview = command.LoseOfficialReview;
+
             var response = new UpdateBoutStateResponse(state);
             return response;
         }

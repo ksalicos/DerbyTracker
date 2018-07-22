@@ -76,3 +76,12 @@ body{
 .timeAlert{
   color: red;
 }
+
+button.selected{
+  background-color: lightblue;
+}
+
+button:disabled{
+  color: gray;
+  background-color: darkgray;
+}

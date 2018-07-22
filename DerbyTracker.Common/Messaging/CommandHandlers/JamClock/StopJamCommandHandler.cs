@@ -69,6 +69,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             state.JamStart = DateTime.Now;
             state.ClockRunning = true;
 
+            response = new UpdateBoutStateResponse(state);
             return response;
         }
     }

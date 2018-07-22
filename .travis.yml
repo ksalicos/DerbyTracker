@@ -1,8 +1,9 @@
 language: csharp
 dist: trusty
 mono: none
-solution: DerbyTracker.sln
 dotnet: 2.1
+install:
+- dotnet restore
 script:
-  - dotnet restore
-  - dotnet build
+- dotnet build
+- dotnet test DerbyTracker.Common.Tests/DerbyTracker.Common.Tests.csproj

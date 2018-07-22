@@ -1,7 +1,6 @@
 ﻿using DerbyTracker.Common.Entities;
 using DerbyTracker.Common.Exceptions;
 using DerbyTracker.Common.Messaging.Commands.JamClock;
-using DerbyTracker.Common.Messaging.Events.Bout;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
 using DerbyTracker.Messaging.Handlers;
@@ -22,8 +21,6 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 
         public override ICommandResponse Handle(EnterLineupPhaseCommand command)
         {
-            var response = new CommandResponse();
-
             //Bout must be running
             var bout = _boutDataService.Load(command.BoutId);
             if (!_boutRunnerService.IsRunning(bout.BoutId))
@@ -32,10 +29,10 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             //Game Must Be in pregame
             var state = _boutRunnerService.GetBoutState(command.BoutId);
             if (state.Phase != BoutPhase.Pregame && state.Phase != BoutPhase.Halftime)
-            { return response; }
+            { return new CommandResponse(); }
 
             state.Phase = BoutPhase.Lineup;
-            response.AddEvent(new BoutPhaseChangedEvent(BoutPhase.Lineup, command.BoutId), Audiences.All);
+            var response = new UpdateBoutStateResponse(state);
 
             return response;
         }
