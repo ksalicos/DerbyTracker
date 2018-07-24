@@ -1,10 +1,10 @@
 ﻿using DerbyTracker.Common.Messaging.CommandHandlers.JamClock;
 using DerbyTracker.Common.Messaging.Commands.JamClock;
-using DerbyTracker.Common.Messaging.Events.JamClock;
+using DerbyTracker.Common.Messaging.Events.Bout;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Common.Services.Mocks;
 using System;
-using DerbyTracker.Common.Messaging.Events.Bout;
+using System.Linq;
 using Xunit;
 
 namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
@@ -34,7 +34,12 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
 
             //Assert.Equal(BoutPhase.Jam, state.Phase);
             //Assert.True(state.JamClock().TotalSeconds < 1);
+
             Assert.Contains(response.Events, x => x.Event.GetType() == typeof(BoutStateUpdatedEvent));
+
+            var jam = state.Jams.SingleOrDefault(x => x.Period == state.Period && x.JamNumber == state.JamNumber);
+            Assert.NotNull(jam);
+            Assert.Equal(2, jam.JamNumber);
         }
 
         //IfJamStopsWithTimeOnClockGoToLineup

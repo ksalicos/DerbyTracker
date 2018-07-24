@@ -1,11 +1,10 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { actionCreators as system } from '../store/System'
 import { actionCreators as lineupsTracker } from '../store/lineupsTrackerSignalR'
 import ShortClockDisplay from './shared/ShortClockDisplay';
 import ShortScoreDisplay from './shared/ShortScoreDisplay';
-import { Row, Col, Button, ButtonGroup } from 'react-bootstrap'
+import { Row, Col, Button, ButtonGroup, Glyphicon } from 'react-bootstrap'
 
 class LineupsTracker extends React.Component {
     constructor(props) {
@@ -23,21 +22,51 @@ class LineupsTracker extends React.Component {
         let team = this.state.viewTeam === 'left'
             ? data.leftTeam
             : data.rightTeam
+        let currentJam = bs.jams.find((e) => { return e.period === bs.period && e.jamNumber === bs.jamNumber })
+        let lineup = this.state.viewTeam === 'left'
+            ? currentJam.leftRoster
+            : currentJam.rightRoster
 
         return (<div>
             <h1>Lineups Tracker</h1>
             <ShortClockDisplay boutState={bs} />
             <ShortScoreDisplay boutState={bs} />
 
-            <h2>Current Jam Here</h2>
+            <h2>Current Jam</h2>
+            <Row>
+                {lineup.map((e, i) => {
+                    let name = team.roster.find((r) => { return e.number === r.number }).name
+                    return (<Col sm={6} key={i}>
+                        <Row className='lineups-skater'>
+                            <Col sm={2} className='lineups-number'>
+                                <Button onClick={() => {
+                                    this.props.addSkater(bs.boutId, this.state.viewPeriod, this.state.viewJam,
+                                        this.state.viewTeam, e.number)
+                                }}
+                                    bsStyle='success' bsSize="large" block>{e.number}</Button>
+                            </Col>
+                            <Col sm={4} className='lineups-name'>{name}</Col>
+                            <Col sm={2}>
+                                <Button bsSize="large" block><Glyphicon glyph='star' /></Button>
+                            </Col>
+                            <Col sm={2}>
+                                <Button bsSize="large" block><Glyphicon glyph='stop' /></Button>
+                            </Col>
+                            <Col sm={2}>
+                                <Button bsSize="large" block><Glyphicon glyph='bold' /></Button>
+                            </Col>
+                        </Row>
+                    </Col>)
+                })}
+            </Row>
 
             <h2>
                 <ButtonGroup bsSize="large">
-                    <Button bsStyle={this.state.viewTeam === 'left' ? 'primary' : ''}
+                    <Button bsStyle={this.state.viewTeam === 'left' ? 'primary' : 'default'}
                         onClick={() => { this.setState({ viewTeam: 'left' }) }}>
                         {data.leftTeam.name}
                     </Button>
-                    <Button bsStyle={this.state.viewTeam === 'right' ? 'primary' : ''}
+                    <Button bsStyle={this.state.viewTeam === 'right' ? 'primary' : 'default'}
                         onClick={() => { this.setState({ viewTeam: 'right' }) }}>
                         {data.rightTeam.name}
                     </Button>
@@ -56,7 +85,11 @@ class LineupsTracker extends React.Component {
                             <Col sm={6} key={i}>
                                 <Row className='lineups-skater'>
                                     <Col sm={4} className='lineups-number'>
-                                        <Button bsStyle={buttonStyle} bsSize="large" block>{e.number}</Button>
+                                        <Button onClick={() => {
+                                            this.props.addSkater(bs.boutId, this.state.viewPeriod, this.state.viewJam,
+                                                this.state.viewTeam, e.number)
+                                        }}
+                                            bsStyle={buttonStyle} bsSize="large" block>{e.number}</Button>
                                     </Col>
                                     <Col sm={8} className='lineups-name'>{e.name}</Col>
                                 </Row>
@@ -78,8 +111,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        go: () => dispatch(system.changeScreen('bout')),
-        addSkater: (period, jam, number) => dispatch(lineupsTracker.addSkater(period, jam, number))
+        addSkater: (boutId, period, jam, team, number) => dispatch(lineupsTracker.addSkater(boutId, period, jam, team, number))
     }
 }
 

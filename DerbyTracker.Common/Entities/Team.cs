@@ -5,6 +5,6 @@ namespace DerbyTracker.Common.Entities
     public class Team
     {
         public string Name { get; set; }
-        public IEnumerable<Skater> Roster { get; set; }
+        public List<Skater> Roster { get; set; }
     }
 }

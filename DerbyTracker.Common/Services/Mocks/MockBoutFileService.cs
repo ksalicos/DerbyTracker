@@ -12,7 +12,30 @@ namespace DerbyTracker.Common.Services.Mocks
         private readonly Dictionary<Guid, BoutData> _bouts = new Dictionary<Guid, BoutData>
         {
             {
-                EmptyBoutId, new BoutData{BoutId = EmptyBoutId, Name = "Empty", RuleSet = RuleSet.WFTDA}
+                EmptyBoutId, new BoutData
+                {
+                    BoutId = EmptyBoutId,
+                    Name = "Empty",
+                    RuleSet = RuleSet.WFTDA,
+                    LeftTeam = new Team
+                    {
+                        Name= "Betties",
+                        Roster = new List<Skater>
+                        {
+                            new Skater{Number = 8, Name="Fleur De Lethal"},
+                            new Skater{Number = 23, Name="Gal Of Fray"},
+                        }
+                    },
+                    RightTeam = new Team
+                    {
+                        Name= "GNR",
+                        Roster = new List<Skater>
+                        {
+                            new Skater{Number = 868, Name="Zip Drive"},
+                            new Skater{Number = 90, Name="Jasberry"},
+                        }
+                    }
+                }
             }
         };
 

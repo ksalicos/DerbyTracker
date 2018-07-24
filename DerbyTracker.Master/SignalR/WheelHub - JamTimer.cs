@@ -11,7 +11,7 @@ namespace DerbyTracker.Master.SignalR
         public async Task ExitPregame(string nodeId, Guid boutId)
         {
             var command = new StartPeriodCommand(boutId, Context.ConnectionId);
-            await _dispatcher.Dispatch(command);
+            await Dispatch(nodeId, NodeRoles.JamTimer, command);
         }
 
         public async Task StartJam(string nodeId, Guid boutId)

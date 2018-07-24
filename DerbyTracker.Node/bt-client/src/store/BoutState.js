@@ -46,7 +46,7 @@ export const reducer = (state, action) => {
         case jamEnded:
             return {
                 ...state,
-                current: { ...state.current, phase: 1, lineupStart: moment(), jam: state.current.jam + 1 }
+                current: { ...state.current, phase: 1, lineupStart: moment(), jam: state.current.jamnumber + 1 }
             }
         case periodEnded:
             return {

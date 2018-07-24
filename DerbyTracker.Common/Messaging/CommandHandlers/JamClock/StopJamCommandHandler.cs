@@ -40,9 +40,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
                 //Still good
                 state.LineupStart = DateTime.Now;
                 state.Phase = BoutPhase.Lineup;
-                state.Jam++;
-
-                //reset jam scores here
+                state.CreateNextJam();
 
                 //keep the jam clock going in case of undo
             }
@@ -52,7 +50,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
                 if (state.Period < bout.RuleSet.NumberOfPeriods)
                 {
                     response.AddEvent(new PeriodEndedEvent(command.BoutId), Audiences.All);
-                    state.Jam = 1;
+                    state.JamNumber = 1;
                     state.Period++;
                     state.GameClock.Clear();
                     state.Phase = BoutPhase.Halftime;

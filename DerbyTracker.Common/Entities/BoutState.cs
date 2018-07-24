@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DerbyTracker.Common.Entities
 {
@@ -22,10 +23,18 @@ namespace DerbyTracker.Common.Entities
         public TimeSpan LineupClock() => DateTime.Now - LineupStart;
 
         public int Period { get; set; } = 1;
-        public int Jam { get; set; } = 1;
+        public int JamNumber { get; set; } = 1;
+        public List<Jam> Jams = new List<Jam> { new Jam(1, 1) };
+
+        public void CreateNextJam()
+        {
+            JamNumber++;
+            Jams.Add(new Jam(Period, JamNumber));
+        }
 
         public TeamState LeftTeamState { get; set; }
         public TeamState RightTeamState { get; set; }
+
 
         public TimeoutType TimeoutType { get; set; }
         public bool LoseOfficialReview { get; set; }

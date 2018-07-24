@@ -6,7 +6,7 @@ const addSkater = 'ADD_SKATER'
 
 
 export const actionCreators = {
-    addSkater: (jam, team, number, b) => ({ type: addSkater, boutId: b, jam, team, number }),
+    addSkater: (b, period, jam, team, number) => ({ type: addSkater, boutId: b, period: period, jam: jam, team: team, number: number }),
 }
 
 var s = settings.get()
@@ -16,7 +16,8 @@ export function middleware(store) {
     return (next) => async (action) => {
         switch (action.type) {
             case addSkater:
-                connection.invoke('AddSkater', nodeId, action.boutId)
+                console.log(action)
+                connection.invoke('AddSkaterToJam', nodeId, action.boutId, action.period, action.jam, action.team, action.number)
                 break
 
             default:
