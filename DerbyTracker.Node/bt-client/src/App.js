@@ -2,6 +2,7 @@ import React from 'react'
 import LoadingScreen from './components/LoadingScreen'
 import { connect } from 'react-redux'
 import JamTimer from './components/JamTimer'
+import LineupsTracker from './components/Lineups'
 import Layout from './components/Layout'
 import Scoreboard from './components/Scoreboard'
 
@@ -11,7 +12,9 @@ const App = props => {
 
   return <Layout>
     {({
-      'JamTimer': (<JamTimer />)
+      'JamTimer': (<JamTimer />),
+      'LineupsTracker': (<LineupsTracker />)
+
     })[props.system.screen]}
   </Layout>
 }

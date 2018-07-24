@@ -90,6 +90,16 @@ button:disabled{
   background-color: darkgray;
 }
 
+/* Lineup Tracker */
+
+.lineups-number{
+  font-size: 1.5em;
+}
+
+.lineups-name{
+  font-size: 1.2em;
+  padding: 12px;
+}
 
 
 /* Scoreboard */
