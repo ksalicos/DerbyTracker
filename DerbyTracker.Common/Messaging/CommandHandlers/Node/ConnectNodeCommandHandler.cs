@@ -29,9 +29,9 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.Node
             response.AddEvent(new NodeConnectedEvent(connection), Audiences.All);
             if (connection.BoutId != Guid.Empty)
             {
+                var bout = _boutData.Load(connection.BoutId);
                 var boutState = _boutRunnerService.GetBoutState(connection.BoutId);
-                var rules = _boutData.Load(connection.BoutId).RuleSet;
-                response.AddEvent(new InitializeBoutEvent(boutState, rules), command.ConnectionId);
+                response.AddEvent(new InitializeBoutEvent(bout, boutState), command.ConnectionId);
             }
             return response;
         }

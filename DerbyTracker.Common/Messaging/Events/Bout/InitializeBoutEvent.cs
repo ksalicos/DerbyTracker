@@ -6,11 +6,11 @@ namespace DerbyTracker.Common.Messaging.Events.Bout
     {
         public override string Type => "INITIALIZE_BOUT_STATE";
         public BoutState BoutState { get; set; }
-        public RuleSet Rules { get; set; }
+        public BoutData BoutData { get; set; }
 
-        public InitializeBoutEvent(BoutState boutState, RuleSet rules) : base(boutState.BoutId)
+        public InitializeBoutEvent(BoutData boutData, BoutState boutState) : base(boutState.BoutId)
         {
-            Rules = rules;
+            BoutData = boutData;
             BoutState = boutState;
         }
     }

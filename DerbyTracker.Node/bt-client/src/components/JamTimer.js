@@ -16,18 +16,25 @@ class JamTimer extends React.Component {
             jamClock: null,
             lineupClock: null
         }
-
-        clock.addWatch('game', 'jt', (t) => { this.setState({ gameClock: t }) })
-        clock.addWatch('lineup', 'jt', (t) => { this.setState({ lineupClock: t }) })
-
     }
 
     componentDidMount() {
+        clock.addWatch('jt', (t) => {
+            this.setState({
+                jamClock: t.jam,
+                gameClock: t.game,
+                lineupClock: t.lineup
+            })
+        })
     }
+    componentWillUnmount() {
+        clock.removeWatch('jt')
+    }
+
 
     render() {
         let props = this.props
-        if (!props.boutState.current || !props.boutState.rules) return <p>Loading</p>
+        if (!props.boutState.current) return <p>Loading</p>
 
         let bs = props.boutState.current
         let left = bs.leftTeamState
@@ -38,8 +45,8 @@ class JamTimer extends React.Component {
 
         return (<div>
             <h1>JamTimer</h1>
-            <ShortClockDisplay boutState={bs} rules={props.boutState.rules} />
-            <ShortScoreDisplay boutState={bs} rules={props.boutState.rules} />
+            <ShortClockDisplay boutState={bs} />
+            <ShortScoreDisplay boutState={bs} />
             {bs.phase === 0 || bs.phase === 4 //pregame or halftime
                 ? <div><button onClick={() => { props.exitPregame(bs.boutId) }}>Start Lineup</button></div>
                 : null

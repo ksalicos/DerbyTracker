@@ -2,7 +2,7 @@
 
 namespace DerbyTracker.Common.Entities
 {
-    public class Bout
+    public class BoutData
     {
         public Guid BoutId { get; set; }
         public string Name { get; set; }

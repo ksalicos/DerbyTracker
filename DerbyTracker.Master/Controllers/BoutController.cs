@@ -30,15 +30,15 @@ namespace DerbyTracker.Master.Controllers
 
         [HttpPost]
         [Route("Save")]
-        public Guid Save(Bout bout)
+        public Guid Save(BoutData boutData)
         {
-            _boutDataService.Save(bout);
-            return bout.BoutId;
+            _boutDataService.Save(boutData);
+            return boutData.BoutId;
         }
 
         [HttpGet]
         [Route("Load/{id}")]
-        public Bout Load(Guid id)
+        public BoutData Load(Guid id)
         {
             return _boutDataService.Load(id);
         }

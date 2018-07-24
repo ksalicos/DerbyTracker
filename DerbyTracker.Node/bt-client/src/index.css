@@ -1,6 +1,6 @@
-
 html, body, .fill-height {
   height: 100%;
+  margin: 0;
 }
 
 body{
@@ -9,9 +9,13 @@ body{
   -moz-background-size: contain;
   -o-background-size: contain;
   background-size: contain;
-  background-color: #F2F2F2;
   opacity: .9;
+  background-color: #F2F2F2;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+div{
+  margin: 0;
 }
 
 #loadingBox{
@@ -84,4 +88,78 @@ button.selected{
 button:disabled{
   color: gray;
   background-color: darkgray;
+}
+
+
+
+/* Scoreboard */
+#scoreboard-box{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+}
+
+.team-name{
+  color: white;
+  font-size: 5em;
+  text-align: center;
+}
+
+.timeout-wrapper{
+  border-radius: 25px;
+  background-color: grey;
+  text-align: center;
+}
+
+.timeout{
+  font-size: 5em;
+
+}
+
+.team-score-wrapper{
+  border-radius: 25px;
+  background-color: grey;
+  text-align: center;
+}
+
+.team-score{
+  font-size: 20em;
+}
+
+.jam-score-wrapper{
+  border-radius: 25px;
+  background-color: grey;
+  text-align: center;
+}
+
+.jam-score{
+  font-size: 10em;
+}
+
+.jammer{
+  font-size: 5em;
+}
+
+.stat-box{
+  border-radius: 25px;
+}
+
+.stat-label{
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  color:white;
+  background-color: grey;
+  font-size:5em;
+}
+
+.stat-text{  
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  color: black;
+  background-color: lightgray;
+  font-size: 12em;
+  text-align: center;
 }

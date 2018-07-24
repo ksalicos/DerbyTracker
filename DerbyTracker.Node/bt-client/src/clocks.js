@@ -25,7 +25,6 @@ var jamClockStarted = moment();
 var lineupClockStarted = moment();
 
 export const setClocks = bs => {
-    console.log(bs)
     gameClock = {
         running: bs.gameClock.running,
         elapsedMs: bs.gameClock.elapsedMs,
@@ -36,16 +35,11 @@ export const setClocks = bs => {
 }
 
 var watch = {
-    game: {},
-    jam: {},
-    lineup: {}
 }
-
-export const addWatch = (clock, id, func) => {
-    watch[clock][id] = func
-
+export const addWatch = (id, func) => {
+    watch[id] = func
 }
-export const removeWatch = (clock, id) => { watch[clock][id] = null }
+export const removeWatch = (id) => { watch[id] = null }
 
 function tick() {
     setTimeout(tick, 100)
@@ -59,14 +53,8 @@ function tick() {
         jam: Math.max(rules.jamDuration - now.diff(jamClockStarted), 0),
         lineup: Math.max(rules.lineupDuration - now.diff(lineupClockStarted), 0)
     }
-    notify(watch.game, clocks.game)
-    notify(watch.jam, clocks.jam)
-    notify(watch.lineup, clocks.lineup)
-}
-tick()
-
-const notify = (list, time) => {
-    for (var id in list) {
-        list[id](time)
+    for (var id in watch) {
+        if (watch[id]) watch[id](clocks)
     }
 }
+tick()

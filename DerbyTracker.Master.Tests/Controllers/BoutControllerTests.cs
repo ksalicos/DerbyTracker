@@ -28,7 +28,7 @@ namespace DerbyTracker.Master.Tests.Controllers
         public void SaveDoesntExplode()
         {
             var controller = new BoutController(new MockBoutDataService(), new BoutRunnerService());
-            controller.Save(new Common.Entities.Bout());
+            controller.Save(new Common.Entities.BoutData());
         }
 
         [Fact]

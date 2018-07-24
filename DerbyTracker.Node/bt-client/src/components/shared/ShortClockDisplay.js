@@ -15,15 +15,19 @@ class ShortClockDisplay extends React.Component {
             jamClock: null,
             lineupClock: null
         }
-
-        clock.addWatch('jam', 'scd', (t) => { this.setState({ jamClock: t }) })
-        clock.addWatch('lineup', 'scd', (t) => { this.setState({ lineupClock: t }) })
-        clock.addWatch('game', 'scd', (t) => { this.setState({ gameClock: t }) })
-
-        this.handleChange = this.handleChange.bind(this)
     }
 
     componentDidMount() {
+        clock.addWatch('scd', (t) => {
+            this.setState({
+                jamClock: t.jam,
+                gameClock: t.game,
+                lineupClock: t.lineup
+            })
+        })
+    }
+    componentWillUnmount() {
+        clock.removeWatch('scd')
     }
 
     render() {
@@ -83,11 +87,6 @@ class ShortClockDisplay extends React.Component {
                     <TimeDisplay ms={this.state.gameClock} />
                 </Col>
             </Row >)
-    }
-
-    handleChange(event) {
-        const target = event.target;
-        this.setState({ [target.name]: target.value, saved: false });
     }
 }
 

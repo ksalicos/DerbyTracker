@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'normalize.css'
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -8,6 +9,7 @@ import configureStore from './store/configureStore';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { signalRRegisterCommands } from './SignalRMiddleware'
+import * as settings from './Settings'
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const initialState = window.initialReduxState
@@ -19,6 +21,11 @@ signalRRegisterCommands(store, () => {
 })
 
 const rootElement = document.getElementById('root');
+
+let s = settings.get()
+if (s.IamAScoreboard) {
+    store.dispatch({ type: 'CHANGE_SCREEN', screen: 'scoreboard' })
+}
 
 ReactDOM.render(
     <Provider store={store}>

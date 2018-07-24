@@ -4,11 +4,11 @@ namespace DerbyTracker.Common.Entities
 {
     public class BoutState
     {
-        public BoutState(Bout bout)
+        public BoutState(BoutData boutData)
         {
-            BoutId = bout.BoutId;
-            LeftTeamState = new TeamState(bout.RuleSet);
-            RightTeamState = new TeamState(bout.RuleSet);
+            BoutId = boutData.BoutId;
+            LeftTeamState = new TeamState(boutData.RuleSet);
+            RightTeamState = new TeamState(boutData.RuleSet);
         }
 
         public Guid BoutId { get; set; }

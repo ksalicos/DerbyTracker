@@ -37,7 +37,11 @@ const NavMenu = props => {
                         </Nav>
                     )
                 }
-
+                <Nav>
+                    <NavItem onClick={() => { props.changeScreen('scoreboard') }}>
+                        <Glyphicon glyph='film' /> Scoreboard
+                    </NavItem>
+                </Nav>
             </Navbar.Collapse>
         </Navbar>
     )

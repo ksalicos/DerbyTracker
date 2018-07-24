@@ -9,27 +9,27 @@ namespace DerbyTracker.Common.Services.Mocks
     {
         public static Guid EmptyBoutId = Guid.Empty;
         private readonly List<BoutListItem> _boutList = new List<BoutListItem> { new BoutListItem { Id = EmptyBoutId } };
-        private readonly Dictionary<Guid, Bout> _bouts = new Dictionary<Guid, Bout>
+        private readonly Dictionary<Guid, BoutData> _bouts = new Dictionary<Guid, BoutData>
         {
             {
-                EmptyBoutId, new Bout{BoutId = EmptyBoutId, Name = "Empty", RuleSet = RuleSet.WFTDA}
+                EmptyBoutId, new BoutData{BoutId = EmptyBoutId, Name = "Empty", RuleSet = RuleSet.WFTDA}
             }
         };
 
         public List<BoutListItem> List() => _boutList;
 
-        public Bout Load(Guid id) => _bouts.ContainsKey(id) ? _bouts[id] : null;
+        public BoutData Load(Guid id) => _bouts.ContainsKey(id) ? _bouts[id] : null;
 
-        public void Save(Bout bout)
+        public void Save(BoutData boutData)
         {
-            _bouts[bout.BoutId] = bout;
-            var entry = _boutList.FirstOrDefault(x => x.Id == bout.BoutId);
+            _bouts[boutData.BoutId] = boutData;
+            var entry = _boutList.FirstOrDefault(x => x.Id == boutData.BoutId);
 
             if (entry == null)
             {
                 _boutList.Add(new BoutListItem
                 {
-                    Id = bout.BoutId,
+                    Id = boutData.BoutId,
                     Name = $"New Bout {DateTime.Now}",
                     TimeStamp = DateTime.Now
                 });

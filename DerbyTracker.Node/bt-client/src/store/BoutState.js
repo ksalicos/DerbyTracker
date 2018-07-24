@@ -12,7 +12,7 @@ const boutEnded = 'BOUT_ENDED'
 const initialState = {
     //bouts: {},
     current: null,
-    rules: null
+    data: null
 }
 
 export const actionCreators = {
@@ -28,9 +28,9 @@ export const reducer = (state, action) => {
             return { ...state, current: convertedState }
         case initializeBoutState:
             setClocks(action.boutState)
-            setRules(action.rules)
+            setRules(action.boutData.ruleSet)
             return {
-                rules: action.rules,
+                data: action.boutData,
                 current: convertedState
                 //current: state.current ? state.current : convertedState,
                 //bouts: { ...state.bouts, [action.boutState.boutId]: convertedState }

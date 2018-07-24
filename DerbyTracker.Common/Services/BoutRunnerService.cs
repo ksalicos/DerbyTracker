@@ -8,7 +8,7 @@ namespace DerbyTracker.Common.Services
 {
     public interface IBoutRunnerService
     {
-        void StartBout(Bout bout);
+        void StartBout(BoutData boutData);
         BoutState GetBoutState(Guid boutId);
         bool IsRunning(Guid boutId);
         List<RunningBout> RunningBouts();
@@ -16,17 +16,17 @@ namespace DerbyTracker.Common.Services
 
     public class BoutRunnerService : IBoutRunnerService
     {
-        private readonly Dictionary<Guid, Bout> _bouts = new Dictionary<Guid, Bout>();
+        private readonly Dictionary<Guid, BoutData> _bouts = new Dictionary<Guid, BoutData>();
         private readonly Dictionary<Guid, BoutState> _boutStates = new Dictionary<Guid, BoutState>();
 
-        public void StartBout(Bout bout)
+        public void StartBout(BoutData boutData)
         {
-            if (_bouts.ContainsKey(bout.BoutId))
+            if (_bouts.ContainsKey(boutData.BoutId))
             {
-                throw new BoutAlreadyRunningException(bout.BoutId);
+                throw new BoutAlreadyRunningException(boutData.BoutId);
             }
-            _bouts[bout.BoutId] = bout;
-            _boutStates[bout.BoutId] = new BoutState(bout);
+            _bouts[boutData.BoutId] = boutData;
+            _boutStates[boutData.BoutId] = new BoutState(boutData);
         }
 
         public BoutState GetBoutState(Guid boutId)
