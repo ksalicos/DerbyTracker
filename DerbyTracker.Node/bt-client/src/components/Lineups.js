@@ -17,15 +17,18 @@ class LineupsTracker extends React.Component {
         }
     }
     render() {
+        let sort = (a, b) => a.number < b.number ? -1 : 1
         let bs = this.props.boutState.current
         let data = this.props.boutState.data
         let team = this.state.viewTeam === 'left'
             ? data.leftTeam
             : data.rightTeam
+        team.roster.sort(sort)
         let currentJam = bs.jams.find((e) => { return e.period === bs.period && e.jamNumber === bs.jamNumber })
-        let lineup = this.state.viewTeam === 'left'
+        let lineup = (this.state.viewTeam === 'left'
             ? currentJam.leftRoster
-            : currentJam.rightRoster
+            : currentJam.rightRoster)
+            .sort(sort)
 
         return (<div>
             <h1>Lineups Tracker</h1>
