@@ -19,11 +19,11 @@ class JamTimer extends React.Component {
     }
 
     componentDidMount() {
-        clock.addWatch('jt', (t) => {
+        clock.addWatch('jt', (clock) => {
             this.setState({
-                jamClock: t.jam,
-                gameClock: t.game,
-                lineupClock: t.lineup
+                jamClock: clock.jam,
+                gameClock: clock.game,
+                lineupClock: clock.lineup
             })
         })
     }

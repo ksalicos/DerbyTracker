@@ -68,7 +68,7 @@ class ShortClockDisplay extends React.Component {
                     <span>{phaseList[bs.phase]}</span>
                 </Col>
                 <Col sm={2}>
-                    <span>{bs.jam}</span>
+                    <span>{bs.jamNumber}</span>
                 </Col>
                 <Col sm={2}>
                     <TimeDisplay ms={bs.phase === 1

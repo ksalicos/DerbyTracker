@@ -1,6 +1,5 @@
 html, body, .fill-height {
   height: 100%;
-  margin: 0;
 }
 
 body{
@@ -12,10 +11,6 @@ body{
   opacity: .9;
   background-color: #F2F2F2;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-div{
-  margin: 0;
 }
 
 #loadingBox{

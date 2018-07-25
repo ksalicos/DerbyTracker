@@ -12,7 +12,7 @@ const TeamDetails = props => {
                 props.team.roster.map((e, i) => {
                     return <Row key={i}>
                         <Col sm={2}>{e.number}</Col>
-                        <Col sm={4}>{e.name}</Col>
+                        <Col sm={8}>{e.name}</Col>
                     </Row>
                 })
             }

@@ -37,10 +37,10 @@ class RosterEdit extends React.Component {
                             this.state.roster.map((e, i) =>
                                 <Row key={i}>
                                     <Col sm={4}>
-                                        <input value={e.number} name={'number' + i} onChange={console.log} />
+                                        <input value={e.number} name={'number|' + i} onChange={this.handleChange} />
                                     </Col>
                                     <Col sm={4}>
-                                        <input value={e.name} name={'name' + i} onChange={console.log} />
+                                        <input value={e.name} name={'name|' + i} onChange={this.handleChange} />
                                     </Col>
                                 </Row>
                             )
@@ -70,7 +70,16 @@ class RosterEdit extends React.Component {
 
     handleChange(event) {
         const target = event.target;
-        this.setState({ [target.name]: target.value, saved: false });
+        let idx
+        if (target.name.startsWith('number')) {
+            idx = target.name.split('|')[1]
+            this.setState({ roster: this.state.roster.map((e, i) => i === idx * 1 ? { ...e, number: target.value } : e), saved: false })
+        } else if (target.name.startsWith('name')) {
+            idx = target.name.split('|')[1]
+            this.setState({ roster: this.state.roster.map((e, i) => i === idx * 1 ? { ...e, name: target.value } : e), saved: false })
+        } else {
+            this.setState({ [target.name]: target.value, saved: false });
+        }
     }
 
     save() {

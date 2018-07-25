@@ -40,20 +40,29 @@ class LineupsTracker extends React.Component {
                         <Row className='lineups-skater'>
                             <Col sm={2} className='lineups-number'>
                                 <Button onClick={() => {
-                                    this.props.addSkater(bs.boutId, this.state.viewPeriod, this.state.viewJam,
+                                    this.props.removeSkater(bs.boutId, this.state.viewPeriod, this.state.viewJam,
                                         this.state.viewTeam, e.number)
                                 }}
                                     bsStyle='success' bsSize="large" block>{e.number}</Button>
                             </Col>
                             <Col sm={4} className='lineups-name'>{name}</Col>
                             <Col sm={2}>
-                                <Button bsSize="large" block><Glyphicon glyph='star' /></Button>
+                                <Button bsStyle={e.position === 0 ? 'success' : 'default'} onClick={() => {
+                                    this.props.setSkaterPosition(bs.boutId, this.state.viewPeriod,
+                                        this.state.viewJam, this.state.viewTeam, e.number, 0)
+                                }} bsSize="large" block><Glyphicon glyph='bold' /></Button>
                             </Col>
                             <Col sm={2}>
-                                <Button bsSize="large" block><Glyphicon glyph='stop' /></Button>
+                                <Button bsStyle={e.position === 1 ? 'success' : 'default'} onClick={() => {
+                                    this.props.setSkaterPosition(bs.boutId, this.state.viewPeriod,
+                                        this.state.viewJam, this.state.viewTeam, e.number, 1)
+                                }} bsSize="large" block><Glyphicon glyph='star' /></Button>
                             </Col>
                             <Col sm={2}>
-                                <Button bsSize="large" block><Glyphicon glyph='bold' /></Button>
+                                <Button bsStyle={e.position === 2 ? 'success' : 'default'} onClick={() => {
+                                    this.props.setSkaterPosition(bs.boutId, this.state.viewPeriod,
+                                        this.state.viewJam, this.state.viewTeam, e.number, 2)
+                                }} bsSize="large" block><Glyphicon glyph='stop' /></Button>
                             </Col>
                         </Row>
                     </Col>)
@@ -111,7 +120,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addSkater: (boutId, period, jam, team, number) => dispatch(lineupsTracker.addSkater(boutId, period, jam, team, number))
+        addSkater: (boutId, period, jam, team, number) => dispatch(lineupsTracker.addSkater(boutId, period, jam, team, number)),
+        removeSkater: (boutId, period, jam, team, number) => dispatch(lineupsTracker.removeSkater(boutId, period, jam, team, number)),
+        setSkaterPosition: (boutId, period, jam, team, number, position) => dispatch(lineupsTracker.setSkaterPosition(boutId, period, jam, team, number, position))
     }
 }
 

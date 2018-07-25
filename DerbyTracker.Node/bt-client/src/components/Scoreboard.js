@@ -108,7 +108,7 @@ class Scoreboard extends React.Component {
 
                 <Col smOffset={2} sm={4}>
                     <div className='stat-box'>
-                        <div className='stat-label'>{phaseList[bs.phase]} {bs.jam}</div>
+                        <div className='stat-label'>{phaseList[bs.phase]} {bs.jamNumber}</div>
                         <div className='stat-text'>
                             <TimeDisplay ms={bs.phase === 1
                                 ? this.state.lineupClock
