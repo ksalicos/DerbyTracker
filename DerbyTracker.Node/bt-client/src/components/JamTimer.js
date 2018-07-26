@@ -40,7 +40,7 @@ class JamTimer extends React.Component {
         let left = bs.leftTeamState
         let right = bs.rightTeamState
 
-        let canStartJam = this.state.gameClock > 0 && (!bs.gameClock.running || this.state.lineupClock === 0)
+        //let canStartJam = this.state.gameClock > 0 && (!bs.gameClock.running || this.state.lineupClock === 0)
         //|| (this.state.lineupClock)
 
         return (<div>
@@ -54,7 +54,7 @@ class JamTimer extends React.Component {
 
             {bs.phase === 1 //lineup
                 ? <div>
-                    <div><button disabled={!canStartJam} onClick={() => { props.startJam(bs.boutId) }}>Start Jam</button></div>
+                    <div><button onClick={() => { props.startJam(bs.boutId) }}>Start Jam</button></div>
                     <div><button onClick={() => { props.startTimeout(bs.boutId) }}>Start Timeout</button></div>
                     {
                         this.state.gameClock === 0 ? <div>

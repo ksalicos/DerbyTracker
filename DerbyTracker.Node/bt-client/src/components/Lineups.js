@@ -13,9 +13,14 @@ class LineupsTracker extends React.Component {
         this.state = {
             viewTeam: 'left',
             viewPeriod: 1,
-            viewJam: 1
+            viewJam: 1,
+            jamIndex: props.boutState ? props.boutState.current.jams.length - 1 : null
         }
+
+        this.lastJam = this.lastJam.bind(this);
+        this.nextJam = this.nextJam.bind(this);
     }
+
     render() {
         let sort = (a, b) => a.number < b.number ? -1 : 1
         let bs = this.props.boutState.current
@@ -24,7 +29,7 @@ class LineupsTracker extends React.Component {
             ? data.leftTeam
             : data.rightTeam
         team.roster.sort(sort)
-        let currentJam = bs.jams.find((e) => { return e.period === bs.period && e.jamNumber === bs.jamNumber })
+        let currentJam = bs.jams[this.state.jamIndex]
         let lineup = (this.state.viewTeam === 'left'
             ? currentJam.leftRoster
             : currentJam.rightRoster)
@@ -35,7 +40,11 @@ class LineupsTracker extends React.Component {
             <ShortClockDisplay boutState={bs} />
             <ShortScoreDisplay boutState={bs} />
 
-            <h2>Current Jam</h2>
+            <h2>
+                <Button onClick={this.lastJam} disabled={this.state.jamIndex === 0}>Previous</Button>
+                Viewing Period {currentJam.period} Jam {currentJam.jamNumber}
+                <Button onClick={this.nextJam} disabled={this.state.jamIndex === bs.jams.length - 1}>Next</Button>
+            </h2>
             <Row>
                 {lineup.map((e, i) => {
                     let name = team.roster.find((r) => { return e.number === r.number }).name
@@ -43,7 +52,7 @@ class LineupsTracker extends React.Component {
                         <Row className='lineups-skater'>
                             <Col sm={2} className='lineups-number'>
                                 <Button onClick={() => {
-                                    this.props.removeSkater(bs.boutId, this.state.viewPeriod, this.state.viewJam,
+                                    this.props.removeSkater(bs.boutId, currentJam.period, currentJam.jamNumber,
                                         this.state.viewTeam, e.number)
                                 }}
                                     bsStyle='success' bsSize="large" block>{e.number}</Button>
@@ -51,20 +60,20 @@ class LineupsTracker extends React.Component {
                             <Col sm={4} className='lineups-name'>{name}</Col>
                             <Col sm={2}>
                                 <Button bsStyle={e.position === 0 ? 'success' : 'default'} onClick={() => {
-                                    this.props.setSkaterPosition(bs.boutId, this.state.viewPeriod,
-                                        this.state.viewJam, this.state.viewTeam, e.number, 0)
+                                    this.props.setSkaterPosition(bs.boutId, currentJam.period, currentJam.jamNumber,
+                                        this.state.viewTeam, e.number, 0)
                                 }} bsSize="large" block><Glyphicon glyph='bold' /></Button>
                             </Col>
                             <Col sm={2}>
                                 <Button bsStyle={e.position === 1 ? 'success' : 'default'} onClick={() => {
-                                    this.props.setSkaterPosition(bs.boutId, this.state.viewPeriod,
-                                        this.state.viewJam, this.state.viewTeam, e.number, 1)
+                                    this.props.setSkaterPosition(bs.boutId, currentJam.period, currentJam.jamNumber,
+                                        this.state.viewTeam, e.number, 1)
                                 }} bsSize="large" block><Glyphicon glyph='star' /></Button>
                             </Col>
                             <Col sm={2}>
                                 <Button bsStyle={e.position === 2 ? 'success' : 'default'} onClick={() => {
-                                    this.props.setSkaterPosition(bs.boutId, this.state.viewPeriod,
-                                        this.state.viewJam, this.state.viewTeam, e.number, 2)
+                                    this.props.setSkaterPosition(bs.boutId, currentJam.period, currentJam.jamNumber,
+                                        this.state.viewTeam, e.number, 2)
                                 }} bsSize="large" block><Glyphicon glyph='stop' /></Button>
                             </Col>
                         </Row>
@@ -88,6 +97,9 @@ class LineupsTracker extends React.Component {
                 {
                     team.roster.map((e, i) => {
                         let buttonStyle = 'primary' //Set this when penalties are tracked.
+                        if (lineup.find(r => r.number === e.number)) {
+                            buttonStyle = 'success'
+                        }
                         //Red: In box but not jam
                         //Yellow: In box and jam?
                         //Green: In jam
@@ -98,7 +110,7 @@ class LineupsTracker extends React.Component {
                                 <Row className='lineups-skater'>
                                     <Col sm={4} className='lineups-number'>
                                         <Button onClick={() => {
-                                            this.props.addSkater(bs.boutId, this.state.viewPeriod, this.state.viewJam,
+                                            this.props.addSkater(bs.boutId, currentJam.period, currentJam.jamNumber,
                                                 this.state.viewTeam, e.number)
                                         }}
                                             bsStyle={buttonStyle} bsSize="large" block>{e.number}</Button>
@@ -111,6 +123,15 @@ class LineupsTracker extends React.Component {
             </Row>
 
         </div>)
+    }
+
+    lastJam() {
+        if (this.state.jamIndex > 0)
+            this.setState({ jamIndex: this.state.jamIndex - 1 })
+    }
+    nextJam() {
+        if (this.state.jamIndex < this.props.boutState.current.jams.length - 1)
+            this.setState({ jamIndex: this.state.jamIndex + 1 })
     }
 }
 
