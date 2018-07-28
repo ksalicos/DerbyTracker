@@ -1,9 +1,9 @@
-﻿using DerbyTracker.Common.Messaging.Commands.PenaltyTracker;
+﻿using DerbyTracker.Common.Exceptions;
+using DerbyTracker.Common.Messaging.Commands.PenaltyTracker;
 using DerbyTracker.Common.Messaging.Events.PenaltyTracker;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
 using DerbyTracker.Messaging.Handlers;
-using System;
 using System.Linq;
 
 namespace DerbyTracker.Common.Messaging.CommandHandlers.PenaltyTracker
@@ -22,7 +22,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.PenaltyTracker
         {
             var state = _boutRunner.GetBoutState(command.BoutId);
             var target = state.Penalties.SingleOrDefault(x => x.Id == command.Penalty.Id);
-            if (target == null) throw new Exception();//lazy
+            if (target == null) throw new NoSuchPenaltyException(command.Penalty.Id);
             var source = command.Penalty;
             target.Team = source.Team;
             target.Number = source.Number;
