@@ -26,6 +26,7 @@ namespace DerbyTracker.Common.Entities
         public int JamNumber { get; set; } = 1;
         public List<Jam> Jams = new List<Jam> { new Jam(1, 1) };
 
+
         public void CreateNextJam()
         {
             JamNumber++;
@@ -35,6 +36,7 @@ namespace DerbyTracker.Common.Entities
         public TeamState LeftTeamState { get; set; }
         public TeamState RightTeamState { get; set; }
 
+        public List<Penalty> Penalties = new List<Penalty>();
 
         public TimeoutType TimeoutType { get; set; }
         public bool LoseOfficialReview { get; set; }

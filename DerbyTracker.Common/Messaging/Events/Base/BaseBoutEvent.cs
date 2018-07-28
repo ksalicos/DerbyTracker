@@ -1,7 +1,7 @@
 ﻿using DerbyTracker.Messaging.Events;
 using System;
 
-namespace DerbyTracker.Common.Messaging.Events.Bout
+namespace DerbyTracker.Common.Messaging.Events.Base
 {
     public abstract class BaseBoutEvent : BaseEvent
     {

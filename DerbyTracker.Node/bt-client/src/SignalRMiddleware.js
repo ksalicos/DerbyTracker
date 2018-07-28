@@ -3,6 +3,7 @@ import * as settings from './Settings'
 import { nodeConnected } from './store/System'
 import { middleware as jamTimer } from './store/jamTimerSignalR'
 import { middleware as lineupsTracker } from './store/lineupsTrackerSignalR'
+import { middleware as penaltyTracker } from './store/penaltyTrackerSignalR'
 
 //TODO: Set log level programmatically
 const signalrLogLevel = signalR.LogLevel.Information
@@ -17,7 +18,8 @@ const nodeId = s.nodeId
 export const signalRMiddleware = [
     signalRInvokeMiddleware,
     jamTimer,
-    lineupsTracker
+    lineupsTracker,
+    penaltyTracker
 ]
 
 export function signalRInvokeMiddleware(store) {

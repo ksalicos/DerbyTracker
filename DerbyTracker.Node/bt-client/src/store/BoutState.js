@@ -8,6 +8,7 @@ const jamStarted = 'JAM_STARTED'
 const jamEnded = 'JAM_ENDED'
 const periodEnded = 'PERIOD_ENDED'
 const boutEnded = 'BOUT_ENDED'
+const penaltyUpdated = 'PENALTY_UPDATED'
 
 const initialState = {
     //bouts: {},
@@ -58,6 +59,14 @@ export const reducer = (state, action) => {
                 ...state,
                 current: { ...state.current, phase: 5 }
             }
+        case penaltyUpdated:
+            let newpenalties
+            if (state.current.penalties.some((e) => { return e.id === action.penalty.id })) {
+                newpenalties = state.current.penalties.map(e => e.id === action.penalty.id ? action.penalty : e)
+            } else {
+                newpenalties = [...state.current.penalties, action.penalty]
+            }
+            return { ...state, current: { ...state.current, penalties: newpenalties } }
         default:
             return state
     }
