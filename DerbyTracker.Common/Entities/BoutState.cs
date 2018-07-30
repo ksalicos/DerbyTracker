@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DerbyTracker.Common.Entities
 {
@@ -35,6 +36,21 @@ namespace DerbyTracker.Common.Entities
 
         public TeamState LeftTeamState { get; set; }
         public TeamState RightTeamState { get; set; }
+
+        public int LeftScore()
+        { return Jams.SelectMany(x => x.Left.Passes).Sum(x => x.Score); }
+        public int RightScore()
+        { return Jams.SelectMany(x => x.Right.Passes).Sum(x => x.Score); }
+
+        public TeamState TeamState(string team)
+        {
+            switch (team)
+            {
+                case "left": return LeftTeamState;
+                case "right": return RightTeamState;
+                default: throw new Exception("Invalid team string");
+            }
+        }
 
         public List<Penalty> Penalties = new List<Penalty>();
 

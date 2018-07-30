@@ -32,7 +32,8 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
         {
             _handler.Handle(_command);
             var state = _boutRunner.GetBoutState(Guid.Empty);
-            Assert.Contains(state.Jams[0].LeftRoster, x => x.Number == 8);
+            var team = state.Jams[0].Team("left");
+            Assert.Contains(team.Roster, x => x.Number == 8);
         }
 
         [Fact]
@@ -42,7 +43,8 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
             _command.Number = 868;
             _handler.Handle(_command);
             var state = _boutRunner.GetBoutState(Guid.Empty);
-            Assert.Contains(state.Jams[0].RightRoster, x => x.Number == 868);
+            var team = state.Jams[0].Team("right");
+            Assert.Contains(team.Roster, x => x.Number == 868);
         }
 
         [Fact]
@@ -51,7 +53,8 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
             _handler.Handle(_command);
             _handler.Handle(_command);
             var state = _boutRunner.GetBoutState(Guid.Empty);
-            Assert.Contains(state.Jams[0].LeftRoster, x => x.Number == 8);
+            var team = state.Jams[0].Team("left");
+            Assert.Contains(team.Roster, x => x.Number == 8);
         }
 
         [Fact]

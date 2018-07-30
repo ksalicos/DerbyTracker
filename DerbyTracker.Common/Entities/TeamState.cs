@@ -8,7 +8,6 @@
             OfficialReviews = rules.OfficialReviewsPerTeam;
         }
 
-        public int Score { get; set; }
         public int TimeOutsRemaining { get; set; }
         public int OfficialReviews { get; set; }
     }

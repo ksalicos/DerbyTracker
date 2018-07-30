@@ -21,7 +21,8 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
             var bout = _boutData.Load(Guid.Empty);
             _boutRunner.StartBout(bout);
             var state = _boutRunner.GetBoutState(Guid.Empty);
-            state.Jams[0].LeftRoster.Add(new JamParticipant { Number = 8, Position = Position.Blocker });
+            var team = state.Jams[0].Team("left");
+            team.Roster.Add(new JamParticipant { Number = 8, Position = Position.Blocker });
             state.Phase = BoutPhase.Lineup;
 
             _handler = new SetSkaterPositionCommandHandler(_boutRunner);
@@ -32,7 +33,8 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
         {
             _handler.Handle(_command);
             var state = _boutRunner.GetBoutState(Guid.Empty);
-            Assert.Equal(Position.Jammer, state.Jams[0].LeftRoster[0].Position);
+            var team = state.Jams[0].Team("left");
+            Assert.Equal(Position.Jammer, team.Roster[0].Position);
         }
 
         [Fact]

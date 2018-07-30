@@ -6,6 +6,7 @@ import LineupsTracker from './components/Lineups'
 import Layout from './components/Layout'
 import Scoreboard from './components/Scoreboard'
 import PenaltyTracker from './components/PenaltyTracker'
+import ScoreKeeper from './components/ScoreKeeper'
 
 const App = props => {
   if (props.system.screen === 'loading') { return <LoadingScreen /> }
@@ -15,7 +16,8 @@ const App = props => {
     {({
       'JamTimer': (<JamTimer />),
       'LineupsTracker': (<LineupsTracker />),
-      'PenaltyTracker': (<PenaltyTracker />)
+      'PenaltyTracker': (<PenaltyTracker />),
+      'ScoreKeeper': (<ScoreKeeper />)
     })[props.system.screen]}
   </Layout>
 }

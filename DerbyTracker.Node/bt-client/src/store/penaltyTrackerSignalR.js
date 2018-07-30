@@ -19,7 +19,6 @@ export function middleware(store) {
                 connection.invoke('CreatePenalty', nodeId, action.boutId, action.period, action.jam, action.team)
                 break
             case updatePenalty:
-                console.log(action)
                 connection.invoke('UpdatePenalty', nodeId, action.boutId, action.penalty)
                 break
             default:

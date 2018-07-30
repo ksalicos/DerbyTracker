@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as penaltyTracker } from '../store/penaltyTrackerSignalR'
@@ -81,6 +80,7 @@ class PenaltyTracker extends React.Component {
             .sort(sort)
         let penalties = bs.penalties.filter((e) => { return e.period === currentJam.period && e.jamNumber === currentJam.jamNumber })
             .sort((a, b) => a < b ? -1 : 1)
+
         return (<div>
             <h1>Penalty Tracker</h1>
             <ShortClockDisplay boutState={bs} />

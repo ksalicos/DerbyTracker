@@ -4,7 +4,6 @@ using DerbyTracker.Common.Messaging.Commands.LineupsTracker;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
 using DerbyTracker.Messaging.Handlers;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace DerbyTracker.Common.Messaging.CommandHandlers.LineupsTracker
@@ -29,19 +28,10 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.LineupsTracker
             if (jam == null)
             { throw new JamNotFoundException(command.Period, command.Jam); }
 
-            List<Skater> roster;
-            List<JamParticipant> lineup;
+            var team = jam.Team(command.Team);
+            var roster = command.Team == "left" ? bout.LeftTeam.Roster : bout.RightTeam.Roster;
+            var lineup = team.Roster;
 
-            if (command.Team == "left")
-            {
-                roster = bout.LeftTeam.Roster;
-                lineup = jam.LeftRoster;
-            }
-            else
-            {
-                roster = bout.RightTeam.Roster;
-                lineup = jam.RightRoster;
-            }
 
             if (roster.All(x => x.Number != command.Number))
             { throw new InvalidSkaterNumberException(command.Team, command.Number); }

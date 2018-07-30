@@ -24,7 +24,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.LineupsTracker
             if (jam == null)
             { throw new JamNotFoundException(command.Period, command.Jam); }
 
-            var roster = command.Team == "left" ? jam.LeftRoster : jam.RightRoster;
+            var roster = jam.Team(command.Team).Roster;
             var skater = roster.SingleOrDefault(x => x.Number == command.Number);
             if (skater == null) return new CommandResponse();
 

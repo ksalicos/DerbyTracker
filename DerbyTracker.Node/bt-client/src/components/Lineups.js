@@ -30,9 +30,7 @@ class LineupsTracker extends React.Component {
             : data.rightTeam
         team.roster.sort(sort)
         let currentJam = bs.jams[this.state.jamIndex]
-        let lineup = (this.state.viewTeam === 'left'
-            ? currentJam.leftRoster
-            : currentJam.rightRoster)
+        let lineup = currentJam[this.state.viewTeam].roster
             .sort(sort)
 
         return (<div>

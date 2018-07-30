@@ -23,7 +23,8 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
             _boutRunner.StartBout(bout);
             var state = _boutRunner.GetBoutState(Guid.Empty);
             state.Phase = BoutPhase.Lineup;
-            state.Jams[0].LeftRoster.Add(new JamParticipant { Number = 8, Position = Position.Blocker });
+            var team = state.Jams[0].Team("left");
+            team.Roster.Add(new JamParticipant { Number = 8, Position = Position.Blocker });
             _handler = new RemoveSkaterFromJamCommandHandler(_boutRunner);
         }
 
@@ -32,7 +33,8 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
         {
             _handler.Handle(_command);
             var state = _boutRunner.GetBoutState(Guid.Empty);
-            Assert.DoesNotContain(state.Jams[0].LeftRoster, x => x.Number == 8);
+            var team = state.Jams[0].Team("left");
+            Assert.DoesNotContain(team.Roster, x => x.Number == 8);
         }
 
         [Fact]
