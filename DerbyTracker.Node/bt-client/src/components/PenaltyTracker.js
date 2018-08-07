@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as penaltyTracker } from '../store/penaltyTrackerSignalR'
-import ShortClockDisplay from './shared/ShortClockDisplay';
-import ShortScoreDisplay from './shared/ShortScoreDisplay';
-import { Row, Col, Button, Modal } from 'react-bootstrap'
+import ShortClockDisplay from './shared/ShortClockDisplay'
+import ShortScoreDisplay from './shared/ShortScoreDisplay'
+import SkaterSelect from './shared/SkaterSelect'
+import { Row, Col, Button, Modal, Table } from 'react-bootstrap'
 import penaltyList from '../penalties'
 
 class PenaltyTracker extends React.Component {
@@ -40,7 +41,6 @@ class PenaltyTracker extends React.Component {
         this.props.createPenalty(this.props.boutState.current.boutId, currentJam.period, currentJam.jamNumber, team)
     }
     showSkaterSelect(id, team) {
-        console.log('show skater', id, team)
         this.setState({ penaltyId: id, viewTeam: team, showPlayerSelect: true })
     }
     showPenaltySelect(id) {
@@ -78,6 +78,26 @@ class PenaltyTracker extends React.Component {
         let penalties = bs.penalties.filter((e) => { return e.period === currentJam.period && e.jamNumber === currentJam.jamNumber })
             .sort((a, b) => a < b ? -1 : 1)
 
+        let penaltyDisplay = (e, i) => {
+            let pteam = data[e.team]
+            let skater = pteam.roster.find(r => r.number === e.number)
+            skater = skater || { number: -1, name: 'Not Set' }
+            return (<Row key={i}>
+                <Col sm={6}>
+                    <Button block onClick={() => this.showSkaterSelect(e.id, e.team)}>
+                        {e.number === -1 ? 'Select Skater' : `${e.number}: ${skater.name}`}
+                    </Button>
+                </Col>
+                <Col sm={6}>
+                    <Button block onClick={() => { this.showPenaltySelect(e.id) }}>
+                        {e.penaltyCode
+                            ? `${e.penaltyCode}: ${penaltyList[e.penaltyCode]}`
+                            : 'Select Penalty'}
+                    </Button>
+                </Col>
+            </Row>)
+        }
+
         return (<div>
             <h1>Penalty Tracker</h1>
             <ShortClockDisplay boutState={bs} />
@@ -98,67 +118,80 @@ class PenaltyTracker extends React.Component {
                 <Button onClick={this.nextJam} disabled={this.state.jamIndex === bs.jams.length - 1}>Next</Button>
             </h2>
 
-            {penalties.map((e, i) => {
-                let pteam = data[e.team]
-                let skater = pteam.roster.find(r => r.number === e.number)
-                skater = skater || { number: -1, name: 'Not Set' }
-                return (<Row key={i}>
-                    <Col sm={2}>
-                        <Button block onClick={() => this.showSkaterSelect(e.id, e.team)}>
-                            {e.number === -1 ? 'Select Skater' : e.number}
-                        </Button>
-                    </Col>
-                    <Col sm={2}>{skater.name}</Col>
-                    <Col sm={2}>{pteam.name}</Col>
-                    <Col sm={2}>
-                        <Button block onClick={() => { this.showPenaltySelect(e.id) }}>
-                            {e.penaltyCode || "Select Penalty"}
-                        </Button>
-                    </Col>
-                    <Col sm={2}>{e.penaltyCode ? penaltyList[e.penaltyCode] : null}</Col>
-                </Row>)
-            })}
+            <Row>
+                <Col sm={6}>
+                    <h2>{data['left'].name}</h2>
+                    {penalties.filter(e => e.team === 'left').map(penaltyDisplay)}
+                </Col>
+                <Col sm={6}>
+                    <h2>{data['right'].name}</h2>
+                    {penalties.filter(e => e.team === 'right').map(penaltyDisplay)}
+                </Col>
+            </Row>
 
-            <Modal show={this.state.showPlayerSelect} animation={false}>
-                <Modal.Header closeButton onHide={() => this.setState({ showPlayerSelect: false })}>
-                    <Modal.Title>Select Skater</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <h3>Current Lineup</h3>
-                    <Row>
-                        {lineup.map(e => {
-                            return (<Col sm={2} key={e.number}>
-                                <Button block onClick={() => this.selectSkater(e.number)}>{e.number}</Button>
-                            </Col>)
-                        })}
-                    </Row>
-                    <h3>Full Roster</h3>
-                    <Row>
-                        {team.roster.map(e => {
-                            return (<Col sm={2} key={e.number}>
-                                <Button block onClick={() => this.selectSkater(e.number)}>{e.number}</Button>
-                            </Col>)
-                        })}
-                    </Row>
-                </Modal.Body>
-            </Modal>
+            <div className='bottom'>
+                <h2>Penalty Status</h2>
+                <Row>
+                    <Col sm={6}>
+                        <Table responsive>
+                            <tbody>
+                                {currentJam.left.roster.map((e, i) => {
+                                    let skater = data['left'].roster.find(r => r.number === e.number)
+                                    let penalties = bs.penalties.filter(p => p.number === e.number && p.team === 'left').length
+                                    let color = penalties > 5 ? (penalties >= 7 ? 'penaltyAlert' : 'penaltyWarning') : ''
+                                    return (<tr key={i}>
+                                        <td>{e.number}</td>
+                                        <td>{skater.name}</td>
+                                        <td className={color}>{penalties}</td>
+                                    </tr>)
+                                })}
+                            </tbody>
+                        </Table>
+                    </Col>
+                    <Col sm={6}>
+                        <Table responsive>
+                            <tbody>
+                                {currentJam.right.roster.map((e, i) => {
+                                    let skater = data['right'].roster.find(r => r.number === e.number)
+                                    let penalties = bs.penalties.filter(p => p.number === e.number && p.team === 'right').length
+                                    let color = penalties > 5 ? (penalties >= 7 ? 'penaltyAlert' : 'penaltyWarning') : ''
+                                    return (<tr key={i}>
+                                        <td>{e.number}</td>
+                                        <td>{skater.name}</td>
+                                        <td className={color}>{penalties}</td>
+                                    </tr>)
+                                })}
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+            </div>
+
+            <SkaterSelect show={this.state.showPlayerSelect} close={() => this.setState({ showPlayerSelect: false })}
+                selectSkater={this.selectSkater} roster={team.roster} lineup={lineup} />
 
             <Modal show={this.state.showPenaltySelect} animation={false}>
                 <Modal.Header closeButton onHide={() => this.setState({ showPenaltySelect: false })}>
                     <Modal.Title>Select Penalty</Modal.Title>
                 </Modal.Header>
-                <Row>
-                    <Modal.Body>
+                <Modal.Body>
+                    <Row>
                         {
-
                             Object.keys(penaltyList).map((e, i) =>
-                                <Col sm={2} key={i}>
-                                    <Button block onClick={() => this.selectPenalty(e)}>{e}</Button>
+                                <Col sm={6} key={i}>
+                                    <Row>
+                                        <Col sm={4}>
+                                            <Button block onClick={() => this.selectPenalty(e)}>{e}</Button>
+                                        </Col>
+                                        <Col sm={8}>
+                                            {penaltyList[e]}
+                                        </Col>
+                                    </Row>
                                 </Col>
                             )
                         }
-                    </Modal.Body>
-                </Row>
+                    </Row>
+                </Modal.Body>
             </Modal>
         </div>)
     }

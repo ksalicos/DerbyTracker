@@ -168,3 +168,18 @@ button:disabled{
   font-size: 12em;
   text-align: center;
 }
+
+.bottom{
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0px;
+}
+
+.penaltyWarning{
+  background-color: orange;
+}
+
+.penaltyAlert{
+  background-color: lightcoral;
+}
