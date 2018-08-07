@@ -41,6 +41,12 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.ScoreKeeper
             pass.Score = command.Pass.Score;
             pass.StarPass = command.Pass.StarPass;
 
+            //If adding score to the last pass of the current running jam, add a pass.
+            if (jam == state.Jams.Last() && state.GameClock.Running && pass == passes.Last())
+            {
+                jam.Team(command.Team).AddPass();
+            }
+
             return new UpdateJamResponse(command.BoutId, jam);
         }
     }

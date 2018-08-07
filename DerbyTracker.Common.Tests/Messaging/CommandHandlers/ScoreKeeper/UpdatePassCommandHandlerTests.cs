@@ -5,9 +5,10 @@ using DerbyTracker.Common.Messaging.Commands.ScoreKeeper;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Common.Services.Mocks;
 using System;
+using System.Linq;
 using Xunit;
 
-namespace DerbyTracker.Common.Tests.Messaging.ScoreKeeper
+namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.ScoreKeeper
 {
     public class UpdatePassCommandHandlerTests
     {
@@ -60,6 +61,34 @@ namespace DerbyTracker.Common.Tests.Messaging.ScoreKeeper
             _command.Pass.Number = 0;
             _command.Pass.Score = 1;
             Assert.Throws<InvalidPassException>(() => _handler.Handle(_command));
+        }
+
+        [Fact]
+        public void AddingScoreAddsPassIfClockRunningAndItsLastPass()
+        {
+            _state.GameClock.Start();
+            _command.Pass.Score = 1;
+            _handler.Handle(_command);
+            Assert.Equal(3, _state.Jams.Last().Left.Passes.Count);
+        }
+
+        [Fact]
+        public void AddingScoreDoesntAddPassIfClockNotRunning()
+        {
+            _command.Pass.Score = 1;
+            _handler.Handle(_command);
+            Assert.Equal(2, _state.Jams.Last().Left.Passes.Count);
+        }
+
+        [Fact]
+        public void AddingScoreDoesntAddPassIfItsNotLastPass()
+        {
+            _state.GameClock.Start();
+            var team = _state.Jams[0].Team("left");
+            team.Passes.Add(new Pass { Number = 2 });
+            _command.Pass.Score = 1;
+            _handler.Handle(_command);
+            Assert.Equal(3, _state.Jams.Last().Left.Passes.Count);
         }
     }
 }
