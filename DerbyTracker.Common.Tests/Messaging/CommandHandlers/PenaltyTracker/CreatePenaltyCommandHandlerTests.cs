@@ -40,5 +40,13 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.PenaltyTracker
 
             Assert.Contains(response.Events, x => x.Event.GetType() == typeof(PenaltyUpdatedEvent));
         }
+
+        [Fact]
+        public void PenaltyCanBeAddedToPriorJams()
+        {
+            _state.CreateNextJam();
+            _handler.Handle(_command);
+            Assert.Contains(_state.Penalties, x => x.JamNumber == 1 && x.Period == 1);
+        }
     }
 }

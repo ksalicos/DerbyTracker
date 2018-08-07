@@ -2,8 +2,8 @@ import uuid from 'uuid'
 var settings = null
 
 //debug settings
-var newIdOnLoad = true;
-var IamAScoreboard = false;
+var newIdOnLoad = false
+var IamAScoreboard = false
 
 export function get() {
     if (!settings) {

@@ -16,8 +16,6 @@ class PenaltyTracker extends React.Component {
             showPlayerSelect: false,
             showPenaltySelect: false,
             penaltyCode: null,
-            viewPeriod: 1,
-            viewJam: 1,
             jamIndex: props.boutState ? props.boutState.current.jams.length - 1 : null
         }
 
@@ -38,7 +36,8 @@ class PenaltyTracker extends React.Component {
             this.setState({ jamIndex: this.state.jamIndex + 1 })
     }
     createPenalty(team) {
-        this.props.createPenalty(this.props.boutState.current.boutId, this.state.viewPeriod, this.state.viewJam, team)
+        let currentJam = this.props.boutState.current.jams[this.state.jamIndex]
+        this.props.createPenalty(this.props.boutState.current.boutId, currentJam.period, currentJam.jamNumber, team)
     }
     showSkaterSelect(id, team) {
         console.log('show skater', id, team)
@@ -49,7 +48,6 @@ class PenaltyTracker extends React.Component {
     }
     selectSkater(number) {
         let penalty = this.props.boutState.current.penalties.find(e => e.id === this.state.penaltyId)
-        console.log(penalty)
         penalty = { ...penalty, number: number }
         this.props.updatePenalty(this.props.boutState.current.boutId, penalty)
         this.setState({

@@ -21,7 +21,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.PenaltyTracker
         {
             var state = _boutRunner.GetBoutState(command.BoutId);
 
-            var penalty = new Penalty(command.Team, state.Period, state.JamNumber, state.GameClock.Elapsed);
+            var penalty = new Penalty(command.Team, command.Period, command.Jam, state.GameClock.Elapsed);
             state.Penalties.Add(penalty);
             var response = new CommandResponse();
             response.AddEvent(new PenaltyUpdatedEvent(command.BoutId, penalty), Audiences.Bout(command.BoutId));
