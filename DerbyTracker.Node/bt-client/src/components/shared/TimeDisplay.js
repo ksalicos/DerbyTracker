@@ -14,7 +14,7 @@ const foo = props => {
     let tenths = Math.floor(ms / 10)
 
     //Under ten seconds show tenths
-    var output = (props.ms < 10000) ? `${z(seconds)}.${z(tenths)}`
+    var output = (props.showTenths && props.ms < 10000) ? `${z(seconds)}.${z(tenths)}`
         : `${props.padMins ? z(minutes) : minutes}:${z(seconds)}`
 
     return <span className={props.color}>{output}</span>

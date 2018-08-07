@@ -52,8 +52,8 @@ class PenaltyBoxTimer extends React.Component {
             let time = Math.max(e.secondsOwed * 1000 - (e.stopWatch.running
                 ? (this.state.currentTime.diff(e.stopWatch.lastStarted) + e.stopWatch.elapsedMs)
                 : e.stopWatch.elapsedMs), 0)
-            let roster = data[e.team + 'Team'].roster.sort(sort)
-
+            let roster = data[e.team].roster.sort(sort)
+            console.log(time, e.secondsOwed)
             return (<Col sm={2} key={i}>
                 <div>
                     {
