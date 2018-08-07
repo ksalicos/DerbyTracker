@@ -25,9 +25,8 @@ class LineupsTracker extends React.Component {
         let sort = (a, b) => a.number < b.number ? -1 : 1
         let bs = this.props.boutState.current
         let data = this.props.boutState.data
-        let team = this.state.viewTeam === 'left'
-            ? data.leftTeam
-            : data.rightTeam
+        let team = data[this.state.viewTeam]
+
         team.roster.sort(sort)
         let currentJam = bs.jams[this.state.jamIndex]
         let lineup = currentJam[this.state.viewTeam].roster
@@ -83,11 +82,11 @@ class LineupsTracker extends React.Component {
                 <ButtonGroup bsSize="large">
                     <Button bsStyle={this.state.viewTeam === 'left' ? 'primary' : 'default'}
                         onClick={() => { this.setState({ viewTeam: 'left' }) }}>
-                        {data.leftTeam.name}
+                        {data['left'].name}
                     </Button>
                     <Button bsStyle={this.state.viewTeam === 'right' ? 'primary' : 'default'}
                         onClick={() => { this.setState({ viewTeam: 'right' }) }}>
-                        {data.rightTeam.name}
+                        {data['right'].name}
                     </Button>
                 </ButtonGroup>
             </h2>

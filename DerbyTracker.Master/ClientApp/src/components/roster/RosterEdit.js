@@ -10,6 +10,7 @@ class RosterEdit extends React.Component {
         this.state = {
             busy: false,
             name: this.props.roster.current.name,
+            color: this.props.roster.current.color || '#ff00ff',
             roster: this.props.roster.current.roster,
             newname: '',
             newnumber: ''
@@ -30,6 +31,13 @@ class RosterEdit extends React.Component {
                             <Col sm={1}><label className='poppy'>Name</label></Col>
                             <Col sm={5}>
                                 <input name='name' value={this.state.name} onChange={this.handleChange} disabled={this.state.busy} />
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col sm={1}><label className='poppy'>Color</label></Col>
+                            <Col sm={5}>
+                                <input name='color' value={this.state.color} onChange={this.handleChange} disabled={this.state.busy} type='color' />
                             </Col>
                         </Row>
 
@@ -85,7 +93,8 @@ class RosterEdit extends React.Component {
     save() {
         let team = {
             name: this.state.name,
-            roster: this.state.roster
+            roster: this.state.roster,
+            color: this.state.color,
         }
         this.props.save(team, this.props.roster.selectedSide)
     }

@@ -38,10 +38,10 @@ class Scoreboard extends React.Component {
         return (<Grid fluid id='scoreboard-box' className='fill-height'>
             <Row>
                 <Col smOffset={1} sm={4}>
-                    <div className='team-name'>{data.leftTeam.name}</div>
+                    <div className='team-name'>{data['left'].name}</div>
                 </Col>
                 <Col smOffset={2} sm={4}>
-                    <div className='team-name'>{data.rightTeam.name}</div>
+                    <div className='team-name'>{data['right'].name}</div>
                 </Col>
             </Row>
             <Row>

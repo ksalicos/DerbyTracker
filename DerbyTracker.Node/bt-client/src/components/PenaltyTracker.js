@@ -69,10 +69,9 @@ class PenaltyTracker extends React.Component {
         let sort = (a, b) => a.number + '' < b.number + '' ? -1 : 1
         let bs = this.props.boutState.current
         let data = this.props.boutState.data
-        let team = this.state.viewTeam === 'left'
-            ? data.leftTeam
-            : data.rightTeam
+        let team = data[this.state.viewTeam]
         team.roster.sort(sort)
+
         let currentJam = bs.jams[this.state.jamIndex]
         let lineup = (this.state.viewTeam === 'left'
             ? currentJam.left.roster
@@ -102,9 +101,7 @@ class PenaltyTracker extends React.Component {
             </h2>
 
             {penalties.map((e, i) => {
-                let pteam = e.team === 'left'
-                    ? data.leftTeam
-                    : data.rightTeam
+                let pteam = data[e.team]
                 let skater = pteam.roster.find(r => r.number === e.number)
                 skater = skater || { number: -1, name: 'Not Set' }
                 return (<Row key={i}>

@@ -29,7 +29,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.LineupsTracker
             { throw new JamNotFoundException(command.Period, command.Jam); }
 
             var team = jam.Team(command.Team);
-            var roster = command.Team == "left" ? bout.LeftTeam.Roster : bout.RightTeam.Roster;
+            var roster = command.Team == "left" ? bout.Left.Roster : bout.Right.Roster;
             var lineup = team.Roster;
 
 

@@ -17,7 +17,7 @@ namespace DerbyTracker.Common.Services.Mocks
                     BoutId = EmptyBoutId,
                     Name = "Empty",
                     RuleSet = RuleSet.WFTDA,
-                    LeftTeam = new Team
+                    Left = new Team
                     {
                         Name= "Betties",
                         Roster = new List<Skater>
@@ -26,7 +26,7 @@ namespace DerbyTracker.Common.Services.Mocks
                             new Skater{Number = 23, Name="Gal Of Fray"},
                         }
                     },
-                    RightTeam = new Team
+                    Right = new Team
                     {
                         Name= "GNR",
                         Roster = new List<Skater>

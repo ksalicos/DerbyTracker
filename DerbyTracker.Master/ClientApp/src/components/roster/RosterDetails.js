@@ -11,15 +11,15 @@ const RosterDetails = props => {
             <h1>Rosters</h1>
             <Row>
                 <Col sm={6}>
-                    <TeamDetails team={props.bout.leftTeam} />
+                    <TeamDetails team={props.bout.left} />
                     <div>
-                        <button onClick={() => props.editRoster(props.bout.leftTeam, 'left')}>Edit</button>
+                        <button onClick={() => props.editRoster(props.bout.left, 'left')}>Edit</button>
                     </div>
                 </Col>
                 <Col sm={6}>
-                    <TeamDetails team={props.bout.rightTeam} />
+                    <TeamDetails team={props.bout.right} />
                     <div>
-                        <button onClick={() => props.editRoster(props.bout.rightTeam, 'right')}>Edit</button>
+                        <button onClick={() => props.editRoster(props.bout.right, 'right')}>Edit</button>
                     </div>
                 </Col>
             </Row>

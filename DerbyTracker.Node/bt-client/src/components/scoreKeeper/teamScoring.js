@@ -24,10 +24,10 @@ class TeamScoring extends React.Component {
 
         if (this.props.team === 'left') {
             otherJammerStatus = currentJam.right.jammerStatus
-            roster = this.props.boutState.data.leftTeam.roster
+            roster = this.props.boutState.data['left'].roster
         } else {
             otherJammerStatus = currentJam.left.jammerStatus
-            roster = this.props.boutState.data.rightTeam.roster
+            roster = this.props.boutState.data['right'].roster
         }
 
         let jammer = currentTeam.roster.find(e => e.position === 1)
@@ -96,27 +96,11 @@ class TeamScoring extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
-                        <Col sm={2}>
-                            <Button onClick={() => { this.updatePass(this.state.scoringPass, 0, this.state.starPass) }} block>0</Button>
-                        </Col>
-                        <Col sm={2}>
-                            <Button onClick={() => { this.updatePass(this.state.scoringPass, 1, this.state.starPass) }} block>1</Button>
-                        </Col>
-                        <Col sm={2}>
-                            <Button onClick={() => { this.updatePass(this.state.scoringPass, 2, this.state.starPass) }} block>2</Button>
-                        </Col>
-                        <Col sm={2}>
-                            <Button onClick={() => { this.updatePass(this.state.scoringPass, 3, this.state.starPass) }} block>3</Button>
-                        </Col>
-                        <Col sm={2}>
-                            <Button onClick={() => { this.updatePass(this.state.scoringPass, 4, this.state.starPass) }} block>4</Button>
-                        </Col>
-                        <Col sm={2}>
-                            <Button onClick={() => { this.updatePass(this.state.scoringPass, 5, this.state.starPass) }} block>5</Button>
-                        </Col>
-                        <Col sm={2}>
-                            <Button onClick={() => { this.updatePass(this.state.scoringPass, 6, this.state.starPass) }} block>6</Button>
-                        </Col>
+                        {
+                            Array(7).fill().map((x, i) => <Col sm={2} key={i}>
+                                <Button onClick={() => { this.updatePass(this.state.scoringPass, i, this.state.starPass) }} block>{i}</Button>
+                            </Col>)
+                        }
                     </Row>
                 </Modal.Body>
             </Modal>

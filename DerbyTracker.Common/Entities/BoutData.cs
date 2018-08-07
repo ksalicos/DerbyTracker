@@ -7,8 +7,8 @@ namespace DerbyTracker.Common.Entities
         public Guid BoutId { get; set; }
         public string Name { get; set; }
 
-        public Team LeftTeam { get; set; }
-        public Team RightTeam { get; set; }
+        public Team Left { get; set; }
+        public Team Right { get; set; }
 
         public RuleSet RuleSet { get; set; }
 

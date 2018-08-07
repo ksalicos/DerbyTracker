@@ -72,9 +72,9 @@ export const reducer = (state, action) => {
             return { ...state, current: { ...state.current, venue: action.data } }
         case rosterUpdated:
             if (action.side === 'left')
-                return { ...state, current: { ...state.current, leftTeam: { ...action.data } } }
+                return { ...state, current: { ...state.current, left: { ...action.data } } }
             if (action.side === 'right')
-                return { ...state, current: { ...state.current, rightTeam: { ...action.data } } }
+                return { ...state, current: { ...state.current, right: { ...action.data } } }
             console.log('Invalid Side Set, Doing Nothing')
             break;
         case boutRunning:
@@ -95,12 +95,14 @@ const defaultBout = {
         state: 'OR'
     },
     advertisedTime: new Date().toLocaleDateString(),
-    leftTeam: {
+    left: {
         name: 'Left Team',
+        color: '&FFFFFF',
         roster: []
     },
-    rightTeam: {
+    right: {
         name: 'Right Team',
+        color: '&FFFFFF',
         roster: []
     }
 }

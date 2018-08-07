@@ -40,9 +40,9 @@ class PenaltyBoxTimer extends React.Component {
         let bs = this.props.boutState.current
         let data = this.props.boutState.data
 
-        let leftRoster = data.leftTeam.roster.sort(sort)
+        let leftRoster = data['left'].roster.sort(sort)
         let leftLineup = bs.jams[bs.jams.length - 1].left.roster.sort(sort)
-        let rightRoster = data.rightTeam.roster.sort(sort)
+        let rightRoster = data['right'].roster.sort(sort)
         let rightLineup = bs.jams[bs.jams.length - 1].right.roster.sort(sort)
 
         let leftPenalties = bs.penaltyBox.filter(e => e.team === 'left')
