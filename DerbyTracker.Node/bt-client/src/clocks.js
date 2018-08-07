@@ -10,6 +10,7 @@ export const setRules = r => {
 }
 
 var clocks = {
+    now: moment(),
     game: 0,
     jam: 0,
     lineup: 0
@@ -47,6 +48,7 @@ function tick() {
 
     let now = moment()
     clocks = {
+        now: now,
         game: gameClock.running
             ? Math.max(rules.periodDuration - (gameClock.elapsedMs + now.diff(gameClock.lastStarted)), 0)
             : rules.periodDuration - gameClock.elapsedMs,

@@ -8,7 +8,7 @@ const roles = [
     { role: 'LineupsTracker', label: 'Lineups Tracker', glyph: 'user' },
     { role: 'ScoreKeeper', label: 'Score Keeper', glyph: 'blackboard' },
     { role: 'PenaltyTracker', label: 'Penalty Tracker', glyph: 'eye-open' },
-    { role: 'Penalty Box', label: 'Penalty Box', glyph: 'inbox' },
+    { role: 'PenaltyBoxTimer', label: 'Penalty Box', glyph: 'inbox' },
     { role: 'HeadNSO', label: 'Head NSO', glyph: 'sunglasses' },
 ]
 

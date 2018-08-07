@@ -1,7 +1,7 @@
 ﻿using DerbyTracker.Common.Entities;
 using DerbyTracker.Common.Exceptions;
 using DerbyTracker.Common.Messaging.Commands.JamClock;
-using DerbyTracker.Common.Messaging.Events.JamClock;
+using DerbyTracker.Common.Messaging.Events.PenaltyBoxTimer;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
 using DerbyTracker.Messaging.Handlers;
@@ -24,15 +24,12 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 
         public override ICommandResponse Handle(StopJamCommand command)
         {
-            var response = new CommandResponse();
             var bout = _boutDataService.Load(command.BoutId);
             var state = _boutRunnerService.GetBoutState(command.BoutId);
 
             //State must be in jam
             if (state.Phase != BoutPhase.Jam)
             { throw new InvalidBoutPhaseException(state.Phase); }
-
-            response.AddEvent(new JamEndedEvent(command.BoutId), Audiences.All);
 
             //Check to see if bout is over
             if (state.GameClock.Elapsed.Seconds < bout.RuleSet.PeriodDurationSeconds)
@@ -49,7 +46,6 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
                 //Intermission
                 if (state.Period < bout.RuleSet.NumberOfPeriods)
                 {
-                    response.AddEvent(new PeriodEndedEvent(command.BoutId), Audiences.All);
                     state.JamNumber = 1;
                     state.Period++;
                     state.GameClock.Clear();
@@ -59,7 +55,6 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
                 //Game Over
                 {
                     state.Phase = BoutPhase.UnofficialFinal;
-                    response.AddEvent(new BoutEndedEvent(command.BoutId), Audiences.All);
                 }
             }
 
@@ -67,7 +62,14 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             state.JamStart = DateTime.Now;
             state.GameClock.Start();
 
-            response = new UpdateBoutStateResponse(state);
+            var response = new UpdateBoutStateResponse(state);
+
+            state.PenaltyBox.ForEach(x =>
+            {
+                x.StopWatch.Stop();
+                response.AddEvent(new ChairUpdatedEvent(state.BoutId, x), Audiences.Bout(state.BoutId));
+            });
+
             return response;
         }
     }

@@ -1,6 +1,8 @@
 ﻿using DerbyTracker.Common.Entities;
 using DerbyTracker.Common.Exceptions;
 using DerbyTracker.Common.Messaging.Commands.JamClock;
+using DerbyTracker.Common.Messaging.Events.Bout;
+using DerbyTracker.Common.Messaging.Events.PenaltyBoxTimer;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
 using DerbyTracker.Messaging.Events;
@@ -45,7 +47,13 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             state.JamStart = DateTime.Now;
             state.GameClock.Start();
 
-            response = new UpdateBoutStateResponse(state);
+            state.PenaltyBox.ForEach(x =>
+            {
+                x.StopWatch.Start();
+                response.AddEvent(new ChairUpdatedEvent(state.BoutId, x), Audiences.Bout(state.BoutId));
+            });
+
+            response.AddEvent(new BoutStateUpdatedEvent(state), Audiences.Bout(state.BoutId));
             return response;
         }
     }

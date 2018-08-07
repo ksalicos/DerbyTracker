@@ -5,6 +5,7 @@ import { middleware as jamTimer } from './store/jamTimerSignalR'
 import { middleware as lineupsTracker } from './store/lineupsTrackerSignalR'
 import { middleware as penaltyTracker } from './store/penaltyTrackerSignalR'
 import { middleware as scoreKeeper } from './store/scoreKeeperSignalR'
+import { middleware as penaltyBox } from './store/penaltyBoxTimerSignalR'
 
 //TODO: Set log level programmatically
 const signalrLogLevel = signalR.LogLevel.Information
@@ -21,7 +22,8 @@ export const signalRMiddleware = [
     jamTimer,
     lineupsTracker,
     penaltyTracker,
-    scoreKeeper
+    scoreKeeper,
+    penaltyBox
 ]
 
 export function signalRInvokeMiddleware(store) {

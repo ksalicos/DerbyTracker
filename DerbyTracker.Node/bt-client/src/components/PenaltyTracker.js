@@ -75,8 +75,8 @@ class PenaltyTracker extends React.Component {
         team.roster.sort(sort)
         let currentJam = bs.jams[this.state.jamIndex]
         let lineup = (this.state.viewTeam === 'left'
-            ? currentJam.leftRoster
-            : currentJam.rightRoster)
+            ? currentJam.left.roster
+            : currentJam.right.roster)
             .sort(sort)
         let penalties = bs.penalties.filter((e) => { return e.period === currentJam.period && e.jamNumber === currentJam.jamNumber })
             .sort((a, b) => a < b ? -1 : 1)

@@ -11,6 +11,8 @@ const periodEnded = 'PERIOD_ENDED'
 const boutEnded = 'BOUT_ENDED'
 const penaltyUpdated = 'PENALTY_UPDATED'
 //const passUpdated = 'PASS_UPDATED'
+const chairUpdated = 'CHAIR_UPDATED'
+const chairRemoved = 'CHAIR_REMOVED'
 
 const initialState = {
     //bouts: {},
@@ -78,6 +80,18 @@ export const reducer = (state, action) => {
                     )
                 }
             }
+        case chairUpdated:
+            if (state.current.penaltyBox.some(e => e.id === action.chair.id)) {
+                return {
+                    ...state, current: {
+                        ...state.current,
+                        penaltyBox: state.current.penaltyBox.map(e => e.id === action.chair.id ? action.chair : e)
+                    }
+                }
+            }
+            return { ...state, current: { ...state.current, penaltyBox: [...state.current.penaltyBox, action.chair] } }
+        case chairRemoved:
+            return { ...state, current: { ...state.current, penaltyBox: state.current.penaltyBox.filter(e => e.id !== action.id) } }
         default:
             return state
     }

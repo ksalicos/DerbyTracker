@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DerbyTracker.Common.Entities
 {
@@ -27,6 +26,8 @@ namespace DerbyTracker.Common.Entities
         public int JamNumber { get; set; } = 1;
         public List<Jam> Jams = new List<Jam> { new Jam(1, 1) };
 
+        public TimeoutType TimeoutType { get; set; }
+        public bool LoseOfficialReview { get; set; }
 
         public void CreateNextJam()
         {
@@ -37,10 +38,6 @@ namespace DerbyTracker.Common.Entities
         public TeamState LeftTeamState { get; set; }
         public TeamState RightTeamState { get; set; }
 
-        public int LeftScore()
-        { return Jams.SelectMany(x => x.Left.Passes).Sum(x => x.Score); }
-        public int RightScore()
-        { return Jams.SelectMany(x => x.Right.Passes).Sum(x => x.Score); }
 
         public TeamState TeamState(string team)
         {
@@ -53,9 +50,7 @@ namespace DerbyTracker.Common.Entities
         }
 
         public List<Penalty> Penalties = new List<Penalty>();
-
-        public TimeoutType TimeoutType { get; set; }
-        public bool LoseOfficialReview { get; set; }
+        public List<Chair> PenaltyBox = new List<Chair>();
     }
 
     public enum BoutPhase
