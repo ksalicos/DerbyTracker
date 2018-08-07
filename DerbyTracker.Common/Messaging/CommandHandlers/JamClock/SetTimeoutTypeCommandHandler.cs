@@ -26,23 +26,9 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             if (state.TimeoutType == command.TimeoutType)
             { return response; }
 
-            if (state.TimeoutType == TimeoutType.LeftTeam && command.TimeoutType != TimeoutType.LeftTeam)
-            { state.LeftTeamState.TimeOutsRemaining++; }
-            if (state.TimeoutType == TimeoutType.RightTeam && command.TimeoutType != TimeoutType.RightTeam)
-            { state.RightTeamState.TimeOutsRemaining++; }
-
-            if (command.TimeoutType == TimeoutType.LeftTeam && state.TimeoutType != TimeoutType.LeftTeam)
-            {
-                if (state.LeftTeamState.TimeOutsRemaining == 0)
-                { throw new NoTimeoutsRemainingException(); }
-                state.LeftTeamState.TimeOutsRemaining--;
-            }
-            else if (command.TimeoutType == TimeoutType.RightTeam && state.TimeoutType != TimeoutType.RightTeam)
-            {
-                if (state.RightTeamState.TimeOutsRemaining == 0)
-                { throw new NoTimeoutsRemainingException(); }
-                state.RightTeamState.TimeOutsRemaining--;
-            }
+            if ((command.TimeoutType == TimeoutType.LeftTeam && state.LeftTeamState.TimeOutsRemaining == 0)
+                || (command.TimeoutType == TimeoutType.RightTeam && state.RightTeamState.TimeOutsRemaining == 0))
+            { throw new NoTimeoutsRemainingException(); }
 
             state.TimeoutType = command.TimeoutType;
 

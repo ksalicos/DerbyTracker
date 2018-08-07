@@ -22,7 +22,7 @@ class LineupsTracker extends React.Component {
     }
 
     render() {
-        let sort = (a, b) => a.number < b.number ? -1 : 1
+        let sort = (a, b) => a.number + '' < b.number + '' ? -1 : 1
         let bs = this.props.boutState.current
         let data = this.props.boutState.data
         let team = data[this.state.viewTeam]
@@ -94,7 +94,7 @@ class LineupsTracker extends React.Component {
                 {
                     team.roster.map((e, i) => {
                         let buttonStyle = 'primary' //Set this when penalties are tracked.
-                        if (lineup.find(r => r.number === e.number)) {
+                        if (lineup.some(r => r.number === e.number)) {
                             buttonStyle = 'success'
                         }
                         //Red: In box but not jam
@@ -107,8 +107,11 @@ class LineupsTracker extends React.Component {
                                 <Row className='lineups-skater'>
                                     <Col sm={4} className='lineups-number'>
                                         <Button onClick={() => {
-                                            this.props.addSkater(bs.boutId, currentJam.period, currentJam.jamNumber,
-                                                this.state.viewTeam, e.number)
+                                            buttonStyle === 'success'
+                                                ? this.props.removeSkater(bs.boutId, currentJam.period, currentJam.jamNumber,
+                                                    this.state.viewTeam, e.number)
+                                                : this.props.addSkater(bs.boutId, currentJam.period, currentJam.jamNumber,
+                                                    this.state.viewTeam, e.number)
                                         }}
                                             bsStyle={buttonStyle} bsSize="large" block>{e.number}</Button>
                                     </Col>

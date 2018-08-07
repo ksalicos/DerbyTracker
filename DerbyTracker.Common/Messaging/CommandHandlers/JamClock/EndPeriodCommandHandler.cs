@@ -1,4 +1,5 @@
-﻿using DerbyTracker.Common.Exceptions;
+﻿using DerbyTracker.Common.Entities;
+using DerbyTracker.Common.Exceptions;
 using DerbyTracker.Common.Messaging.Commands.JamClock;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Messaging.Commands;
@@ -30,8 +31,10 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
 
             if (state.Period < bout.RuleSet.NumberOfPeriods)
             {
-                state.Phase = Entities.BoutPhase.Halftime;
+                state.Phase = BoutPhase.Halftime;
                 state.Period++;
+                state.JamNumber = 1;
+                state.Jams.Add(new Jam(state.Period, state.JamNumber));
             }
             else
             {

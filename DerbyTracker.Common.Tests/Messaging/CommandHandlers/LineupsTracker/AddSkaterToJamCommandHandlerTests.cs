@@ -5,6 +5,8 @@ using DerbyTracker.Common.Messaging.Commands.LineupsTracker;
 using DerbyTracker.Common.Services;
 using DerbyTracker.Common.Services.Mocks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
@@ -66,5 +68,23 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.LineupsTracker
                 _handler.Handle(_command);
             });
         }
+
+        [Fact]
+        public void CantAddMoreThanSix()
+        {
+            var state = _boutRunner.GetBoutState(Guid.Empty);
+            state.Jams.Last().Left.Roster = new List<JamParticipant>
+            {
+                new JamParticipant { },
+                new JamParticipant { },
+                new JamParticipant { },
+                new JamParticipant { },
+                new JamParticipant { },
+                new JamParticipant { },
+            };
+            _handler.Handle(_command);
+            Assert.Equal(6, state.Jams.Last().Left.Roster.Count);
+        }
+
     }
 }

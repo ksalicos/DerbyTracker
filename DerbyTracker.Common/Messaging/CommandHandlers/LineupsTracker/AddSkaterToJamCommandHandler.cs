@@ -32,11 +32,10 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.LineupsTracker
             var roster = command.Team == "left" ? bout.Left.Roster : bout.Right.Roster;
             var lineup = team.Roster;
 
-
             if (roster.All(x => x.Number != command.Number))
             { throw new InvalidSkaterNumberException(command.Team, command.Number); }
 
-            if (lineup.Any(x => x.Number == command.Number))
+            if (lineup.Any(x => x.Number == command.Number || lineup.Count == 6))
             { return new CommandResponse(); }
 
             lineup.Add(new JamParticipant { Number = command.Number, Position = Position.Blocker });

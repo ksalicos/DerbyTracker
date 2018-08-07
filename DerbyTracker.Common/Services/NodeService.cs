@@ -24,16 +24,13 @@ namespace DerbyTracker.Common.Services
 
         List<NodeConnection> ListConnected();
 
-        //Register node
-        //Disconnect node
-        //Assign role to node
-        //Remove role from node
         bool IsInRole(string nodeId, string role);
         void RemoveRole(string nodeId, string role);
         void AddRole(string nodeId, string role);
         List<string> GetRoles(string nodeId);
         bool ValidateNode(string nodeId, string connectionId, string role = "");
         bool IsInBout(string nodeId, Guid boutId);
+        string GetConnection(string nodeId);
     }
 
     public class NodeConnection
@@ -48,7 +45,6 @@ namespace DerbyTracker.Common.Services
     public class NodeService : INodeService
     {
         private readonly Dictionary<string, NodeConnection> _nodeIdToConnectionId = new Dictionary<string, NodeConnection>();
-
         private readonly IBoutRunnerService _boutRunnerService;
 
         public NodeService(IBoutRunnerService boutRunnerService)
@@ -111,9 +107,7 @@ namespace DerbyTracker.Common.Services
         public void AddRole(string nodeId, string role)
         {
             if (!_nodeIdToConnectionId.ContainsKey(nodeId))
-            {
-                throw new NoSuchNodeException(nodeId);
-            }
+            { throw new NoSuchNodeException(nodeId); }
             _nodeIdToConnectionId[nodeId].Roles.Add(role);
         }
 
@@ -136,6 +130,13 @@ namespace DerbyTracker.Common.Services
         public bool IsInBout(string nodeId, Guid boutId)
         {
             return _nodeIdToConnectionId[nodeId].BoutId == boutId;
+        }
+
+        public string GetConnection(string nodeId)
+        {
+            if (_nodeIdToConnectionId.ContainsKey(nodeId))
+            { return _nodeIdToConnectionId[nodeId].ConnectionId; }
+            throw new NoSuchNodeException(nodeId);
         }
 
         public bool ConnectionIsInRole(string connectionId, string role)

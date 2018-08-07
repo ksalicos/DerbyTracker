@@ -80,8 +80,10 @@ class JamTimer extends React.Component {
                     </div>
                     <div>
                         <button className={bs.timeoutType === 1 ? 'selected' : ''}
+                            disabled={left.timeOutsRemaining < 1}
                             onClick={() => { props.setTimeoutType(bs.boutId, 1) }}>Team Timeout Left</button>
                         <button className={bs.timeoutType === 2 ? 'selected' : ''}
+                            disabled={right.timeOutsRemaining < 1}
                             onClick={() => { props.setTimeoutType(bs.boutId, 2) }}>Team Timeout Right</button>
                     </div>
                     <div>
@@ -95,8 +97,8 @@ class JamTimer extends React.Component {
                     {
                         bs.timeoutType === 3 || bs.timeoutType === 4 ? <div>
                             <h2>Review Kept?</h2>
-                            <button onClick={() => { props.setLoseReview(bs.boutId, false) }}>Keep Review</button>
-                            <button onClick={() => { props.setLoseReview(bs.boutId, true) }}>Lose Review</button>
+                            <button className={!bs.loseOfficialReview ? 'selected' : ''} onClick={() => { props.setLoseReview(bs.boutId, false) }}>Keep Review</button>
+                            <button className={bs.loseOfficialReview ? 'selected' : ''} onClick={() => { props.setLoseReview(bs.boutId, true) }}>Lose Review</button>
                         </div> : null
                     }
                     <hr />

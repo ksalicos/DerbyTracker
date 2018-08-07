@@ -45,11 +45,14 @@ export const reducer = (state, action) => {
             }
             break
         case rolesUpdated:
+            let needNewScreen = !action.newRoles.some(e => e === state.screen)
+
             return {
                 ...state,
                 roles: action.newRoles,
-                screen: state.screen === 'bout' && action.newRoles.length > 0
+                screen: needNewScreen ? action.newRoles.length > 0
                     ? action.newRoles[0]
+                    : 'bout'
                     : state.screen
             }
         case initializeBoutState:

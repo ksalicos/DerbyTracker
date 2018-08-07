@@ -23,15 +23,29 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             state.Phase = BoutPhase.Lineup;
             state.LineupStart = DateTime.Now;
 
-            if (state.TimeoutType == TimeoutType.LeftReview && state.LoseOfficialReview)
+            switch (state.TimeoutType)
             {
-                state.LeftTeamState.OfficialReviews--;
+                case TimeoutType.Official:
+                    break;
+                case TimeoutType.LeftTeam:
+                    state.LeftTeamState.TimeOutsRemaining--;
+                    break;
+                case TimeoutType.RightTeam:
+                    state.RightTeamState.TimeOutsRemaining--;
+                    break;
+                case TimeoutType.LeftReview:
+                    if (state.LoseOfficialReview)
+                    { state.LeftTeamState.OfficialReviews--; }
+                    break;
+                case TimeoutType.RightReview:
+                    if (state.LoseOfficialReview)
+                    { state.RightTeamState.OfficialReviews--; }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
-            if (state.TimeoutType == TimeoutType.RightReview && state.LoseOfficialReview)
-            {
-                state.RightTeamState.OfficialReviews--;
-            }
+            state.TimeoutType = TimeoutType.Official;
 
             var response = new UpdateBoutStateResponse(state);
             return response;

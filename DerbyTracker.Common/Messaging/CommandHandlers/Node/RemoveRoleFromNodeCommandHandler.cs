@@ -21,7 +21,8 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.Node
             var response = new CommandResponse();
             if (!_nodeService.IsInRole(command.NodeId, command.Role)) return response;
             _nodeService.RemoveRole(command.NodeId, command.Role);
-            response.AddEvent(new NodeRolesUpdatedEvent(command.NodeId, _nodeService.GetRoles(command.NodeId)), Audiences.All);
+            response.AddEvent(new NodeRolesUpdatedEvent(command.NodeId, _nodeService.GetRoles(command.NodeId)), _nodeService.GetConnection(command.NodeId));
+            response.AddEvent(new NodeRolesUpdatedEvent(command.NodeId, _nodeService.GetRoles(command.NodeId)), command.Originator);
             return response;
         }
     }
