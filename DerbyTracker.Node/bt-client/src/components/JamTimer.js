@@ -1,11 +1,13 @@
-
+import './JamTimer.css'
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as system } from '../store/System'
 import { actionCreators as jamTimer } from '../store/jamTimerSignalR'
-import ShortClockDisplay from './shared/ShortClockDisplay';
-import ShortScoreDisplay from './shared/ShortScoreDisplay';
+import { Col, Row, Button } from 'react-bootstrap';
+import TimeDisplay from './shared/TimeDisplay'
 import * as clock from '../clocks'
+import * as input from '../input'
+import { phaseList } from '../store/BoutState'
 
 class JamTimer extends React.Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class JamTimer extends React.Component {
             jamClock: null,
             lineupClock: null
         }
+        this.startStopJam = this.startStopJam.bind(this);
     }
 
     componentDidMount() {
@@ -26,11 +29,26 @@ class JamTimer extends React.Component {
                 lineupClock: clock.lineup
             })
         })
+        input.addWatch('toggleJam', 'jt', this.startStopJam)
     }
     componentWillUnmount() {
         clock.removeWatch('jt')
+        input.removeWatch('toggleJam', 'jt')
     }
 
+    startStopJam() {
+        let bs = this.props.boutState.current
+        switch (bs.phase) {
+            case 1:
+                this.props.startJam(bs.boutId)
+                break
+            case 2:
+                this.props.stopJam(bs.boutId)
+                break
+            default:
+                break
+        }
+    }
 
     render() {
         let props = this.props
@@ -40,73 +58,148 @@ class JamTimer extends React.Component {
         let left = bs.leftTeamState
         let right = bs.rightTeamState
 
-        //let canStartJam = this.state.gameClock > 0 && (!bs.gameClock.running || this.state.lineupClock === 0)
-        //|| (this.state.lineupClock)
+        let circle = (color) => <svg viewBox="0 0 100 100" className='timeout-circle'>
+            <circle cx="50" cy="50" r="40" stroke="black" strokeWidth="3" fill={color} />
+        </svg>
+        let lto = bs.leftTeamState.timeOutsRemaining
+        let rto = bs.rightTeamState.timeOutsRemaining
+        let lcolor = this.props.boutState.data.left.color
+        let rcolor = this.props.boutState.data.right.color
+        let used = '#555555'
 
         return (<div>
-            <h1>JamTimer</h1>
-            <ShortClockDisplay boutState={bs} />
-            <ShortScoreDisplay boutState={bs} />
-            {bs.phase === 0 || bs.phase === 4 //pregame or halftime
-                ? <div><button onClick={() => { props.exitPregame(bs.boutId) }}>Start Lineup</button></div>
-                : null
-            }
+            <Row>
+                <Col xs={2} sm={1}>
+                    <div className='timeout'>{circle(lto >= 3 ? lcolor : used)}</div>
+                    <div className='timeout'>{circle(lto >= 2 ? lcolor : used)}</div>
+                    <div className='timeout'>{circle(lto >= 1 ? lcolor : used)}</div>
+                    <div className='timeout official-review'>{circle(bs.leftTeamState.officialReviews > 0 ? lcolor : used)}</div>
+                </Col>
+                <Col xs={8} sm={10}>
+                    <Row className='period-display'>
+                        <Col md={12} lgOffset={1} lg={5}>
+                            P{bs.period}: <TimeDisplay ms={this.state.gameClock} />
+                        </Col>
+                        {
+                            bs.phase === 1
+                                ? <Col md={12} lg={5}>
+                                    Lineup: <TimeDisplay ms={this.state.lineupClock} />
+                                </Col>
+                                : null
+                        }
+                        {
+                            bs.phase === 2
+                                ? <Col md={12} lg={4}>
+                                    J{bs.jamNumber}: <TimeDisplay ms={this.state.jamClock} />
+                                </Col>
+                                : null
+                        }
+                        {
+                            bs.phase === 0 || bs.phase >= 3
+                                ? <Col md={12} lg={4}>
+                                    {phaseList[bs.phase]}
+                                </Col>
+                                : null
+                        }
+                    </Row>
 
-            {bs.phase === 1 //lineup
-                ? <div>
-                    <div><button onClick={() => { props.startJam(bs.boutId) }}>Start Jam</button></div>
-                    <div><button onClick={() => { props.startTimeout(bs.boutId) }}>Start Timeout</button></div>
-                    {
-                        this.state.gameClock === 0 ? <div>
-                            <button onClick={() => { props.endPeriod(bs.boutId) }}>End Period</button>
-                        </div>
-                            : null
-                    }
-                </div>
-                : null
-            }
+                    <Row>
+                        <Col sm={12} mdOffset={2} md={8} lgOffset={3} lg={6}>
+                            {bs.phase === 0 || bs.phase === 4 //pregame or halftime
+                                ? <Button block bsSize='large' onClick={() => { props.exitPregame(bs.boutId) }}>Start Lineup</Button>
+                                : null
+                            }
 
-            {bs.phase === 2 //jam
-                ? <div><button onClick={() => { props.stopJam(bs.boutId) }}>Stop Jam</button></div>
-                : null
-            }
+                            {bs.phase === 1 //lineup
+                                ? <div>
+                                    <Button block bsSize='large' bsStyle='primary' onClick={() => { props.startJam(bs.boutId) }}>Start Jam</Button>
+                                    <Button block bsSize='large' onClick={() => { props.startTimeout(bs.boutId) }}>Start Timeout</Button>
+                                    {
+                                        this.state.gameClock === 0
+                                            ? <Button block bsSize='large' onClick={() => { props.endPeriod(bs.boutId) }}>End Period</Button>
+                                            : null
+                                    }
+                                </div>
+                                : null
+                            }
 
-            {bs.phase === 3 //timeout
-                ? <div>
-                    <h2>Timeout Type</h2>
-                    <div>
-                        <button className={bs.timeoutType === 0 ? 'selected' : ''}
-                            onClick={() => { props.setTimeoutType(bs.boutId, 0) }}>Official Timeout</button>
-                    </div>
-                    <div>
-                        <button className={bs.timeoutType === 1 ? 'selected' : ''}
-                            disabled={left.timeOutsRemaining < 1}
-                            onClick={() => { props.setTimeoutType(bs.boutId, 1) }}>Team Timeout Left</button>
-                        <button className={bs.timeoutType === 2 ? 'selected' : ''}
-                            disabled={right.timeOutsRemaining < 1}
-                            onClick={() => { props.setTimeoutType(bs.boutId, 2) }}>Team Timeout Right</button>
-                    </div>
-                    <div>
-                        <button className={bs.timeoutType === 3 ? 'selected' : ''}
-                            disabled={left.officialReviews < 1}
-                            onClick={() => { props.setTimeoutType(bs.boutId, 3) }}>Official Review Left</button>
-                        <button className={bs.timeoutType === 4 ? 'selected' : ''}
-                            disabled={right.officialReviews < 1}
-                            onClick={() => { props.setTimeoutType(bs.boutId, 4) }}>Official Review Right</button>
-                    </div>
-                    {
-                        bs.timeoutType === 3 || bs.timeoutType === 4 ? <div>
-                            <h2>Review Kept?</h2>
-                            <button className={!bs.loseOfficialReview ? 'selected' : ''} onClick={() => { props.setLoseReview(bs.boutId, false) }}>Keep Review</button>
-                            <button className={bs.loseOfficialReview ? 'selected' : ''} onClick={() => { props.setLoseReview(bs.boutId, true) }}>Lose Review</button>
-                        </div> : null
-                    }
-                    <hr />
-                    <div><button onClick={() => { props.stopTimeout(bs.boutId) }}>Stop Timeout</button></div>
-                </div>
-                : null
-            }
-        </div>)
+                            {bs.phase === 2 //jam
+                                ? <Button block bsSize='large' bsStyle='primary' onClick={() => { props.stopJam(bs.boutId) }}>Stop Jam</Button>
+                                : null
+                            }
+
+                            {bs.phase === 3 //timeout
+                                ? <div>
+                                    <div className='period-display'>Timeout Type</div>
+                                    <Row>
+                                        <Col sm={12} className='button-column'>
+                                            <Button block bsSize='large' bsStyle={bs.timeoutType === 0 ? 'primary' : 'default'}
+                                                onClick={() => { props.setTimeoutType(bs.boutId, 0) }}>Official Timeout</Button>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={11} sm={6} className='button-column'>
+                                            <Button block bsSize='large' bsStyle={bs.timeoutType === 1 ? 'primary' : 'default'}
+                                                disabled={left.timeOutsRemaining < 1}
+                                                onClick={() => { props.setTimeoutType(bs.boutId, 1) }}>Team Timeout Left</Button>
+                                        </Col>
+                                        <Col xsOffset={1} xs={11} smOffset={0} sm={6} className='button-column'>
+                                            <Button block bsSize='large' bsStyle={bs.timeoutType === 2 ? 'primary' : 'default'}
+                                                disabled={right.timeOutsRemaining < 1}
+                                                onClick={() => { props.setTimeoutType(bs.boutId, 2) }}>Team Timeout Right</Button>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={11} sm={6} className='button-column'>
+                                            <Button block bsSize='large' bsStyle={bs.timeoutType === 3 ? 'primary' : 'default'}
+                                                disabled={left.officialReviews < 1}
+                                                onClick={() => { props.setTimeoutType(bs.boutId, 3) }}>Official Review Left</Button>
+                                        </Col>
+                                        <Col xsOffset={1} xs={11} smOffset={0} sm={6} className='button-column'>
+                                            <Button block bsSize='large' bsStyle={bs.timeoutType === 4 ? 'primary' : 'default'}
+                                                disabled={right.officialReviews < 1}
+                                                onClick={() => { props.setTimeoutType(bs.boutId, 4) }}>Official Review Right</Button>
+                                        </Col>
+                                    </Row>
+                                    {
+                                        bs.timeoutType === 3 || bs.timeoutType === 4 ? <div>
+                                            <h2>Review Kept?</h2>
+                                            <Row>
+                                                <Col sm={6} className='button-column'>
+                                                    <Button block bsSize='large' bsStyle={!bs.loseOfficialReview ? 'primary' : 'default'} onClick={() => { props.setLoseReview(bs.boutId, false) }}>Keep Review</Button>
+                                                </Col>
+                                                <Col sm={6} className='button-column'>
+                                                    <Button block bsSize='large' bsStyle={bs.loseOfficialReview ? 'primary' : 'default'} onClick={() => { props.setLoseReview(bs.boutId, true) }}>Lose Review</Button>
+                                                </Col>
+                                            </Row>
+                                        </div> : null
+                                    }
+                                    <hr />
+                                    <Row>
+                                        <Col sm={12} mdOffset={3} md={6} lgOffset={4} lg={4} className='button-column'>
+                                            <Button block bsSize='large' onClick={() => { props.stopTimeout(bs.boutId) }}>End Timeout</Button>
+                                        </Col>
+                                    </Row>
+                                </div>
+                                : null
+                            }
+                        </Col>
+                    </Row>
+
+
+                </Col>
+                <Col xs={2} sm={1}>
+                    <div className='timeout'>{circle(rto >= 3 ? rcolor : used)}</div>
+                    <div className='timeout'>{circle(rto >= 2 ? rcolor : used)}</div>
+                    <div className='timeout'>{circle(rto >= 1 ? rcolor : used)}</div>
+                    <div className='timeout official-review'>{circle(bs.rightTeamState.officialReviews > 0 ? rcolor : used)}</div>
+                </Col>
+            </Row>
+
+
+
+
+        </div >)
     }
 }
 

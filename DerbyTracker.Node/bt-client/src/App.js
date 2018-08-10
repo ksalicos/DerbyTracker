@@ -8,20 +8,31 @@ import Scoreboard from './components/Scoreboard'
 import PenaltyTracker from './components/PenaltyTracker'
 import ScoreKeeper from './components/ScoreKeeper'
 import PenaltyBoxTimer from './components/PenaltyBoxTimer'
+import * as input from './input'
 
-const App = props => {
-  if (props.system.screen === 'loading') { return <LoadingScreen /> }
-  if (props.system.screen === 'scoreboard') { return <Scoreboard /> }
+class App extends React.Component {
+  componentDidMount() {
+    document.addEventListener('keydown', input.handleKeyPress);
+  }
 
-  return <Layout>
-    {({
-      'JamTimer': (<JamTimer />),
-      'LineupsTracker': (<LineupsTracker />),
-      'PenaltyTracker': (<PenaltyTracker />),
-      'ScoreKeeper': (<ScoreKeeper />),
-      'PenaltyBoxTimer': (<PenaltyBoxTimer />)
-    })[props.system.screen]}
-  </Layout>
+  componentWillUnmount() {
+    document.removeEventListener('keydown', input.handleKeyPress);
+  }
+
+  render() {
+    if (this.props.system.screen === 'loading') { return <LoadingScreen /> }
+    if (this.props.system.screen === 'scoreboard') { return <Scoreboard /> }
+
+    return <Layout>
+      {({
+        'JamTimer': (<JamTimer />),
+        'LineupsTracker': (<LineupsTracker />),
+        'PenaltyTracker': (<PenaltyTracker />),
+        'ScoreKeeper': (<ScoreKeeper />),
+        'PenaltyBoxTimer': (<PenaltyBoxTimer />)
+      })[this.props.system.screen]}
+    </Layout>
+  }
 }
 
 const mapStateToProps = state => {

@@ -19,11 +19,9 @@ export function middleware(store) {
     return (next) => async (action) => {
         switch (action.type) {
             case addSkater:
-                console.log('add')
                 connection.invoke('AddSkaterToJam', nodeId, action.boutId, action.period, action.jam, action.team, action.number)
                 break
             case removeSkater:
-                console.log('removef')
                 connection.invoke('RemoveSkaterFromJam', nodeId, action.boutId, action.period, action.jam, action.team, action.number)
                 break
             case setSkaterPosition:

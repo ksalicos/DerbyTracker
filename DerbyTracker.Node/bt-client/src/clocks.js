@@ -51,7 +51,7 @@ function tick() {
         now: now,
         game: gameClock.running
             ? Math.max(rules.periodDuration - (gameClock.elapsedMs + now.diff(gameClock.lastStarted)), 0)
-            : rules.periodDuration - gameClock.elapsedMs,
+            : Math.max(rules.periodDuration - gameClock.elapsedMs, 0),
         jam: Math.max(rules.jamDuration - now.diff(jamClockStarted), 0),
         lineup: Math.max(rules.lineupDuration - now.diff(lineupClockStarted), 0)
     }
