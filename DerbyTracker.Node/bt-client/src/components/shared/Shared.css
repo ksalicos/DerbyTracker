@@ -1,0 +1,12 @@
+.jam-selector{
+    font-size: 2em;
+    margin-bottom: .5vw;
+}
+.jam-selector>span{
+    margin:0 10px 0 10px;
+}
+
+.jam-jump{
+    display: inline;
+    margin-left: 2vw;
+}

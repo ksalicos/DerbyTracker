@@ -25,16 +25,15 @@ namespace DerbyTracker.Master
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             //TODO: Verify CORS settings for signalr clients
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                 builder =>
                 {
-                    builder.AllowAnyMethod().AllowAnyHeader()
-                        //.WithOrigins("http://localhost:44347")
+                    builder
                         .AllowAnyOrigin()
-                        .AllowCredentials();
+                        .AllowCredentials()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 }));
 
             // In production, the React files will be served from this directory
@@ -43,7 +42,10 @@ namespace DerbyTracker.Master
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddSignalR();
+            services.AddSignalR(o => o.EnableDetailedErrors = true);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             services.AddScoped<SignalRCallbackFactory>();
             services.AddSingleton<ICallbackFactory, SignalRCallbackFactory>();
             services.AddSingleton<IDispatcher, ImmediateDispatcher>();
@@ -68,7 +70,7 @@ namespace DerbyTracker.Master
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 

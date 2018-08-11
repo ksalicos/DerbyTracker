@@ -1,4 +1,6 @@
 import uuid from 'uuid'
+import { LogLevel } from '@aspnet/signalr'
+
 var settings = null
 
 //debug settings
@@ -9,6 +11,11 @@ export function get() {
     if (!settings) {
         settings = JSON.parse(window.localStorage.getItem('settings'))
 
+        if (settings) {
+            settings.remoteIp = '192.168.1.10'
+            settings.logLevel = LogLevel.Trace
+        }
+
         if (newIdOnLoad) {
             settings.nodeId = uuid.v4()
         }
@@ -18,7 +25,9 @@ export function get() {
     }
     if (!settings) {
         settings = {
-            nodeId: uuid.v4()
+            nodeId: uuid.v4(),
+            remoteIp: '192.168.1.10',
+            logLevel: LogLevel.Trace
         }
         save()
     }

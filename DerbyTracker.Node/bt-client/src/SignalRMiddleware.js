@@ -7,15 +7,17 @@ import { middleware as penaltyTracker } from './store/penaltyTrackerSignalR'
 import { middleware as scoreKeeper } from './store/scoreKeeperSignalR'
 import { middleware as penaltyBox } from './store/penaltyBoxTimerSignalR'
 
-//TODO: Set log level programmatically
-const signalrLogLevel = signalR.LogLevel.Information
+var s = settings.get()
+const nodeId = s.nodeId
+const remoteIp = `http://${s.remoteIp}:5000/wheelhub`
+
+const signalrLogLevel = s.logLevel
 export const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:44347/wheelhub")
+    .withUrl(remoteIp)
     .configureLogging(signalrLogLevel)
     .build();
 
-var s = settings.get()
-const nodeId = s.nodeId
+
 
 export const signalRMiddleware = [
     signalRInvokeMiddleware,
@@ -54,5 +56,5 @@ export function signalRRegisterCommands(store, callback) {
         store.dispatch(data)
     })
 
-    connection.start().catch(err => console.log(err.toString())).then(callback);
+    connection.start().catch(err => console.log('SignalR Startup Error', err.toString())).then(callback);
 }
