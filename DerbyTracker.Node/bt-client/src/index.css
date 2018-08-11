@@ -13,6 +13,8 @@ body{
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
+button:focus {outline-color: white !important}
+
 #loadingBox{
   margin: 10% auto auto auto;
   padding: 1%;
@@ -84,18 +86,6 @@ button:disabled{
   color: gray;
   background-color: darkgray;
 }
-
-/* Lineup Tracker */
-
-.lineups-number{
-  font-size: 1.5em;
-}
-
-.lineups-name{
-  font-size: 1.2em;
-  padding: 12px;
-}
-
 
 /* Scoreboard */
 #scoreboard-box{

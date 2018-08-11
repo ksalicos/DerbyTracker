@@ -1,5 +1,6 @@
 import uuid from 'uuid'
 var settings = null
+import { LogLevel } from '@aspnet/signalr'
 
 //debug settings
 var newIdOnLoad = false
@@ -8,6 +9,11 @@ var IamAScoreboard = false
 export function get() {
     if (!settings) {
         settings = JSON.parse(window.localStorage.getItem('settings'))
+
+        if (settings) {
+            settings.remoteIp = '192.168.1.10'
+            logLevel = LogLevel.Trace
+        }
 
         if (newIdOnLoad) {
             settings.nodeId = uuid.v4()
@@ -18,7 +24,9 @@ export function get() {
     }
     if (!settings) {
         settings = {
-            nodeId: uuid.v4()
+            nodeId: uuid.v4(),
+            remoteIp: '192.168.1.10'
+            logLevel: LogLevel.Trace
         }
         save()
     }

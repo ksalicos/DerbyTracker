@@ -79,12 +79,31 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
             var state = _boutRunner.GetBoutState(Guid.Empty);
             state.LoseOfficialReview = true;
             state.RightTeamState.OfficialReviews = 1;
-            state.RightTeamState.OfficialReviews = 1;
+            state.LeftTeamState.OfficialReviews = 1;
             state.TimeoutType = TimeoutType.RightReview;
             _handler.Handle(_command);
             Assert.Equal(1, state.LeftTeamState.OfficialReviews);
             Assert.Equal(0, state.RightTeamState.OfficialReviews);
         }
 
+        [Fact]
+        public void LeftTeamLosesTimeout()
+        {
+            var state = _boutRunner.GetBoutState(Guid.Empty);
+            state.TimeoutType = TimeoutType.LeftTeam;
+            _handler.Handle(_command);
+            Assert.Equal(2, state.LeftTeamState.TimeOutsRemaining);
+            Assert.Equal(3, state.RightTeamState.TimeOutsRemaining);
+        }
+
+        [Fact]
+        public void RightTeamLosesTimeout()
+        {
+            var state = _boutRunner.GetBoutState(Guid.Empty);
+            state.TimeoutType = TimeoutType.RightTeam;
+            _handler.Handle(_command);
+            Assert.Equal(3, state.LeftTeamState.TimeOutsRemaining);
+            Assert.Equal(2, state.RightTeamState.TimeOutsRemaining);
+        }
     }
 }

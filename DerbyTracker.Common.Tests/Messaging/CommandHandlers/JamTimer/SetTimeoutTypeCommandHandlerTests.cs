@@ -46,28 +46,6 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
         }
 
         [Fact]
-        public void SettingLeftTeamTimeoutRemovesTimeout()
-        {
-            var state = _boutRunner.GetBoutState(Guid.Empty);
-            Assert.Equal(3, state.LeftTeamState.TimeOutsRemaining);
-            _command.TimeoutType = TimeoutType.LeftTeam;
-            _handler.Handle(_command);
-            Assert.Equal(TimeoutType.LeftTeam, state.TimeoutType);
-            Assert.Equal(2, state.LeftTeamState.TimeOutsRemaining);
-        }
-
-        [Fact]
-        public void SettingRightTeamTimeoutRemovesTimeout()
-        {
-            var state = _boutRunner.GetBoutState(Guid.Empty);
-            Assert.Equal(3, state.RightTeamState.TimeOutsRemaining);
-            _command.TimeoutType = TimeoutType.RightTeam;
-            _handler.Handle(_command);
-            Assert.Equal(TimeoutType.RightTeam, state.TimeoutType);
-            Assert.Equal(2, state.RightTeamState.TimeOutsRemaining);
-        }
-
-        [Fact]
         public void SettingLeftReviewSetsState()
         {
             var state = _boutRunner.GetBoutState(Guid.Empty);
@@ -83,28 +61,6 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
             _command.TimeoutType = TimeoutType.RightReview;
             _handler.Handle(_command);
             Assert.Equal(TimeoutType.RightReview, state.TimeoutType);
-        }
-
-        [Fact]
-        public void SwitchingAwayFromLeftTeamTimeoutReturnsTimeout()
-        {
-            var state = _boutRunner.GetBoutState(Guid.Empty);
-            state.TimeoutType = TimeoutType.LeftTeam;
-            state.LeftTeamState.TimeOutsRemaining = 2;
-            _command.TimeoutType = TimeoutType.Official;
-            _handler.Handle(_command);
-            Assert.Equal(3, state.LeftTeamState.TimeOutsRemaining);
-        }
-
-        [Fact]
-        public void SwitchingAwayFromRightTeamTimeoutReturnsTimeout()
-        {
-            var state = _boutRunner.GetBoutState(Guid.Empty);
-            state.TimeoutType = TimeoutType.RightTeam;
-            state.RightTeamState.TimeOutsRemaining = 2;
-            _command.TimeoutType = TimeoutType.Official;
-            _handler.Handle(_command);
-            Assert.Equal(3, state.RightTeamState.TimeOutsRemaining);
         }
     }
 }
