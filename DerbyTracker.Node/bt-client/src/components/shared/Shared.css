@@ -2,11 +2,35 @@
     font-size: 2em;
     margin-bottom: .5vw;
 }
-.jam-selector>span{
+.jam-label{
     margin:0 10px 0 10px;
 }
 
 .jam-jump{
     display: inline;
     margin-left: 2vw;
+}
+
+.done-button{
+    float: right;
+}
+
+.summary-timers{
+    font-size: 2em;
+}
+
+.summary-score{
+    font-size: 3em;
+    background-color: lightgrey;
+    text-align: center
+}
+
+.summary-timeout{
+    display: inline-block;
+    height:25px;
+    width: 25px;
+}
+
+.i-mean-review{
+    margin-left: 20px;
 }

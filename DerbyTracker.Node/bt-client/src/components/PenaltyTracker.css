@@ -1,0 +1,19 @@
+.penalty-team-name{
+    font-size: 2em;
+}
+
+.penaltyWarning{
+    background-color: orange;
+}
+  
+.penaltyAlert{
+    background-color: lightcoral;
+}
+
+.bottom{
+    position: absolute;
+    bottom: 0;
+    left: 0px;
+}
+  
+  

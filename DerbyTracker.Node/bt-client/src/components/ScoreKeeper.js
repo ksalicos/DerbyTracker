@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import ShortClockDisplay from './shared/ShortClockDisplay';
-import ShortScoreDisplay from './shared/ShortScoreDisplay';
-import { Row, Col, Button } from 'react-bootstrap'
-import TeamScoring from './scoreKeeper/teamScoring'
+import GameSummary from './shared/GameSummary';
+import { Row, Col, Button, ButtonGroup, Panel } from 'react-bootstrap'
+import TeamScoring from './scoreKeeper/TeamScoring'
+import JamSelector from './shared/JamSelector'
+import './ScoreKeeper.css'
 
 class ScoreKeeper extends React.Component {
     constructor(props) {
@@ -13,44 +14,31 @@ class ScoreKeeper extends React.Component {
             viewTeam: 'both',
             jamIndex: props.boutState ? props.boutState.current.jams.length - 1 : null
         }
-        this.lastJam = this.lastJam.bind(this);
-        this.nextJam = this.nextJam.bind(this);
     }
-    lastJam() {
-        if (this.state.jamIndex > 0)
-            this.setState({ jamIndex: this.state.jamIndex - 1 })
-    }
-    nextJam() {
-        if (this.state.jamIndex < this.props.boutState.current.jams.length - 1)
-            this.setState({ jamIndex: this.state.jamIndex + 1 })
-    }
+
     render() {
         let bs = this.props.boutState.current
-        let currentJam = bs.jams[this.state.jamIndex]
+        let data = this.props.boutState.data
 
         return (<div>
-            <h1>Score Keeper</h1>
-            <ShortClockDisplay boutState={bs} />
-            <ShortScoreDisplay boutState={bs} />
+            <GameSummary />
 
-            <h2>
-                <Button onClick={this.lastJam} disabled={this.state.jamIndex === 0}>Previous</Button>
-                Viewing Period {currentJam.period} Jam {currentJam.jamNumber}
-                <Button onClick={this.nextJam} disabled={this.state.jamIndex === bs.jams.length - 1}>Next</Button>
-            </h2>
+            <JamSelector setJam={(j) => this.setState({ jamIndex: j })} currentIdx={this.state.jamIndex}
+                jams={bs.jams} />
 
-            <h1>View Team(s)</h1>
-            <Row>
-                <Col sm={4}>
-                    <Button block onClick={() => this.setState({ viewTeam: 'left' })}>Left</Button>
-                </Col>
-                <Col sm={4}>
-                    <Button block onClick={() => this.setState({ viewTeam: 'both' })}>Both</Button>
-                </Col>
-                <Col sm={4}>
-                    <Button block onClick={() => this.setState({ viewTeam: 'right' })}>Right</Button>
-                </Col>
-            </Row>
+            <Panel>
+                <Panel.Body>
+                    <label className='view-teams-label'>View Team(s)</label>
+                    <ButtonGroup>
+                        <Button bsStyle={this.state.viewTeam === 'left' ? 'primary' : 'default'}
+                            onClick={() => this.setState({ viewTeam: 'left' })}>{data['left'].name}</Button>
+                        <Button bsStyle={this.state.viewTeam === 'both' ? 'primary' : 'default'}
+                            onClick={() => this.setState({ viewTeam: 'both' })}>Both</Button>
+                        <Button bsStyle={this.state.viewTeam === 'right' ? 'primary' : 'default'}
+                            onClick={() => this.setState({ viewTeam: 'right' })}>{data['right'].name}</Button>
+                    </ButtonGroup>
+                </Panel.Body>
+            </Panel>
 
             {this.state.viewTeam === 'both'
                 ? <Row>

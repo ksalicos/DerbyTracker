@@ -2,11 +2,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as lineupsTracker } from '../store/lineupsTrackerSignalR'
-import ShortClockDisplay from './shared/ShortClockDisplay';
-import ShortScoreDisplay from './shared/ShortScoreDisplay';
-import { Row, Col, Button, ButtonGroup, Glyphicon } from 'react-bootstrap'
+import GameSummary from './shared/GameSummary';
+import { Row, Col, Button, ButtonGroup, Glyphicon, Panel } from 'react-bootstrap'
 import JamSelector from './shared/JamSelector'
 import './Lineups.css'
+import ShadowedPanel from './shared/ShadowedPanel'
 
 class LineupsTracker extends React.Component {
     constructor(props) {
@@ -14,9 +14,6 @@ class LineupsTracker extends React.Component {
 
         this.state = {
             viewTeam: 'left',
-            viewPeriod: 1,
-            viewJam: 1,
-            jamIndex: props.boutState ? props.boutState.current.jams.length - 1 : null
         }
     }
 
@@ -27,7 +24,7 @@ class LineupsTracker extends React.Component {
         let team = data[this.state.viewTeam]
 
         team.roster.sort(sort)
-        let currentJam = bs.jams[this.state.jamIndex]
+        let currentJam = bs.jams[this.props.currentJam.index]
         let lineup = currentJam[this.state.viewTeam].roster
             .sort(sort)
 
@@ -47,16 +44,15 @@ class LineupsTracker extends React.Component {
 
             return (
                 <Row key={i} className='lineups-skater'>
-                    <Col sm={2} >
+                    <Col sm={7} >
                         <Button className='lineups-number' bsStyle={buttonStyle} bsSize="large" block onClick={() => {
                             inLineup
                                 ? this.props.removeSkater(bs.boutId, currentJam.period, currentJam.jamNumber,
                                     this.state.viewTeam, e.number)
                                 : this.props.addSkater(bs.boutId, currentJam.period, currentJam.jamNumber,
                                     this.state.viewTeam, e.number)
-                        }}>{e.number}</Button>
+                        }}>{e.number}: {e.name}</Button>
                     </Col>
-                    <Col sm={5} lg={6} className='lineups-name'>{e.name}</Col>
                     <Col sm={5} lg={4}>
                         <ButtonGroup bsSize="large">
                             <Button bsStyle={isBlocker ? 'primary' : 'default'} onClick={() => {
@@ -78,11 +74,8 @@ class LineupsTracker extends React.Component {
         }
 
         return (<div>
-            <ShortClockDisplay boutState={bs} />
-            <ShortScoreDisplay boutState={bs} />
-
-            <JamSelector setJam={(j) => this.setState({ jamIndex: j })} currentIdx={this.state.jamIndex}
-                jams={bs.jams} />
+            <GameSummary />
+            <JamSelector />
 
             <div className='team-select'>
                 <ButtonGroup bsSize="large">
@@ -97,7 +90,7 @@ class LineupsTracker extends React.Component {
                 </ButtonGroup>
             </div>
 
-            <Row className='lineups-roster' style={{ 'borderColor': borderColor }} >
+            <ShadowedPanel subtle className='lineups-roster' color={borderColor} >
                 <Col sm={12} md={6} >
                     {
                         team.roster.filter((e, i) => i < (team.roster.length + 1) / 2).map(skaterLine)
@@ -108,22 +101,29 @@ class LineupsTracker extends React.Component {
                         team.roster.filter((e, i) => i >= (team.roster.length + 1) / 2).map(skaterLine)
                     }
                 </Col>
-            </Row>
+            </ShadowedPanel>
 
-            <Row>
-                <Col sm={6}>
-                    {lineup.filter((e, i) => i < (lineup.length + lineup.length % 2) / 2).map((e, i) => {
-                        let s = { ...e, name: team.roster.find((r) => { return e.number === r.number }).name }
-                        return skaterLine(s, i)
-                    })}
-                </Col>
-                <Col sm={6}>
-                    {lineup.filter((e, i) => i >= (lineup.length + lineup.length % 2) / 2).map((e, i) => {
-                        let s = { ...e, name: team.roster.find((r) => { return e.number === r.number }).name }
-                        return skaterLine(s, i)
-                    })}
-                </Col>
-            </Row>
+            <Panel>
+                <Panel.Heading>
+                    <Panel.Title>Lineup</Panel.Title>
+                </Panel.Heading>
+                <Panel.Body>
+                    <Row>
+                        <Col sm={6}>
+                            {lineup.filter((e, i) => i < (lineup.length + lineup.length % 2) / 2).map((e, i) => {
+                                let s = { ...e, name: team.roster.find((r) => { return e.number === r.number }).name }
+                                return skaterLine(s, i)
+                            })}
+                        </Col>
+                        <Col sm={6}>
+                            {lineup.filter((e, i) => i >= (lineup.length + lineup.length % 2) / 2).map((e, i) => {
+                                let s = { ...e, name: team.roster.find((r) => { return e.number === r.number }).name }
+                                return skaterLine(s, i)
+                            })}
+                        </Col>
+                    </Row>
+                </Panel.Body>
+            </Panel>
         </div>)
     }
 }
@@ -132,6 +132,7 @@ const mapStateToProps = state => {
     return {
         system: state.system,
         boutState: state.boutState,
+        currentJam: state.currentJam
     }
 }
 

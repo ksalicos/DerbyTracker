@@ -2,7 +2,7 @@ import moment from 'moment'
 import { setRules, setClocks } from '../clocks'
 
 export const initializeBoutState = 'INITIALIZE_BOUT_STATE'
-const updateBoutState = 'UPDATE_BOUT_STATE'
+export const updateBoutState = 'UPDATE_BOUT_STATE'
 const boutPhaseChanged = 'BOUT_PHASE_CHANGED'
 const jamStarted = 'JAM_STARTED'
 const jamEnded = 'JAM_ENDED'
@@ -25,7 +25,6 @@ export const actionCreators = {
 
 export const reducer = (state, action) => {
     state = state || initialState
-    //This and the below commented code are for when multiple bouts are implemented.
     let convertedState = action.boutState ? momentify(action.boutState) : null
     switch (action.type) {
         case updateBoutState:
@@ -37,8 +36,6 @@ export const reducer = (state, action) => {
             return {
                 data: action.boutData,
                 current: convertedState
-                //current: state.current ? state.current : convertedState,
-                //bouts: { ...state.bouts, [action.boutState.boutId]: convertedState }
             }
         case boutPhaseChanged:
             return { ...state, current: { ...state.current, phase: action.newPhase } }

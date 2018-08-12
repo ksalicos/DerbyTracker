@@ -19,11 +19,11 @@
     display: block;
     padding-bottom: 100%;
   }
-  .timeout-circle {
+.timeout-circle {
     position: absolute;
     width: 100%;
     height: 100%;
-  }
+}
 
 button{
     overflow: hidden;

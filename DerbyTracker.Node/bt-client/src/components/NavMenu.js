@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Glyphicon, Nav, Navbar, MenuItem, NavDropdown } from 'react-bootstrap'
 import './NavMenu.css'
 import { actionCreators as system } from '../store/System'
+import screenfull from 'screenfull'
 
 const roles = [
     { role: 'JamTimer', label: 'Jam Timer', glyph: 'time' },
@@ -19,6 +20,7 @@ const roles = [
 
 const NavMenu = props => {
     let inRoles = roles.filter((e) => { return props.system.roles.includes(e.role) })
+    let title = props.system.screen === 'bout' ? 'Awaiting Role' : props.system.screen
     return (
         <Navbar collapseOnSelect>
             <Navbar.Header>
@@ -29,13 +31,19 @@ const NavMenu = props => {
             </Navbar.Header>
             <Navbar.Collapse>
                 <Nav>
-                    <NavDropdown eventKey={3} title={props.system.screen} id="nav-dropdown">
+                    <NavDropdown eventKey={3} title={title} id="nav-dropdown">
                         {
                             inRoles.map((e, i) =>
                                 <MenuItem key={i} eventKey={i} onClick={() => { props.changeScreen(e.role) }}>
                                     <Glyphicon glyph={e.glyph} /> {e.label}
                                 </MenuItem>
                             )
+                        }
+                        {
+                            screenfull.enabled
+                                ? <MenuItem onClick={() => screenfull.toggle()}>
+                                    <Glyphicon glyph='resize-small' /> Toggle Full Screen </MenuItem>
+                                : null
                         }
                     </NavDropdown>
                 </Nav>

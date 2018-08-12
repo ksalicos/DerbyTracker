@@ -3,12 +3,14 @@ import thunk from 'redux-thunk'
 import { signalRMiddleware } from '../SignalRMiddleware'
 import * as System from './System'
 import * as BoutState from './BoutState'
+import * as CurrentJam from './CurrentJam'
 
 export default function configureStore(initialState) {
-    const reducers = {
+    const rootReducer = combineReducers({
         system: System.reducer,
-        boutState: BoutState.reducer
-    };
+        boutState: BoutState.reducer,
+        currentJam: CurrentJam.reducer
+    });
 
     const middleware = [
         thunk,
@@ -21,10 +23,6 @@ export default function configureStore(initialState) {
     if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
         enhancers.push(window.devToolsExtension());
     }
-
-    const rootReducer = combineReducers({
-        ...reducers
-    });
 
     return createStore(
         rootReducer,

@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as scoreKeeper } from '../../store/scoreKeeperSignalR'
-import { Row, Col, Button, Modal } from 'react-bootstrap'
+import { Row, Col, Button, Modal, ButtonGroup } from 'react-bootstrap'
+import ShadowedPanel from '../shared/ShadowedPanel'
+import computed from '../../Computed'
 
 class TeamScoring extends React.Component {
     constructor(props) {
@@ -15,6 +17,7 @@ class TeamScoring extends React.Component {
 
     render() {
         let bs = this.props.boutState.current
+        let color = this.props.boutState.data[this.props.team].color
         let currentJam = bs.jams[this.props.jamIndex]
         let currentTeam = currentJam[this.props.team]
         let passes = currentTeam.passes
@@ -37,14 +40,17 @@ class TeamScoring extends React.Component {
 
         let alreadyStarPassed = passes.some(e => e.starPass === true)
 
-
-        //Can't become lead if other jammer is
-        //Cant become lead if lost
-        //Cant before lead if can't become lead
-        //Cant lose lead if not lead
-
-        return (<div>
-            <h1>{alreadyStarPassed ? `${pivotName} (from ${jammerName})` : jammerName}</h1>
+        return (<ShadowedPanel color={color}>
+            <div className='scorekeeper-label'>
+                {alreadyStarPassed
+                    ? pivot
+                        ? `${pivot.number}: ${pivotName}`
+                        : pivotName
+                    : jammer
+                        ? `${jammer.number}: ${jammerName}`
+                        : jammerName}
+                < div className='scorekeeper-jamscore'>{computed(bs).jamscores[this.props.jamIndex][this.props.team]}</div>
+            </div>
             <Row>
                 {
                     otherJammerStatus === 1 || otherJammerStatus === 3
@@ -66,45 +72,47 @@ class TeamScoring extends React.Component {
                 </Col>
                 <Col sm={4}>
                     <Button bsStyle={jammerStatus === 4 ? 'success' : 'default'}
-                        onClick={() => this.updateJammerStatus(4)}
+                        onClick={() => { if (jammerStatus === 4) { this.updateJammerStatus(0) } else { this.updateJammerStatus(4) } }}
                         block>Can't Lead</Button>
                 </Col>
             </Row>
 
-            <h1>Passes</h1>
-            {passes.map((e, i) => <Row key={i}>
-                <Col sm={8}>
-                    {e.number === 0 ? 'Initial Pass'
-                        : <Button onClick={() => this.setState({ showScoreModal: true, scoringPass: e.number, starPass: e.starPass })}
-                            block>Score: {e.score}</Button>}
+            <div className='scorekeeper-label'>Passes</div>
+            {
+                passes.map((e, i) => <Row key={i}>
+                    <Col sm={8}>
+                        {e.number === 0 ? 'Initial Pass'
+                            : <Button onClick={() => this.setState({ showScoreModal: true, scoringPass: e.number, starPass: e.starPass })}
+                                block>Score: {e.score}</Button>}
 
-                </Col>
-                <Col sm={4}>
-                    <Button disabled={alreadyStarPassed && !e.starPass}
-                        bsStyle={e.starPass ? 'success' : 'default'}
-                        onClick={() => this.updatePass(e.number, e.score, !e.starPass)}
-                        block>Star Pass</Button>
-                </Col>
-            </Row>)}
+                    </Col>
+                    <Col sm={4}>
+                        <Button disabled={alreadyStarPassed && !e.starPass}
+                            bsStyle={e.starPass ? 'success' : 'default'}
+                            onClick={() => this.updatePass(e.number, e.score, !e.starPass)}
+                            block>Star Pass</Button>
+                    </Col>
+                </Row>)
+            }
             <div>
                 <Button onClick={() => this.createPass()}>Add Pass</Button>
             </div>
 
-            <Modal show={this.state.showScoreModal} animation={false}>
+            <Modal bsSize="small" show={this.state.showScoreModal} animation={false}>
                 <Modal.Header closeButton onHide={() => this.setState({ showScoreModal: false })}>
                     <Modal.Title>Score</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Row>
+                    <ButtonGroup bsSize="large" vertical block>
                         {
-                            Array(7).fill().map((x, i) => <Col sm={2} key={i}>
-                                <Button onClick={() => { this.updatePass(this.state.scoringPass, i, this.state.starPass) }} block>{i}</Button>
-                            </Col>)
+                            Array(7).fill().map((x, i) =>
+                                <Button key={i} onClick={() => { this.updatePass(this.state.scoringPass, i, this.state.starPass) }}>{i}</Button>
+                            )
                         }
-                    </Row>
+                    </ButtonGroup>
                 </Modal.Body>
             </Modal>
-        </div>)
+        </ShadowedPanel >)
     }
     updateJammerStatus(newStatus) {
         let bs = this.props.boutState.current

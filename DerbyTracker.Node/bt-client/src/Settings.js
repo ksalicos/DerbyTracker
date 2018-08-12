@@ -2,7 +2,6 @@ import uuid from 'uuid'
 import { LogLevel } from '@aspnet/signalr'
 
 var settings = null
-import { LogLevel } from '@aspnet/signalr'
 
 //debug settings
 var newIdOnLoad = false

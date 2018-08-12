@@ -1,0 +1,12 @@
+.view-teams-label{
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.scorekeeper-label{
+    font-size: 2em;
+}
+
+.scorekeeper-jamscore{
+    float: right;
+}

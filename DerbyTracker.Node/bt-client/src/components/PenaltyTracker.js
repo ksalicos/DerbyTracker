@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { actionCreators as penaltyTracker } from '../store/penaltyTrackerSignalR'
-import ShortClockDisplay from './shared/ShortClockDisplay'
-import ShortScoreDisplay from './shared/ShortScoreDisplay'
+import GameSummary from './shared/GameSummary'
 import SkaterSelect from './shared/SkaterSelect'
-import { Row, Col, Button, Modal, Table } from 'react-bootstrap'
+import { Row, Col, Button, Modal, Table, Navbar } from 'react-bootstrap'
 import penaltyList from '../penalties'
+import JamSelector from './shared/JamSelector'
+import ShadowedPanel from './shared/ShadowedPanel';
+import './PenaltyTracker.css'
 
 class PenaltyTracker extends React.Component {
     constructor(props) {
@@ -17,27 +19,17 @@ class PenaltyTracker extends React.Component {
             showPlayerSelect: false,
             showPenaltySelect: false,
             penaltyCode: null,
-            jamIndex: props.boutState ? props.boutState.current.jams.length - 1 : null
         }
 
-        this.lastJam = this.lastJam.bind(this);
-        this.nextJam = this.nextJam.bind(this);
         this.createPenalty = this.createPenalty.bind(this);
         this.selectSkater = this.selectSkater.bind(this);
         this.selectPenalty = this.selectPenalty.bind(this);
         this.showSkaterSelect = this.showSkaterSelect.bind(this);
         this.showPenaltySelect = this.showPenaltySelect.bind(this);
     }
-    lastJam() {
-        if (this.state.jamIndex > 0)
-            this.setState({ jamIndex: this.state.jamIndex - 1 })
-    }
-    nextJam() {
-        if (this.state.jamIndex < this.props.boutState.current.jams.length - 1)
-            this.setState({ jamIndex: this.state.jamIndex + 1 })
-    }
+
     createPenalty(team) {
-        let currentJam = this.props.boutState.current.jams[this.state.jamIndex]
+        let currentJam = this.props.boutState.current.jams[this.props.jam.index]
         this.props.createPenalty(this.props.boutState.current.boutId, currentJam.period, currentJam.jamNumber, team)
     }
     showSkaterSelect(id, team) {
@@ -70,7 +62,8 @@ class PenaltyTracker extends React.Component {
         let team = data[this.state.viewTeam]
         team.roster.sort(sort)
 
-        let currentJam = bs.jams[this.state.jamIndex]
+        let currentJam = bs.jams[this.props.jam.index]
+
         let lineup = (this.state.viewTeam === 'left'
             ? currentJam.left.roster
             : currentJam.right.roster)
@@ -82,54 +75,46 @@ class PenaltyTracker extends React.Component {
             let pteam = data[e.team]
             let skater = pteam.roster.find(r => r.number === e.number)
             skater = skater || { number: -1, name: 'Not Set' }
-            return (<Row key={i}>
-                <Col sm={6}>
-                    <Button block onClick={() => this.showSkaterSelect(e.id, e.team)}>
-                        {e.number === -1 ? 'Select Skater' : `${e.number}: ${skater.name}`}
-                    </Button>
-                </Col>
-                <Col sm={6}>
-                    <Button block onClick={() => { this.showPenaltySelect(e.id) }}>
-                        {e.penaltyCode
-                            ? `${e.penaltyCode}: ${penaltyList[e.penaltyCode]}`
-                            : 'Select Penalty'}
-                    </Button>
-                </Col>
-            </Row>)
+            return (
+                <Row key={i}>
+                    <Col sm={6}>
+                        <Button block onClick={() => this.showSkaterSelect(e.id, e.team)}>
+                            {e.number === -1 ? 'Select Skater' : `${e.number}: ${skater.name}`}
+                        </Button>
+                    </Col>
+                    <Col sm={6}>
+                        <Button block onClick={() => { this.showPenaltySelect(e.id) }}>
+                            {e.penaltyCode
+                                ? `${e.penaltyCode}: ${penaltyList[e.penaltyCode]}`
+                                : 'Select Penalty'}
+                        </Button>
+                    </Col>
+                </Row>
+            )
         }
 
         return (<div>
-            <h1>Penalty Tracker</h1>
-            <ShortClockDisplay boutState={bs} />
-            <ShortScoreDisplay boutState={bs} />
+            <GameSummary />
+            <JamSelector />
 
             <Row>
                 <Col sm={6}>
-                    <Button block onClick={() => this.createPenalty('left')}>Penalty Left</Button>
+                    <ShadowedPanel color={data['left'].color}>
+                        <Button bsSize="large" block onClick={() => this.createPenalty('left')}>Penalty Left</Button>
+                        <div className='penalty-team-name'>{data['left'].name}</div>
+                        {penalties.filter(e => e.team === 'left').map(penaltyDisplay)}
+                    </ShadowedPanel>
                 </Col>
                 <Col sm={6}>
-                    <Button block onClick={() => this.createPenalty('right')}>Penalty Right</Button>
+                    <ShadowedPanel subtle color={data['right'].color}>
+                        <Button bsSize="large" block onClick={() => this.createPenalty('right')}>Penalty Right</Button>
+                        <div className='penalty-team-name'>{data['right'].name}</div>
+                        {penalties.filter(e => e.team === 'right').map(penaltyDisplay)}
+                    </ShadowedPanel>
                 </Col>
             </Row>
 
-            <h2>
-                <Button onClick={this.lastJam} disabled={this.state.jamIndex === 0}>Previous</Button>
-                Viewing Period {currentJam.period} Jam {currentJam.jamNumber}
-                <Button onClick={this.nextJam} disabled={this.state.jamIndex === bs.jams.length - 1}>Next</Button>
-            </h2>
-
-            <Row>
-                <Col sm={6}>
-                    <h2>{data['left'].name}</h2>
-                    {penalties.filter(e => e.team === 'left').map(penaltyDisplay)}
-                </Col>
-                <Col sm={6}>
-                    <h2>{data['right'].name}</h2>
-                    {penalties.filter(e => e.team === 'right').map(penaltyDisplay)}
-                </Col>
-            </Row>
-
-            <div className='bottom'>
+            <Navbar fixedBottom>
                 <h2>Penalty Status</h2>
                 <Row>
                     <Col sm={6}>
@@ -165,7 +150,7 @@ class PenaltyTracker extends React.Component {
                         </Table>
                     </Col>
                 </Row>
-            </div>
+            </Navbar>
 
             <SkaterSelect show={this.state.showPlayerSelect} close={() => this.setState({ showPlayerSelect: false })}
                 selectSkater={this.selectSkater} roster={team.roster} lineup={lineup} />
@@ -201,6 +186,7 @@ const mapStateToProps = state => {
     return {
         system: state.system,
         boutState: state.boutState,
+        jam: state.currentJam
     }
 }
 
