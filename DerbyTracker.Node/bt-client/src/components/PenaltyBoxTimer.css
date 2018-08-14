@@ -1,0 +1,17 @@
+.penalty-time{
+    font-size: 3em;
+    text-align:center;
+}
+
+.stand{
+    color: green;
+}
+
+.queue-item{
+    font-size: 2em;
+    text-align: center;
+}
+
+.queue-number{
+    background-color: gray;
+}

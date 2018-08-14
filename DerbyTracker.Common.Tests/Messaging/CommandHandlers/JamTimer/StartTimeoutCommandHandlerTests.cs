@@ -68,5 +68,13 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.JamTimer
             var state = _boutRunner.GetBoutState(Guid.Empty);
             Assert.Equal(TimeoutType.Official, state.TimeoutType);
         }
+
+        [Fact]
+        public void TimeoutClockIsTimeStamped()
+        {
+            _handler.Handle(_command);
+            var state = _boutRunner.GetBoutState(Guid.Empty);
+            Assert.True((DateTime.Now - state.TimeOutStart).Seconds < 1);
+        }
     }
 }

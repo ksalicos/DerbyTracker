@@ -24,7 +24,7 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.PenaltyTracker
             _state = _boutRunner.GetBoutState(Guid.Empty);
             _state.Phase = BoutPhase.Lineup;
 
-            _handler = new CreatePenaltyCommandHandler(_boutRunner);
+            _handler = new CreatePenaltyCommandHandler(_boutRunner, _boutData);
         }
 
         [Fact]
@@ -47,6 +47,13 @@ namespace DerbyTracker.Common.Tests.Messaging.CommandHandlers.PenaltyTracker
             _state.CreateNextJam();
             _handler.Handle(_command);
             Assert.Contains(_state.Penalties, x => x.JamNumber == 1 && x.Period == 1);
+        }
+
+        [Fact]
+        public void CorrectTimeAdded()
+        {
+            _handler.Handle(_command);
+            Assert.Equal(30, _state.Penalties[0].SecondsOwed);
         }
     }
 }

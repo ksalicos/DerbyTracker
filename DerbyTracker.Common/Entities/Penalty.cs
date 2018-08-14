@@ -4,13 +4,16 @@ namespace DerbyTracker.Common.Entities
 {
     public class Penalty
     {
-        public Penalty(string team, int period, int jam, TimeSpan timeStamp)
+        public Penalty(string team, int period, int jam, TimeSpan timeStamp, int secondsOwed, int number = -1, string code = null)
         {
             Id = Guid.NewGuid();
             Team = team;
             Period = period;
             JamNumber = jam;
             GameClock = timeStamp;
+            SecondsOwed = secondsOwed;
+            Number = number;
+            PenaltyCode = code;
         }
 
         public Guid Id { get; set; }
@@ -20,6 +23,6 @@ namespace DerbyTracker.Common.Entities
         public int Period { get; set; }
         public int JamNumber { get; set; }
         public TimeSpan GameClock { get; set; }
-
+        public int SecondsOwed { get; set; }
     }
 }

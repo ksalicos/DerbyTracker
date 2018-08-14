@@ -10,7 +10,8 @@ export default function get(state) {
 var _computed = {
     jamscores: [],
     leftScore: 0,
-    rightScore: 0
+    rightScore: 0,
+    queue: []
 }
 
 const compute = () => {
@@ -25,4 +26,16 @@ const compute = () => {
     _computed.rightScore = _computed.jamscores.reduce((t, e) => {
         return t + e.right
     }, 0)
+
+    _computed.queue = []
+    _state.penalties.forEach((p, i) => {
+        let q = _computed.queue.find(e => p.number === e.number && p.team === e.team)
+        if (q) {
+            q.seconds += p.secondsOwed
+        }
+        else {
+            q = { number: p.number, seconds: p.secondsOwed, team: p.team }
+            _computed.queue.push(q)
+        }
+    })
 }

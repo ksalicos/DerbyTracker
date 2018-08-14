@@ -11,10 +11,8 @@ export function get() {
     if (!settings) {
         settings = JSON.parse(window.localStorage.getItem('settings'))
 
-        if (settings) {
-            settings.remoteIp = '192.168.1.10'
-            settings.logLevel = LogLevel.Trace
-        }
+        if (!settings.remoteIp) settings.remoteIp = '192.168.1.10'
+        if (!settings.logLevel) settings.logLevel = LogLevel.Trace
 
         if (newIdOnLoad) {
             settings.nodeId = uuid.v4()
@@ -22,6 +20,7 @@ export function get() {
         if (IamAScoreboard) {
             settings.IamAScoreboard = true;
         }
+        save()
     }
     if (!settings) {
         settings = {

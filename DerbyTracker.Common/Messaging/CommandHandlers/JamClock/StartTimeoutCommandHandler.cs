@@ -22,6 +22,7 @@ namespace DerbyTracker.Common.Messaging.CommandHandlers.JamClock
             var state = _boutRunner.GetBoutState(command.BoutId);
             if (state.Phase != BoutPhase.Lineup)
             { throw new InvalidBoutPhaseException(state.Phase); }
+            state.TimeOutStart = command.ServerTime;
             state.LoseOfficialReview = false;
             state.TimeoutType = TimeoutType.Official;
             state.Phase = BoutPhase.Timeout;

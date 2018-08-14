@@ -43,19 +43,20 @@ class GameSummary extends React.Component {
             <Panel.Body>
                 <Row>
                     <Col sm={4} className='summary-timers'>
-                        {
-                            (() => {
-                                switch (bs.phase) {
-                                    case 1:
-                                        return <span>P{bs.period}: <TimeDisplay ms={this.state.gameClock} />
-                                            LU{bs.jamNumber}: <TimeDisplay ms={this.state.lineupClock} /></span>
-                                    case 2:
-                                        return <span>P{bs.period}: <TimeDisplay ms={this.state.gameClock} />
-                                            J{bs.jamNumber}: <TimeDisplay ms={this.state.jamClock} /></span>
-                                    default: return phaseList[bs.phase]
-                                }
-                            })()
-                        }
+                        <div>P{bs.period}: <TimeDisplay ms={this.state.gameClock} /></div>
+                        <div>
+                            {
+                                (() => {
+                                    switch (bs.phase) {
+                                        case 1:
+                                            return <span>Lineup: <TimeDisplay ms={this.state.lineupClock} /></span>
+                                        case 2:
+                                            return <span>J{bs.jamNumber}: <TimeDisplay ms={this.state.jamClock} /></span>
+                                        default: return phaseList[bs.phase]
+                                    }
+                                })()
+                            }
+                        </div>
                     </Col>
                     <Col sm={1} className='summary-score'>
                         {computedbs(bs).leftScore}

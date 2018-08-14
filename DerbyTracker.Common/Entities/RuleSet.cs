@@ -6,7 +6,7 @@
         public int JamDurationSeconds { get; set; }
         public int LineupDurationSeconds { get; set; }
         public int PeriodDurationSeconds { get; set; }
-
+        public int PenaltyDurationSeconds { get; set; }
         public int TimeOutsPerTeam { get; set; }
         public int OfficialReviewsPerTeam { get; set; }
 
@@ -16,7 +16,7 @@
             JamDurationSeconds = 120,
             LineupDurationSeconds = 30,
             PeriodDurationSeconds = 1800,
-
+            PenaltyDurationSeconds = 30,
             TimeOutsPerTeam = 3,
             OfficialReviewsPerTeam = 1
         };

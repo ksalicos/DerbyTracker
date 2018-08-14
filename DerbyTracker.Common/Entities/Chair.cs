@@ -9,6 +9,7 @@ namespace DerbyTracker.Common.Entities
         public int SecondsOwed { get; set; } = 30;
         public string Team { get; set; }
         public int Number { get; set; }
+        public int ChairNumber { get; set; }
         public bool IsJammer { get; set; }
     }
 }
