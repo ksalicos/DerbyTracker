@@ -78,7 +78,7 @@ export const reducer = (state, action) => {
             console.log('Invalid Side Set, Doing Nothing')
             break;
         case boutRunning:
-            return { ...state, running: [...state.running, { boutId: action.boutId, name: action.name }] }
+            return { ...state, running: [...state.running, { boutId: action.boutId, name: action.title }] }
         default:
             break;
     }

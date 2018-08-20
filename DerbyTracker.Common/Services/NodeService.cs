@@ -31,6 +31,7 @@ namespace DerbyTracker.Common.Services
         bool ValidateNode(string nodeId, string connectionId, string role = "");
         bool IsInBout(string nodeId, Guid boutId);
         string GetConnection(string nodeId);
+        void AddToBout(string nodeId, Guid boutId);
     }
 
     public class NodeConnection
@@ -136,7 +137,16 @@ namespace DerbyTracker.Common.Services
         {
             if (_nodeIdToConnectionId.ContainsKey(nodeId))
             { return _nodeIdToConnectionId[nodeId].ConnectionId; }
+
             throw new NoSuchNodeException(nodeId);
+        }
+
+        public void AddToBout(string nodeId, Guid boutId)
+        {
+            if (_nodeIdToConnectionId.ContainsKey(nodeId))
+            { _nodeIdToConnectionId[nodeId].BoutId = boutId; }
+            else
+            { throw new NoSuchNodeException(nodeId); }
         }
 
         public bool ConnectionIsInRole(string connectionId, string role)

@@ -24,5 +24,11 @@ namespace DerbyTracker.Master.SignalR
             var command = new RemoveRoleFromNodeCommand(nodeId, role, Context.ConnectionId);
             await _dispatcher.Dispatch(command);
         }
+
+        public async Task AddToBout(string nodeId, Guid boutId)
+        {
+            var command = new AddNodeToBoutCommand(nodeId, boutId, Context.ConnectionId);
+            await _dispatcher.Dispatch(command);
+        }
     }
 }

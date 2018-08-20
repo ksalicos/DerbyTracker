@@ -11,12 +11,14 @@ const signalrTest = 'SIGNALR_TEST'
 const runBout = 'RUN_BOUT'
 const assignRole = 'ASSIGN_ROLE'
 const removeRole = 'REMOVE_ROLE'
+const addToBout = 'ADD_TO_BOUT'
 
 export const actionCreators = {
     signalrTest: () => ({ type: signalrTest }),
     runBout: (boutId) => ({ type: runBout, boutId: boutId }),
     assignRole: (nodeId, role) => ({ type: assignRole, nodeId: nodeId, role: role }),
-    removeRole: (nodeId, role) => ({ type: removeRole, nodeId: nodeId, role: role })
+    removeRole: (nodeId, role) => ({ type: removeRole, nodeId: nodeId, role: role }),
+    addToBout: (nodeId, boutId) => ({ type: addToBout, nodeId: nodeId, boutId: boutId })
 }
 
 export function signalRInvokeMiddleware(store) {
@@ -40,6 +42,9 @@ export function signalRInvokeMiddleware(store) {
                 break
             case removeRole:
                 connection.invoke('RemoveRole', action.nodeId, action.role)
+                break
+            case addToBout:
+                connection.invoke('AddToBout', action.nodeId, action.boutId)
                 break
             default:
                 break

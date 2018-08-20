@@ -10,12 +10,10 @@ const jamUpdated = 'JAM_UPDATED'
 const periodEnded = 'PERIOD_ENDED'
 const boutEnded = 'BOUT_ENDED'
 const penaltyUpdated = 'PENALTY_UPDATED'
-//const passUpdated = 'PASS_UPDATED'
 const chairUpdated = 'CHAIR_UPDATED'
 const chairRemoved = 'CHAIR_REMOVED'
 
 const initialState = {
-    //bouts: {},
     current: null,
     data: null
 }

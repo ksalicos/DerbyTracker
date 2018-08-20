@@ -1,11 +1,11 @@
 ﻿import * as signalR from '@aspnet/signalr'
 import * as settings from './Settings'
-import { nodeConnected } from './store/System'
 import { middleware as jamTimer } from './store/jamTimerSignalR'
 import { middleware as lineupsTracker } from './store/lineupsTrackerSignalR'
 import { middleware as penaltyTracker } from './store/penaltyTrackerSignalR'
 import { middleware as scoreKeeper } from './store/scoreKeeperSignalR'
 import { middleware as penaltyBox } from './store/penaltyBoxTimerSignalR'
+import { initializeBoutState } from './store/BoutState'
 
 var s = settings.get()
 const nodeId = s.nodeId
@@ -16,8 +16,6 @@ export const connection = new signalR.HubConnectionBuilder()
     .withUrl(remoteIp)
     .configureLogging(signalrLogLevel)
     .build();
-
-
 
 export const signalRMiddleware = [
     signalRInvokeMiddleware,
@@ -34,11 +32,8 @@ export function signalRInvokeMiddleware(store) {
             case "CONNECT_NODE":
                 connection.invoke('ConnectNode', nodeId)
                 return;
-            case nodeConnected:
-                if (action.data.boutId) {
-                    console.log(`Joining Bout: ${action.data.boutId}`)
-                    connection.invoke('JoinBoutGroup', nodeId, action.data.boutId)
-                }
+            case initializeBoutState:
+                connection.invoke('JoinBoutGroup', nodeId, action.boutState.boutId)
                 break;
             default:
                 break
