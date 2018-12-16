@@ -11,6 +11,9 @@ import App from './App';
 import { signalRRegisterCommands } from './SignalRMiddleware'
 import * as settings from './Settings'
 import * as logger from './logger'
+import * as aliases from './aliases'
+
+setTimeout(() => { aliases.fullScreen.goFullScreen() }, 100)
 
 let s = settings.get()
 logger.log('Node Initializing: ' + s.nodeId)

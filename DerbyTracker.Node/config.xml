@@ -30,5 +30,6 @@
         <icon density="xhdpi" src="res/icons/android/icon-96-xhdpi.png" />
     </platform>
     <preference name="AndroidLaunchMode" value="singleTask" />
+    <plugin name="cordova-plugin-fullscreen" spec="^1.2.0" />
     <engine name="android" spec="^7.1.4" />
 </widget>

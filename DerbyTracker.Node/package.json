@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "cordova-android": "^7.1.4",
+        "cordova-plugin-fullscreen": "^1.2.0",
         "cordova-plugin-whitelist": "1.2.2"
     },
     "cordova": {
@@ -11,7 +12,8 @@
             "android"
         ],
         "plugins": {
-            "cordova-plugin-whitelist": {}
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-fullscreen": {}
         }
     }
 }
