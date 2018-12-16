@@ -10,6 +10,10 @@ import App from './App';
 //import registerServiceWorker from './registerServiceWorker';
 import { signalRRegisterCommands } from './SignalRMiddleware'
 import * as settings from './Settings'
+import * as logger from './logger'
+
+let s = settings.get()
+logger.log('Node Initializing: ' + s.nodeId)
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const initialState = window.initialReduxState
@@ -22,7 +26,6 @@ signalRRegisterCommands(store, () => {
 
 const rootElement = document.getElementById('root');
 
-let s = settings.get()
 if (s.IamAScoreboard) {
     store.dispatch({ type: 'CHANGE_SCREEN', screen: 'scoreboard' })
 }

@@ -9,7 +9,7 @@ import { initializeBoutState } from './store/BoutState'
 
 var s = settings.get()
 const nodeId = s.nodeId
-const remoteIp = `http://${s.remoteIp}:5000/wheelhub`
+const remoteIp = `http://${s.remoteIp}/wheelhub`
 
 const signalrLogLevel = s.logLevel
 export const connection = new signalR.HubConnectionBuilder()

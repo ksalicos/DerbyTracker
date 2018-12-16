@@ -2,5 +2,16 @@
     "name": "derbytracker.node",
     "version": "1.0.0",
     "private": true,
-    "dependencies": {}
+    "dependencies": {
+        "cordova-android": "^7.1.4",
+        "cordova-plugin-whitelist": "1.2.2"
+    },
+    "cordova": {
+        "platforms": [
+            "android"
+        ],
+        "plugins": {
+            "cordova-plugin-whitelist": {}
+        }
+    }
 }
